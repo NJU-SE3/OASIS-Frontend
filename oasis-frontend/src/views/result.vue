@@ -17,15 +17,14 @@
           </div>
         </div>
       </el-header>
-      <el-container>
-      <el-aside id="options">
-        <div style="background-color:aquamarine; height:100px;">侧边栏</div>
-      </el-aside >
-      <el-main id="res">
-        <div style="height:1000px; background-color:white;">搜索结果</div>
-      </el-main>
-      </el-container>
-
+        <el-row :gutter="20" style="margin:3% 2%;" id="content">
+          <el-col :span="8" id="options">
+            <div style="background-color:aquamarine; height:100px;">侧边栏</div>
+          </el-col>
+          <el-col :span="16" id="res">
+            <div style="height:1000px; background-color:white;">搜索结果</div>
+          </el-col>
+        </el-row>
     </el-container>
 </template>
 
@@ -63,8 +62,4 @@ export default {
   background-color:rgba(79,79,79,0.10);
 };
 
-#content{
-  display: flex;
-
-}
 </style>
