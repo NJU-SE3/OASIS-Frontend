@@ -14,7 +14,25 @@
         </div>
     </div>
     <div id="show">
-      <h1>其他栏（应该要做个组件×）</h1>
+      <div class="link-tab">
+        <ul class="tab-list">
+          <li class="tab-list-item" 
+              v-for="(item, index) in nav_list" 
+              :key="index" 
+              :class="{active : (index == current)}"
+              @mouseenter="toggle(index)">
+            <el-link href="#">{{ item }}</el-link>
+          </li>
+        </ul>
+      </div>
+      <div class="link-content">
+        <div class="content-item" 
+             v-for="(image, index) in tab_contents" 
+             :key="index"
+             v-show="(index == current)">
+          {{ image }}
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -29,11 +47,16 @@ export default {
   },
   data () {
     return {
+      nav_list: ["Ranking", "TODO1", "TODO2"],
+      tab_contents: ["picture1", "picture2", "picture3"],
+      current: 0
     }
   },
 
   methods: {
-    
+    toggle(index) {
+      this.current = index;
+    }
   }
 }
 </script>
@@ -67,6 +90,41 @@ export default {
   background-color: burlywood;
   position: relative;
   height:100px;
+}
+
+.link-tab {
+  display: inline-block;
+  width: 30%;
+}
+
+.link-content {
+  display: inline-block;
+  width: 60%;
+}
+
+.tab-list .tab-list-item {
+  display: flex;
+  justify-content: flex-start;
+  padding: 20px 50px;
+  margin: 50px 0;
+}
+
+.tab-list .tab-list-item a{
+  font-size: 30px;
+  color: #76797C;
+  font-weight: bold;
+}
+
+.tab-list .active {
+  border-left: 2px solid #ffffff;
+}
+
+.tab-list .active a{
+  color: #fff;
+}
+
+#show li {
+  list-style-type: none;
 }
 h1 {
   font-size: 200%
