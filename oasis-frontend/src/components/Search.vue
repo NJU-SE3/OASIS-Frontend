@@ -58,11 +58,35 @@ export default{
       color:black;
   }
   .input-with-select .el-input__inner{
-      padding:6% 0 6% 15%;
+      padding:6% 1% 6% 15%;
       border: none;
   }
   .el-input-group__append, .el-input-group__prepend{
       padding: 0, 4%;
   }
+    .input-with-select .el-input__inner::-webkit-input-placeholder, textarea::-webkit-input-placeholder { 
+        color: black; 
+        font-size: 16px;
+    } 
+    .input-with-select .el-input__inner:-moz-placeholder, textarea:-moz-placeholder { 
+        color: black; 
+        font-size: 16px;
+    } 
+    .input-with-select .el-input__inner::-moz-placeholder, textarea::-moz-placeholder { 
+        color: black; 
+        font-size: 16px;
+    } 
+    .input-with-select .el-input__inner:-ms-input-placeholder, textarea:-ms-input-placeholder { 
+        color: black; 
+    }
+    .el-select-dropdown__wrap{
+        background-color:transparent;
+    }
+    .el-select-dropdown {
+        background-color:rgba(255,255,255,0.5);
+    }
+    .el-select-dropdown__item.selected{
+        color:black;
+    }
 
 </style>
