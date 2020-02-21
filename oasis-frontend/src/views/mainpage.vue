@@ -1,31 +1,28 @@
 <template>
   <div class="main">
-        <div id="search">
-          <div class="overlay">
-            <div class="o-content">
-                <h1>
-                  OASIS
-                </h1>
-                <div id="tips">
-                  —— ——CONNECTING THE KNOWLEDGE—— ——
-                </div>
-
-                <el-input placeholder="请输入内容" v-model="input3" class="input-with-select">
-                    <el-select v-model="select" slot="prepend" placeholder="请选择">
-                      <el-option label="餐厅名" value="1"></el-option>
-                      <el-option label="订单号" value="2"></el-option>
-                      <el-option label="用户电话" value="3"></el-option>
-                    </el-select>
-                    <el-button slot="append" icon="el-icon-search"></el-button>
-                  </el-input>
-          </div>
+    <div id="search">
+      <div class="overlay">
+        <div class="o-content">
+            <h1>
+              OASIS
+            </h1>
+            <div id="tips">
+              —— ——CONNECTING THE KNOWLEDGE—— ——
             </div>
+            <el-input placeholder="请输入内容" v-model="input3" class="input-with-select">
+                <el-select v-model="select" slot="prepend" placeholder="请选择">
+                  <el-option label="餐厅名" value="1"></el-option>
+                  <el-option label="订单号" value="2"></el-option>
+                  <el-option label="用户电话" value="3"></el-option>
+                </el-select>
+                <el-button slot="append" icon="el-icon-search"></el-button>
+              </el-input>
+          </div>
         </div>
-        <div id="show">
-          <el-card>
-            lalalalalala
-          </el-card>
-        </div>
+    </div>
+    <div id="show">
+      <h1>其他栏（应该要做个组件×）</h1>
+    </div>
   </div>
 </template>
 
@@ -43,9 +40,9 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 
-#main{
+.main{
   position: relative;
-  overflow-x: auto;
+  color: white;
 }
 #search{
   position: relative;
@@ -62,7 +59,7 @@ export default {
   align-items:center;
   height: 100%;
   width: 100%;
-  color: white;
+  background-color:rgba(79,79,79,0.10);
 };
 
 #show{
