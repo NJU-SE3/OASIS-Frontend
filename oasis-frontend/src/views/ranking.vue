@@ -1,6 +1,14 @@
 <template>
   <div class="main">
-    <h1>报表展示</h1>
+    <el-container>
+      <el-header>
+        <div style="width:100%; background-color:white;">在下header，有何贵干</div>
+      </el-header>
+      <el-main>
+        <div style="width:100%; height:100%; background-color:rgb(181, 241, 181);">看我！我放报表！！</div>
+      </el-main>
+    </el-container>
+
   </div>
 </template>
 
@@ -11,10 +19,6 @@ export default {
   }
 }
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h1, h2 {
-  font-weight: normal;
-}
+
 </style>
