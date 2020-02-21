@@ -6,31 +6,37 @@
             <h1>
               OASIS
             </h1>
-            <el-input placeholder="请输入内容" v-model="input3" class="input-with-select">
-              <el-select v-model="select" slot="prepend" placeholder="请选择">
-                <el-option label="餐厅名" value="1"></el-option>
-                <el-option label="订单号" value="2"></el-option>
-                <el-option label="用户电话" value="3"></el-option>
-              </el-select>
-              <el-button slot="append" icon="el-icon-search"></el-button>
-            </el-input>
+            <search></search>
           </div>
         </div>
       </el-header>
         <el-row :gutter="20" style="margin:3% 2%;" id="content">
           <el-col :span="8" id="options">
-            <div style="background-color:aquamarine; height:100px;">侧边栏</div>
+            <div style="height:100px;">
+              <side-bar></side-bar>
+            </div>
           </el-col>
           <el-col :span="16" id="res">
-            <div style="height:1000px; background-color:white;">搜索结果</div>
+            <div style="height:1000px;">
+              <essay-search-result-card></essay-search-result-card>
+              <essay-search-result-card></essay-search-result-card>
+            </div>
           </el-col>
         </el-row>
     </el-container>
 </template>
 
 <script>
+  import essaySearchResultCard from "../components/EssaySearchResultCard"
+  import sideBar from "../components/SideBar"
+  import search from "../components/search"
 export default {
   name: 'SearchRes',
+  components: {
+    'essay-search-result-card': essaySearchResultCard,
+    'side-bar': sideBar,
+    'search': search
+  },
   data () {
     return {
       input3:""
@@ -43,7 +49,7 @@ export default {
 <style scoped>
 .main{
   position: relative;
-  color: white; 
+  color: white;
 }
 #header{
   position: relative;
@@ -60,6 +66,6 @@ export default {
   height: 100%;
   width: 100%;
   background-color:rgba(79,79,79,0.10);
-};
+}
 
 </style>
