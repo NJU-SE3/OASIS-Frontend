@@ -18,8 +18,7 @@
           </el-col>
           <el-col :span="16" id="res">
             <div style="height:1000px;">
-              <essay-search-result-card></essay-search-result-card>
-              <essay-search-result-card></essay-search-result-card>
+              <essay-search-result-card v-for="result in results"></essay-search-result-card>
             </div>
           </el-col>
         </el-row>
@@ -39,7 +38,12 @@ export default {
   },
   data () {
     return {
-      input3:""
+      input3:"",
+      results: [
+        { name: 'Runoob' },
+        { name: 'Google' },
+        { name: 'Taobao' },
+      ]
     }
   }
 }

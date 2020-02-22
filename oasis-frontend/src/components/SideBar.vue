@@ -13,7 +13,9 @@
       </el-date-picker>
     </div>
     <div class="category-select">
-
+      <el-checkbox v-model="essayChecked">Essay</el-checkbox>
+      <el-checkbox v-model="authorChecked">Author</el-checkbox>
+      <el-checkbox v-model="organizationChecked">Organization</el-checkbox>
     </div>
   </div>
 </template>
@@ -24,15 +26,58 @@
       name: "side-bar",
       components: {
          'search': search,
+      },
+      data() {
+        return {
+          essayChecked: true,
+          authorChecked: true,
+          organizationChecked: true,
+          value: '',
+        };
       }
-    }
+    };
 </script>
 
 <style scoped>
   .search-within {
     margin: 0 3% 3% 3%;
+    //border: solid pink;
 }
   .date-pick{
     margin: 0 3% 3% 3%;
+    //border: solid pink;
   }
+
+  .el-range-editor.el-input__inner[data-v-3eca7188]{
+    background-color: rgba(255,255,255,0.5);
+  }
+
+  .el-range-editor.el-input__inner{
+    width: 100%;
+    height: 100%;
+    border-color: transparent;
+    border-radius: 2em 0 0 2em
+  }
+
+  el-range-editor .el-range-input {
+    line-height: 1;
+    background-color: transparent;
+  }
+
+  el-date-editor .el-range-input{
+    background-color: transparent;
+  }
+
+  .el-date-editor .el-range-input, .el-date-editor .el-range-separator {
+    background-color: transparent;
+  }
+
+  .el-checkbox {
+    color: azure;
+  }
+
+  .el-checkbox__input.is-checked+.el-checkbox__label{
+    color: azure;
+  }
+
 </style>
