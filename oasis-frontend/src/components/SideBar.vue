@@ -21,7 +21,7 @@
 </template>
 
 <script>
-  import search from "./search"
+  import search from "./Search"
     export default {
       name: "side-bar",
       components: {
@@ -41,11 +41,11 @@
 <style scoped>
   .search-within {
     margin: 0 3% 3% 3%;
-    //border: solid pink;
+    /* border: solid pink; */
 }
   .date-pick{
     margin: 0 3% 3% 3%;
-    //border: solid pink;
+    /* border: solid pink; */
   }
 
   .el-range-editor.el-input__inner[data-v-3eca7188]{

@@ -28,7 +28,7 @@
 <script>
   import essaySearchResultCard from "../components/EssaySearchResultCard"
   import sideBar from "../components/SideBar"
-  import search from "../components/search"
+  import search from "../components/Search"
 export default {
   name: 'SearchRes',
   components: {
