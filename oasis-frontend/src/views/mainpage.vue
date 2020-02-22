@@ -13,7 +13,7 @@
           </div>
         </div>
     </div>
-    <div class="show">
+    <!-- <div class="show">
       <div class="link-tab">
         <ul class="tab-list">
           <li class="tab-list-item" 
@@ -24,17 +24,46 @@
             <el-link :underline="false" href="#">{{ item }}</el-link>
           </li>
         </ul>
-      </div>
-      <div class="link-content">
+      </div> -->
+
+      <!-- <div class="link-content">
         <div class="content-item" 
              v-for="(imageUrl, index) in urls" 
              :key="index"
              v-show="(index == current)">
           <img :src="imageUrl" class="content-img">
-          <!-- </img> -->
         </div>
+      </div> -->
+      <!-- <div class="link-content">
+        <div class="ontent-item-one"></div>
+        <div class="content-item-two"></div>
+        <div class="content-item-three"></div>
       </div>
-    </div>
+    </div> -->
+
+
+      <el-row class="show">
+        <el-col :span="6" :offset="2">
+        <div class="link-tab">
+          <ul class="tab-list">
+            <li class="tab-list-item" 
+                v-for="(item, index) in nav_list" 
+                :key="index" 
+                :class="{active : (index == current)}"
+                @mouseenter="enter(index)">
+              <el-link :underline="false" href="#">{{ item }}</el-link>
+            </li>
+          </ul>
+        </div>
+      </el-col>
+      <el-col :span="14" :offset="2">
+      <div class="link-content">
+        <div id="content-item-one" :class="{imgActive : pic_one}"></div>
+        <div id="content-item-two" :class="{imgActive : pic_two}"></div>
+        <div id="content-item-three" :class="{imgActive : pic_three}"></div>
+      </div>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
@@ -50,18 +79,31 @@ export default {
     return {
       nav_list: ["Ranking", "TODO1", "TODO2"],
       current: 0,
-      urls: [
-        "/static/mainpage/charts.jpg",
-        "/static/mainpage/TODO1.png",
-        "/static/mainpage/TODO2.png"
-      ],
+      pic_one: true,
+      pic_two: false,
+      pic_three: false
     }
   },
 
   methods: {
-    toggle(index) {
+    enter(index) {
       this.current = index;
-    }
+      if (index == 0) {
+        this.pic_one = true;
+        this.pic_two = false;
+        this.pic_three = false;
+      }
+      else if (index == 1) {
+        this.pic_two = true;
+        this.pic_three = false;
+        this.pic_one = false;
+      }
+      else {
+        this.pic_three = true;
+        this.pic_one = false;
+        this.pic_two = false;
+      }
+    },
   }
 }
 </script>
@@ -89,35 +131,39 @@ export default {
   height: 100%;
   width: 100%;
   background-color:rgba(79,79,79,0.10);
-};
-
-.show{
-  /* background-color: burlywood; */
-  /* position: relative; */
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-start;
-  height:200px;
-
-}
-/* 
-.link-content, .link-tab {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-start;
-} */
-
-.link-tab {
-  display: inline-flex;
-  width: 30%;
 }
 
 .link-content {
-  display: inline-flex;
-  width: 60%;
+  width: 800px;
+  height: 550px;
   vertical-align: top;
+  background: #76797C;
+  font-size: 0;
+}
+
+.link-content #content-item-one {
+  display: inline-block;
+  width: 50%;
+  height: 50%;
+  background: pink;
+}
+
+.link-content #content-item-two {
+  display: inline-block;
+  width: 50%;
+  height: 50%;
+  background: yellow;
+}
+
+.link-content #content-item-three {
+  width: 100%;
+  height: 50%;
+  background: white;
+}
+
+.imgActive {
+  transition: all 1s;
+  opacity: 0.6;
 }
 
 .tab-list .tab-list-item {
@@ -153,10 +199,6 @@ export default {
 
 #show li {
   list-style-type: none;
-}
-
-h1 {
-  font-size: 200%
 }
 
   .el-select .el-input {
