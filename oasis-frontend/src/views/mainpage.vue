@@ -13,7 +13,7 @@
           </div>
         </div>
     </div>
-    <div id="show">
+    <div class="show">
       <div class="link-tab">
         <ul class="tab-list">
           <li class="tab-list-item" 
@@ -21,16 +21,17 @@
               :key="index" 
               :class="{active : (index == current)}"
               @mouseenter="toggle(index)">
-            <el-link href="#">{{ item }}</el-link>
+            <el-link :underline="false" href="#">{{ item }}</el-link>
           </li>
         </ul>
       </div>
       <div class="link-content">
         <div class="content-item" 
-             v-for="(image, index) in tab_contents" 
+             v-for="(imageUrl, index) in urls" 
              :key="index"
              v-show="(index == current)">
-          {{ image }}
+          <img :src="imageUrl" class="content-img">
+          <!-- </img> -->
         </div>
       </div>
     </div>
@@ -48,8 +49,12 @@ export default {
   data () {
     return {
       nav_list: ["Ranking", "TODO1", "TODO2"],
-      tab_contents: ["picture1", "picture2", "picture3"],
-      current: 0
+      current: 0,
+      urls: [
+        "/static/mainpage/charts.jpg",
+        "/static/mainpage/TODO1.png",
+        "/static/mainpage/TODO2.png"
+      ],
     }
   },
 
@@ -86,20 +91,33 @@ export default {
   background-color:rgba(79,79,79,0.10);
 };
 
-#show{
-  background-color: burlywood;
-  position: relative;
-  height:100px;
+.show{
+  /* background-color: burlywood; */
+  /* position: relative; */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  height:200px;
+
 }
+/* 
+.link-content, .link-tab {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+} */
 
 .link-tab {
-  display: inline-block;
+  display: inline-flex;
   width: 30%;
 }
 
 .link-content {
-  display: inline-block;
+  display: inline-flex;
   width: 60%;
+  vertical-align: top;
 }
 
 .tab-list .tab-list-item {
@@ -109,14 +127,24 @@ export default {
   margin: 50px 0;
 }
 
+
 .tab-list .tab-list-item a{
-  font-size: 30px;
+  font-size: 40px;
   color: #76797C;
   font-weight: bold;
+  font-style: italic;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .tab-list .active {
-  border-left: 2px solid #ffffff;
+  /* padding-left: 60px; */
+  border-left: 3px solid #ffffff;
+  transition-property: padding;
+  transition-duration: 0.5s;
+}
+
+.tab-list .active:hover {
+  padding-left: 70px;
 }
 
 .tab-list .active a{
@@ -126,6 +154,7 @@ export default {
 #show li {
   list-style-type: none;
 }
+
 h1 {
   font-size: 200%
 }
@@ -135,6 +164,16 @@ h1 {
   }
   .input-with-select .el-input-group__prepend {
     background-color: #fff;
+  }
+
+  .content-item {
+    height: 100%;
+  }
+
+  .content-img {
+    object-fit: fill;
+    height: 100%;
+    width: 100%;
   }
 
 </style>
