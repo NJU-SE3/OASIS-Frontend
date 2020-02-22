@@ -18,7 +18,14 @@
           </el-col>
           <el-col :span="16" id="res">
             <div style="height:1000px;">
-              <essay-search-result-card v-for="result in results"></essay-search-result-card>
+              <essay-search-result-card v-for="result in results"
+                                        v-bind:title="result.title"
+                                        v-bind:authors="result.authors"
+                                        v-bind:organization="result.organization"
+                                        v-bind:year="result.year"
+                                        v-bind:times="result.times"
+                                        v-bind:essayLink="result.essayLink">
+              </essay-search-result-card>
             </div>
           </el-col>
         </el-row>
@@ -28,7 +35,7 @@
 <script>
   import essaySearchResultCard from "../components/EssaySearchResultCard"
   import sideBar from "../components/SideBar"
-  import search from "../components/search"
+  import search from "../components/Search"
 export default {
   name: 'SearchRes',
   components: {
@@ -40,9 +47,24 @@ export default {
     return {
       input3:"",
       results: [
-        { name: 'Runoob' },
-        { name: 'Google' },
-        { name: 'Taobao' },
+        { title: 'Synthesis and SAW characteristics of AlN thin films fabricated on Si and GaN using helicon sputtering system',
+        authors: 'Paul Hershey ; Charles B. Silio',
+        organization: '2009 3rd Annual IEEE Systems Conference',
+        year: '2009',
+        times: '8',
+        essayLink: 'https://www.google.com/'},
+        { title: 'Reliable and accurate algorithm to compute the limit cycle locus for uncertain nonlinear systems',
+          authors: 'Paul Hershey ; Charles B. Silio',
+          organization: '2009 3rd Annual IEEE Systems Conference',
+          year: '2009',
+          times: '9',
+          essayLink: 'https://ieeexplore.ieee.org/document/1248999/'},
+        { title: 'Parametric Lyapunov function approach to H/sub 2/ analysis and control of linear parameter-dependent systems',
+          authors: 'Paul Hershey ; Charles B. Silio',
+          organization: '2009 3rd Annual IEEE Systems Conference',
+          year: '2009',
+          times: '10',
+          essayLink: 'https://ieeexplore.ieee.org/document/1248999/'},
       ]
     }
   }

@@ -1,20 +1,28 @@
 <template>
   <div class="result">
     <div class="title">
-      Systems engineering approach for event monitoring and analysis in high speed enterprise communications systems
+      <a v-bind:href="essayLink">{{title}}</a>
     </div>
     <div class="content">
-      <div id="author">Paul Hershey ; Charles B. Silio</div>
-      <div>2009 3rd Annual IEEE Systems Conference</div>
-      <div>Year: 2009 | Conference Paper</div>
-      <div>Cited by: Papers (8)</div>
+      <div id="author">{{authors}}</div>
+      <div>{{organization}}</div>
+      <div>Year: {{year}} | Conference Paper</div>
+      <div>Cited by: Papers ({{times}})</div>
     </div>
   </div>
 </template>
 
 <script>
     export default {
-        name: "essay-search-result-card"
+        name: "essay-search-result-card",
+      props:{
+        title: String,
+        authors: [String],
+        organization: String,
+        year: String,
+        times: String,
+        essayLink: String,
+      },
     }
 </script>
 
@@ -27,13 +35,19 @@
   }
   .title{
     font-size: large;
-    font-weight: bold;
+    font-weight: normal;
     margin-bottom: 1%;
   }
-  .title:hover{
-    text-decoration: underline;
-    cursor: pointer;
+
+  a{
+    color: azure;
+    text-decoration: transparent;
   }
+
+  a:hover {
+    text-decoration: underline;
+  }
+
   .content{
     color: darkgrey;
   }
