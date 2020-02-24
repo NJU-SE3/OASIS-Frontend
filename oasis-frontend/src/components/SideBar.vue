@@ -13,9 +13,9 @@
       </el-date-picker>
     </div>
     <div class="category-select">
-      <el-checkbox v-model="essayChecked">Essay</el-checkbox>
-      <el-checkbox v-model="authorChecked">Author</el-checkbox>
-      <el-checkbox v-model="organizationChecked">Organization</el-checkbox>
+      <el-checkbox class="check-box" v-model="essayChecked">Essay</el-checkbox>
+      <el-checkbox class="check-box" v-model="authorChecked">Author</el-checkbox>
+      <el-checkbox class="check-box" v-model="organizationChecked">Organization</el-checkbox>
     </div>
   </div>
 </template>
@@ -38,9 +38,12 @@
     };
 </script>
 
-<style scoped>
+<style>
   .search-within {
-    margin: 0 3% 3% 3%;
+    margin: 0 3% 7% 3%;
+}
+  .date-pick{
+    margin: 0 3% 7% 3%;
     /* border: solid pink; */
 }
   .date-pick{
@@ -48,23 +51,20 @@
     /* border: solid pink; */
   }
 
-  .el-range-editor.el-input__inner[data-v-3eca7188]{
-    background-color: rgba(255,255,255,0.5);
-  }
-
   .el-range-editor.el-input__inner{
     width: 100%;
     height: 100%;
     border-color: transparent;
-    border-radius: 2em 0 0 2em
+    background-color: rgba(255,255,255,0.5);
+    border-radius: 2em 2em 2em 2em
   }
 
-  el-range-editor .el-range-input {
+  .el-range-editor .el-range-input {
     line-height: 1;
     background-color: transparent;
   }
 
-  el-date-editor .el-range-input{
+  .el-date-editor .el-range-input{
     background-color: transparent;
   }
 
@@ -78,6 +78,18 @@
 
   .el-checkbox__input.is-checked+.el-checkbox__label{
     color: azure;
+  }
+
+  .category-select {
+    height: 100%;
+    width: 100%;
+    border: solid pink;
+  }
+
+  .check-box {
+    height: 100%;
+    border: solid pink;
+
   }
 
 </style>
