@@ -46,10 +46,6 @@
     margin: 0 3% 7% 3%;
     /* border: solid pink; */
 }
-  .date-pick{
-    margin: 0 3% 3% 3%;
-    /* border: solid pink; */
-  }
 
   .el-range-editor.el-input__inner{
     width: 100%;
@@ -89,7 +85,28 @@
   .check-box {
     height: 100%;
     border: solid pink;
+  }
 
+  .el-pagination button:disabled {
+    background-color: rgba(255,255,255,0.5);
+  }
+
+  .el-pagination .btn-prev {
+    border-radius: 2em 0 0 2em;
+    background-color: rgba(255,255,255,0.5);
+  }
+
+  .el-pager li {
+    background-color: rgba(255,255,255,0.5);
+  }
+
+  .el-pager li.active {
+    color: azure;
+  }
+
+  .el-pagination .btn-next {
+    background-color: rgba(255,255,255,0.5);
+    border-radius: 0 2em 2em 0;
   }
 
 </style>

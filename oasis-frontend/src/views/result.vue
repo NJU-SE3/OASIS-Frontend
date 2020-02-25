@@ -17,8 +17,8 @@
             </div>
           </el-col>
           <el-col :span="16" id="res">
-            <div style="height:1000px;">
-              <essay-search-result-card v-for="result in results"
+            <div style="height:500px;">
+              <essay-search-result-card v-for="result in displayedResults"
                                         v-bind:title="result.title"
                                         v-bind:authors="result.authors"
                                         v-bind:organization="result.organization"
@@ -26,6 +26,15 @@
                                         v-bind:times="result.times"
                                         v-bind:essayLink="result.essayLink">
               </essay-search-result-card>
+            </div>
+            <div class="page-pagination">
+              <el-pagination style="border: solid red"
+                             layout="prev,pager,next"
+                             :total="results.length"
+                             :current-page="current_page"
+                             :page-size="page_size"
+                             @current-change="handleCurrentChange">
+              </el-pagination>
             </div>
           </el-col>
         </el-row>
@@ -43,9 +52,16 @@ export default {
     'side-bar': sideBar,
     'search': search
   },
+
+  created(){
+    this.currentPageChange(1);
+  },
+
   data () {
     return {
-      input3:"",
+      current_page: 1,
+      page_size: 1,
+      is_ready: false,
       results: [
         { title: 'Synthesis and SAW characteristics of AlN thin films fabricated on Si and GaN using helicon sputtering system',
         authors: 'Paul Hershey ; Charles B. Silio',
@@ -63,11 +79,59 @@ export default {
           authors: 'Paul Hershey ; Charles B. Silio',
           organization: '2009 3rd Annual IEEE Systems Conference',
           year: '2009',
+          times: '100',
+          essayLink: 'https://ieeexplore.ieee.org/document/1248999/'},
+        { title: 'Parametric Lyapunov function approach to H/sub 2/ analysis and control of linear parameter-dependent systems',
+          authors: 'Paul Hershey ; Charles B. Silio',
+          organization: '2009 3rd Annual IEEE Systems Conference',
+          year: '2009',
+          times: '1',
+          essayLink: 'https://ieeexplore.ieee.org/document/1248999/'},
+        { title: 'Parametric Lyapunov function approach to H/sub 2/ analysis and control of linear parameter-dependent systems',
+          authors: 'Paul Hershey ; Charles B. Silio',
+          organization: '2009 3rd Annual IEEE Systems Conference',
+          year: '2009',
           times: '10',
           essayLink: 'https://ieeexplore.ieee.org/document/1248999/'},
-      ]
+        { title: 'Parametric Lyapunov function approach to H/sub 2/ analysis and control of linear parameter-dependent systems',
+          authors: 'Paul Hershey ; Charles B. Silio',
+          organization: '2009 3rd Annual IEEE Systems Conference',
+          year: '2009',
+          times: '11',
+          essayLink: 'https://ieeexplore.ieee.org/document/1248999/'},
+        { title: 'Parametric Lyapunov function approach to H/sub 2/ analysis and control of linear parameter-dependent systems',
+          authors: 'Paul Hershey ; Charles B. Silio',
+          organization: '2009 3rd Annual IEEE Systems Conference',
+          year: '2009',
+          times: '12',
+          essayLink: 'https://ieeexplore.ieee.org/document/1248999/'},
+        { title: 'Parametric Lyapunov function approach to H/sub 2/ analysis and control of linear parameter-dependent systems',
+          authors: 'Paul Hershey ; Charles B. Silio',
+          organization: '2009 3rd Annual IEEE Systems Conference',
+          year: '2009',
+          times: '13',
+          essayLink: 'https://ieeexplore.ieee.org/document/1248999/'},
+      ],
+      displayedResults: [],
     }
-  }
+  },
+
+  methods:{
+    handleCurrentChange: function (currentPage) {
+      this.current_page = currentPage;
+      this.currentPageChange(currentPage);
+    },
+    currentPageChange(currentPage){
+      let from = (currentPage - 1) * this.page_size;
+      let to = currentPage * this.page_size;
+      this.displayedResults = [];
+      for(; from < to; from++) {
+        if(this.results[from]) {
+          this.displayedResults.push(this.results[from]);
+        }
+      }
+    },
+  },
 }
 </script>
 
@@ -92,6 +156,11 @@ export default {
   height: 100%;
   width: 100%;
   background-color:rgba(79,79,79,0.10);
+}
+
+.page-pagination{
+  border: solid pink;
+  align-element: right;
 }
 
 </style>
