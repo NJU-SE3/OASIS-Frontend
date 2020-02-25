@@ -5,14 +5,61 @@
         <MyHeader @search="search" ></MyHeader>
       </el-header>
       <el-main>
-        <div class="bar-ranking">
-          <ve-histogram class="bar-chart"
-          :data="chartData" 
-          :settings="chartSettings"
-          :events="chartEvents"
-          height="300px"></ve-histogram>
-        </div>
-        <div style="width:100%; height:100%; background-color:rgb(181, 241, 181);">看我！我放报表！！</div>
+        <el-row class="bar-ranking">
+          <el-col :span="8">
+            <div class="name">
+              <h1>Top 10 authors with papers cite in 2019</h1><!-- <p>those who publish </p> -->
+            </div>
+          </el-col>
+          <el-col :span="14" :offset="2">
+            <div class="chart">
+              <ve-histogram class="bar-chart"
+              :data="chartData" 
+              :settings="authorSettings"
+              :events="chartEvents"
+              height="100%"
+              :extend="authorExtend"
+              ></ve-histogram>
+          </div>
+          </el-col>
+        </el-row>
+        <el-row class="bar-ranking">
+          <el-col :span="8">
+            <div class="name">
+              <h1>Top 10 organizations with papers cite</h1><!-- <p>those who publish </p> -->
+            </div>
+          </el-col>
+          <el-col :span="14" :offset="2">
+            <div class="chart">
+              <ve-histogram class="bar-chart"
+              :data="chartData" 
+              :settings="paperSettings"
+              :events="chartEvents"
+              height="100%"
+              :extend="paperExtend"
+              ></ve-histogram>
+          </div>
+          </el-col>
+        </el-row>
+        <el-row class="bar-ranking">
+          <el-col :span="8">
+            <div class="name">
+              <h1>Top 10 xxx with papers cite</h1><!-- <p>those who publish </p> -->
+            </div>
+          </el-col>
+          <el-col :span="14" :offset="2">
+            <div class="chart">
+              <ve-histogram class="bar-chart"
+              :data="chartData" 
+              :settings="paperSettings"
+              :events="chartEvents"
+              height="100%"
+              :extend="xxxExtend"
+              ></ve-histogram>
+          </div>
+          </el-col>
+        </el-row>
+        <!-- <div style="width:100%; height:100%; background-color:rgb(181, 241, 181);">看我！我放报表！！</div> -->
       </el-main>
     </el-container>
   </div>
@@ -26,13 +73,65 @@ export default {
       MyHeader,
     },
   data () {
-      this.chartSettings = {
-        stack: { '用户': ['访问用户', '下单用户'] }
+      this.authorSettings = {
+        stack: { 'Papers': ['Paper1','Paper2','Paper3','Paper4','Paper5'] },
+      }
+      this.authorExtend = {
+        textStyle:{
+          color: 'white',
+        },
+          "color": [
+          "#ca0b5b",
+          "#d95850",
+          "#eb8146",
+          "#ffb248",
+          "#f2d643",
+          "#ebdba4",
+          "#ff004e",
+          "rgba(255,242,0,0.16)"
+      ],
+      }
+
+      this.paperSettings = {
+        stack: { 'Papers': ['Paper1','Paper2','Paper3','Paper4','Paper5'] },
+      }
+      this.paperExtend = {
+        textStyle:{
+          color: 'white',
+        },
+          "color": [
+            "#9b8bba",
+            "#e098c7",
+            "#8fd3e8",
+            "#71669e",
+            "#cc70af",
+            "#7cb4cc",
+            "#7992da"
+      ],
+      }
+      this.xxxExtend = {
+        textStyle:{
+          color: 'white',
+        },
+          "color": [
+            "#2ec7c9",
+            "#b6a2de",
+            "#5ab1ef",
+            "#ffb980",
+            "#d87a80",
+            "#8d98b3",
+            "#e5cf0d",
+            "#97b552",
+            "#95706d",
+            "#dc69aa",
+            "#07a2a4",
+            "#9a7fd1",
+            "#588dd5",
+      ],
       }
        var self = this
       this.chartEvents = {
         click: function(e){
-          // console.log(self);
           self.getClick(e)
         },
         dblclick : function (e) {
@@ -42,27 +141,29 @@ export default {
       }
       return {
         chartData: {
-          columns: ['日期', '访问用户', '下单用户', '下单率'],
-          rows: [
-            { '日期': '1/1', '访问用户': 1393, '下单用户': 1093, '下单率': 1132 },
-            { '日期': '1/2', '访问用户': 3530, '下单用户': 3230, '下单率': 0.26 },
-            { '日期': '1/3', '访问用户': 2923, '下单用户': 2623, '下单率': 0.76 },
-            { '日期': '1/4', '访问用户': 1723, '下单用户': 1423, '下单率': 0.49 },
-            { '日期': '1/5', '访问用户': 3792, '下单用户': 3492, '下单率': 0.323 },
-            { '日期': '1/6', '访问用户': 4593, '下单用户': 4293, '下单率': 0.78 }
-          ]
+          columns: ['Author','Paper1','Paper2','Paper3','Paper4','Paper5'],
+          rows: []
         },
 
       }
   },
-  // watch: {
-  //     activeName (v) {
-  //       this.$nextTick(_ => {
-  //         this.$refs[`chart${v}`].echarts.resize()
-  //       })
-  //     }
-  //   },
+  mounted(){
+    this.initChart();
+  },
     methods: {
+      initChart(){
+        console.log(this.chartData)
+        for (var i =0; i<10 ;i++){
+        this.chartData.rows.push({
+          'Author':"Smith.J",
+          'Paper1':Math.ceil(Math.random()*1000),
+          'Paper2':Math.ceil(Math.random()*1000),
+          'Paper3':Math.ceil(Math.random()*1000),
+          'Paper4':Math.ceil(Math.random()*1000),
+          'Paper5':Math.ceil(Math.random()*1000),
+        })
+        }
+      },
     search(data) {
       console.log(data);
     },
@@ -73,12 +174,17 @@ export default {
 }
 </script>
 <style scoped>
-.bar-chart{
-  /* height: 100%; */
-  /* height: 100px; */
-  width: 100%;
+.main{
+  color:white;
+}
+.chart{
+  height: 300px;
 }
 .bar-ranking{
-  height: 300px;
+  overflow: hidden;
+}
+
+.bar-chart{
+
 }
 </style>
