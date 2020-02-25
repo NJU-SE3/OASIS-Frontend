@@ -58,9 +58,15 @@
       </el-col>
       <el-col :span="14" :offset="2">
       <div class="link-content">
-        <div id="content-item-one" :class="{imgActive : pic_one}"></div>
-        <div id="content-item-two" :class="{imgActive : pic_two}"></div>
-        <div id="content-item-three" :class="{imgActive : pic_three}"></div>
+        <div id="content-item-one" :class="{imgActive : pic_one}">
+          <img src="/static/mainpage/charts.jpg" alt="ooops" class="img-item">
+        </div>
+        <div id="content-item-two" :class="{imgActive : pic_two}">
+          <img src="/static/mainpage/TODO1.png" alt="ooops" class="img-item">
+        </div>
+        <div id="content-item-three" :class="{imgActive : pic_three}">
+          <img src="/static/mainpage/TODO2.png" alt="ooops" class="img-item">
+        </div>
       </div>
       </el-col>
     </el-row>
@@ -141,6 +147,10 @@ export default {
   font-size: 0;
 }
 
+.link-content > * {
+  opacity: 0.3;
+}
+
 .link-content #content-item-one {
   display: inline-block;
   width: 50%;
@@ -163,7 +173,17 @@ export default {
 
 .imgActive {
   transition: all 1s;
-  opacity: 0.6;
+  opacity: 1;
+}
+
+/* .img-item {
+  max-width: 100%;
+  max-height: 100%;
+} */
+
+.img-item {
+  width: 100%;
+  height: 100%;
 }
 
 .tab-list .tab-list-item {
