@@ -59,13 +59,13 @@
       <el-col :span="14" :offset="2">
       <div class="link-content">
         <div id="content-item-one" :class="{imgActive : pic_one}">
-          <img src="/static/mainpage/charts.jpg" alt="ooops" class="img-item">
+          <el-image src="/static/mainpage/charts.jpg" alt="ooops" class="img-item" lazy></el-image>
         </div>
         <div id="content-item-two" :class="{imgActive : pic_two}">
-          <img src="/static/mainpage/TODO1.png" alt="ooops" class="img-item">
+          <el-image src="/static/mainpage/TODO1.png" alt="ooops" class="img-item" lazy></el-image>
         </div>
         <div id="content-item-three" :class="{imgActive : pic_three}">
-          <img src="/static/mainpage/TODO2.png" alt="ooops" class="img-item">
+          <el-image src="/static/mainpage/TODO2.png" alt="ooops" class="img-item" lazy></el-image>
         </div>
       </div>
       </el-col>
@@ -140,8 +140,8 @@ export default {
 }
 
 .link-content {
-  width: 800px;
-  height: 550px;
+  width: 850px;
+  height: 580px;
   vertical-align: top;
   background: #76797C;
   font-size: 0;
@@ -149,6 +149,7 @@ export default {
 
 .link-content > * {
   opacity: 0.3;
+  transition: all 0.6s;
 }
 
 .link-content #content-item-one {
