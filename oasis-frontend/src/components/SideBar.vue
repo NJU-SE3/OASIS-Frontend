@@ -1,21 +1,82 @@
 <template>
   <div class="side-bar">
     <div class="search-within">
+      <div class="indicator">Search within</div>
       <search></search>
     </div>
     <div class="date-pick">
-      <el-date-picker
-        v-model="value"
-        type="daterange"
-        start-placeholder="Start Date"
-        end-placeholder="End Date"
-        :default-time="['00:00:00', '23:59:59']">
-      </el-date-picker>
+      <div class="indicator">Year pick</div>
+      <div class="year-pick start-year">
+        <el-date-picker
+          v-model="startYear"
+          type="year"
+          placeholder="Start">
+        </el-date-picker>
+      </div>
+      <div class="year-pick end-year">
+        <el-date-picker
+          v-model="endYear"
+          type="year"
+          placeholder="End">
+        </el-date-picker>
+      </div>
+      <div class="apply-button" v-if="startYear != '' || endYear != ''">
+        <el-button round>
+          OK
+        </el-button>
+      </div>
     </div>
     <div class="category-select">
-      <el-checkbox class="check-box" v-model="essayChecked">Essay</el-checkbox>
-      <el-checkbox class="check-box" v-model="authorChecked">Author</el-checkbox>
-      <el-checkbox class="check-box" v-model="organizationChecked">Organization</el-checkbox>
+      <el-collapse v-model="activeNames" @change="handleChange">
+        <el-collapse-item title="Author" name="1">
+          <div>
+            <el-checkbox class="check-box" v-model="essayChecked">Essay</el-checkbox>
+          </div>
+          <div>
+            <el-checkbox class="check-box" v-model="authorChecked">Author</el-checkbox>
+          </div>
+          <div>
+            <el-checkbox class="check-box" v-model="organizationChecked">Organization</el-checkbox>
+          </div>
+          <div class="apply-button">
+            <el-button round v-if="essayChecked || authorChecked || organizationChecked">
+              OK
+            </el-button>
+          </div>
+        </el-collapse-item>
+        <el-collapse-item title="Organization" name="2">
+          <div>
+            <el-checkbox class="check-box" v-model="essayChecked">Essay</el-checkbox>
+          </div>
+          <div>
+            <el-checkbox class="check-box" v-model="authorChecked">Author</el-checkbox>
+          </div>
+          <div>
+            <el-checkbox class="check-box" v-model="organizationChecked">Organization</el-checkbox>
+          </div>
+          <div class="apply-button">
+            <el-button round v-if="essayChecked || authorChecked || organizationChecked">
+              OK
+            </el-button>
+          </div>
+        </el-collapse-item>
+        <el-collapse-item title="Term" name="3">
+          <div>
+            <el-checkbox class="check-box" v-model="essayChecked">Essay</el-checkbox>
+          </div>
+          <div>
+            <el-checkbox class="check-box" v-model="authorChecked">Author</el-checkbox>
+          </div>
+          <div>
+            <el-checkbox class="check-box" v-model="organizationChecked">Organization</el-checkbox>
+          </div>
+          <div class="apply-button">
+            <el-button round v-if="essayChecked || authorChecked || organizationChecked">
+              OK
+            </el-button>
+          </div>
+        </el-collapse-item>
+      </el-collapse>
     </div>
   </div>
 </template>
@@ -29,43 +90,69 @@
       },
       data() {
         return {
-          essayChecked: true,
-          authorChecked: true,
-          organizationChecked: true,
-          value: '',
+          essayChecked: false,
+          authorChecked: false,
+          organizationChecked: false,
+          startYear: '',
+          endYear: '',
+          activeNames: [],
         };
+      },
+      methods: {
+        handleChange(val) {
+          console.log(val);
+        }
       }
     };
 </script>
 
 <style>
+  .indicator{
+    color: azure;
+    display: block;
+    text-align: left;
+  }
+
   .search-within {
     margin: 0 3% 7% 3%;
 }
+
   .date-pick{
     margin: 0 3% 7% 3%;
-    /* border: solid pink; */
 }
 
-  .el-range-editor.el-input__inner{
-    width: 100%;
-    height: 100%;
-    border-color: transparent;
+  .year-pick{
+    display: inline-block;
+  }
+
+  .el-input__inner
+  {
+    background-color: transparent;
+    border: transparent;
+  }
+
+  .el-input__inner{
+    color: azure;
+  }
+
+  .el-date-editor.el-input, .el-date-editor.el-input__inner {
+    width: 100px;
+  }
+
+  .el-picker-panel {
     background-color: rgba(255,255,255,0.5);
-    border-radius: 2em 2em 2em 2em
   }
 
-  .el-range-editor .el-range-input {
-    line-height: 1;
-    background-color: transparent;
+  .el-date-picker__header-label:hover,.el-picker-panel__icon-btn:hover {
+    color: azure;
   }
 
-  .el-date-editor .el-range-input{
-    background-color: transparent;
+  .el-year-table td .cell:hover, .el-year-table td.current:not(.disabled) .cell {
+    color: azure;
   }
 
-  .el-date-editor .el-range-input, .el-date-editor .el-range-separator {
-    background-color: transparent;
+  .el-year-table td.today .cell {
+    color: azure;
   }
 
   .el-checkbox {
@@ -79,34 +166,35 @@
   .category-select {
     height: 100%;
     width: 100%;
-    border: solid pink;
   }
 
   .check-box {
     height: 100%;
-    border: solid pink;
   }
 
-  .el-pagination button:disabled {
-    background-color: rgba(255,255,255,0.5);
-  }
-
-  .el-pagination .btn-prev {
-    border-radius: 2em 0 0 2em;
-    background-color: rgba(255,255,255,0.5);
-  }
-
-  .el-pager li {
-    background-color: rgba(255,255,255,0.5);
-  }
-
-  .el-pager li.active {
+  .el-collapse-item__header{
+    background-color: transparent;
     color: azure;
   }
 
-  .el-pagination .btn-next {
+  .el-collapse-item__wrap{
+    background-color: transparent;
+    display: block;
+    text-align: left;
+  }
+
+  .apply-button{
+    display: block;
+    text-align: center;
+  }
+
+  .el-button.is-round{
     background-color: rgba(255,255,255,0.5);
-    border-radius: 0 2em 2em 0;
+    border: transparent;
+  }
+
+  .el-button:focus, .el-button:hover{
+    color: azure;
   }
 
 </style>

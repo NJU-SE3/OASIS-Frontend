@@ -11,14 +11,15 @@
         </div>
       </el-header>
         <el-row :gutter="20" style="margin:3% 2%;" id="content">
-          <el-col :span="8" id="options">
+          <el-col :span="6" id="options">
             <div style="height:100px;">
               <side-bar></side-bar>
             </div>
           </el-col>
-          <el-col :span="16" id="res">
+          <el-col :span="18" id="res">
             <div style="height:500px;">
-              <essay-search-result-card v-for="result in displayedResults"
+              <essay-search-result-card v-for="(result, index) in displayedResults"
+                                        v-bind:key="index"
                                         v-bind:title="result.title"
                                         v-bind:authors="result.authors"
                                         v-bind:organization="result.organization"
@@ -28,8 +29,7 @@
               </essay-search-result-card>
             </div>
             <div class="page-pagination">
-              <el-pagination style="border: solid red"
-                             layout="prev,pager,next"
+              <el-pagination layout="prev,pager,next"
                              :total="results.length"
                              :current-page="current_page"
                              :page-size="page_size"
@@ -136,7 +136,7 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style>
 .main{
   position: relative;
   color: white;
@@ -159,8 +159,29 @@ export default {
 }
 
 .page-pagination{
-  border: solid pink;
-  align-element: right;
+  display: block;
+  text-align: right;
 }
 
+.el-pagination button:disabled {
+  background-color: rgba(255,255,255,0.5);
+}
+
+.el-pagination .btn-prev {
+  border-radius: 2em 0 0 2em;
+  background-color: rgba(255,255,255,0.5);
+}
+
+.el-pager li {
+  background-color: rgba(255,255,255,0.5);
+}
+
+.el-pager li.active {
+  color: azure;
+}
+
+.el-pagination .btn-next {
+  background-color: rgba(255,255,255,0.5);
+  border-radius: 0 2em 2em 0;
+}
 </style>
