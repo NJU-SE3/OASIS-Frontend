@@ -15,8 +15,8 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'copy',
-      component: Testing
+      name: 'HelloWorld',
+      component: HelloWorld
     },
     {
       path: '/mainpage',

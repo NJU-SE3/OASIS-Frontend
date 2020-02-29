@@ -98,13 +98,14 @@ export default {
           color: 'white',
         },
           "color": [
-            "#9b8bba",
-            "#e098c7",
-            "#8fd3e8",
-            "#71669e",
-            "#cc70af",
-            "#7cb4cc",
-            "#7992da"
+  "#c12e34",
+                "#e6b600",
+                "#0098d9",
+                "#2b821d",
+                "#005eaa",
+                "#339ca8",
+                "#cda819",
+                "#32a487"
       ],
       }
       this.xxxExtend = {
@@ -124,14 +125,6 @@ export default {
             "#2e4783",
             "#82b6e9",
             "#ff6347",
-            "#a092f1",
-            "#0a915d",
-            "#eaf889",
-            "#6699ff",
-            "#ff6666",
-            "#3cb371",
-            "#d5b158",
-            "#38b6b6"
       ],
       }
        var self = this
