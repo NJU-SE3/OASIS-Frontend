@@ -18,9 +18,9 @@
     <!-- <div class="show">
       <div class="link-tab">
         <ul class="tab-list">
-          <li class="tab-list-item" 
-              v-for="(item, index) in nav_list" 
-              :key="index" 
+          <li class="tab-list-item"
+              v-for="(item, index) in nav_list"
+              :key="index"
               :class="{active : (index == current)}"
               @mouseenter="toggle(index)">
             <el-link :underline="false" href="#">{{ item }}</el-link>
@@ -29,8 +29,8 @@
       </div> -->
 
       <!-- <div class="link-content">
-        <div class="content-item" 
-             v-for="(imageUrl, index) in urls" 
+        <div class="content-item"
+             v-for="(imageUrl, index) in urls"
              :key="index"
              v-show="(index == current)">
           <img :src="imageUrl" class="content-img">
@@ -48,9 +48,9 @@
         <el-col :span="6" :offset="2">
         <div class="link-tab">
           <ul class="tab-list">
-            <li class="tab-list-item" 
-                v-for="(item, index) in nav_list" 
-                :key="index" 
+            <li class="tab-list-item"
+                v-for="(item, index) in nav_list"
+                :key="index"
                 :class="{active : (index == current)}"
                 @mouseenter="enter(index)"
                 @click="detail(index)">
@@ -62,26 +62,26 @@
       <el-col :span="14" :offset="2">
       <div class="link-content">
         <div id="content-item-one" :class="{imgActive : pic_one}">
-          <el-image src="/static/mainpage/charts.jpg" 
-                    alt="ooops" 
-                    class="img-item" 
-                    lazy 
-                    @click="detail(0)" 
+          <el-image src="/static/mainpage/charts.jpg"
+                    alt="ooops"
+                    class="img-item"
+                    lazy
+                    @click="detail(0)"
                     @mouseenter="enter(0)"></el-image>
         </div>
         <div id="content-item-two" :class="{imgActive : pic_two}">
-          <el-image src="/static/mainpage/TODO1.png" 
-                    alt="ooops" 
-                    class="img-item" 
-                    lazy 
+          <el-image src="/static/mainpage/TODO1.png"
+                    alt="ooops"
+                    class="img-item"
+                    lazy
                     @click="detail(1)"
                     @mouseenter="enter(1)"></el-image>
         </div>
         <div id="content-item-three" :class="{imgActive : pic_three}">
-          <el-image src="/static/mainpage/TODO2.png" 
-                    alt="ooops" 
-                    class="img-item" 
-                    lazy 
+          <el-image src="/static/mainpage/TODO2.png"
+                    alt="ooops"
+                    class="img-item"
+                    lazy
                     @click="detail(2)"
                     @mouseenter="enter(2)"></el-image>
         </div>
@@ -146,8 +146,11 @@ export default {
 <style scoped>
 
 .main{
-  position: relative;
-  color: white;
+  //position: relative;
+  //color: white;
+  color:white;
+  height: 100%;
+  overflow: auto
 }
 
 .title {

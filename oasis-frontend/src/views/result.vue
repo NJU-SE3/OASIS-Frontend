@@ -45,6 +45,7 @@
   import essaySearchResultCard from "../components/EssaySearchResultCard"
   import sideBar from "../components/SideBar"
   import search from "../components/Search"
+  import {getRequest} from "../utils/request.js"
 export default {
   name: 'SearchRes',
   components: {
@@ -55,6 +56,14 @@ export default {
 
   created(){
     this.currentPageChange(1);
+  },
+
+  mounted() {
+    getRequest("/api/query/paper/list?query=system&returnFacets=all").then(res=>{
+      console.log("res",res);
+      console.log("in");
+    })
+    console.log("outer");
   },
 
   data () {

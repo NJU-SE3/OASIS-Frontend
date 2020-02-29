@@ -25,7 +25,7 @@
           <el-col :span="16" :offset="1">
             <div class="chart">
               <ve-histogram class="bar-chart"
-              :data="auData" 
+              :data="auData"
               :settings="auSettings"
               :events="auEvents"
               height="100%"
@@ -39,7 +39,7 @@
             <div class="name">
               <h2><em>Top 10</em><br /> authors with papers cite</h2>
               <div class="chart">
-                <ve-ring 
+                <ve-ring
                 :data="paperData"
                 :settings="paperSettings"
                 :events="paperExtand"
@@ -55,7 +55,7 @@
           </el-col>
         </el-row>
                     <div class="word-cloud">
-               <ve-wordcloud 
+               <ve-wordcloud
                :data="termData"
                :settings="termSettings"></ve-wordcloud>
           </div>
@@ -199,6 +199,9 @@ export default {
       }
   },
   mounted(){
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
+    
     console.log("outer")
     this.initChart();
   },
@@ -266,6 +269,8 @@ em{
 }
 .main{
   color:white;
+  height: 100%;
+  overflow: auto
 }
 .chart{
   height: 450px;
