@@ -9,7 +9,9 @@
             <div id="tips">
               —— ——CONNECTING THE KNOWLEDGE—— ——
             </div>
+            <div class="bar">
             <SearchBar></SearchBar>
+            </div>
           </div>
         </div>
     </div>
@@ -129,7 +131,8 @@ export default {
 
     detail(index) {
       if (index == 0) {
-        this.$router.push("/ranking");
+        console.log("jump to rank");
+        this.$router.push({path: "/ranking"});
       }
       else {
         console.log("to do");
@@ -156,8 +159,13 @@ export default {
   margin-bottom: 50px;
 }
 
+.bar {
+  display: flex;
+  justify-content: center;
+}
+
 .search-bar {
-  width: 100%;
+  width: 35%;
 }
 
 #search{
@@ -176,6 +184,10 @@ export default {
   height: 100%;
   width: 100%;
   background-color:rgba(79,79,79,0.10);
+}
+
+.o-content {
+  width: 100%;
 }
 
 .link-content {
