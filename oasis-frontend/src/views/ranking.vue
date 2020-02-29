@@ -140,6 +140,7 @@ export default {
         textStyle:{
           color: 'white',
         },
+        color:["#a5e7f0",],
         series: {
           label: {
             normal: {
@@ -150,26 +151,12 @@ export default {
       }
       this.paperExtand = {
          color: [
-            "#e01f54",
-            "#001852",
-            "#f5e8c8",
-            "#b8d2c7",
-            "#c6b38e",
-            "#a4d8c2",
-            "#f3d999",
-            "#d3758f",
-            "#dcc392",
-            "#2e4783",
-            "#82b6e9",
-            "#ff6347",
-            "#a092f1",
-            "#0a915d",
-            "#eaf889",
-            "#6699FF",
-            "#ff6666",
-            "#3cb371",
-            "#d5b158",
-            "#38b6b6"
+            "#516b91",
+            "#59c4e6",
+            "#edafda",
+            "#93b7e3",
+            "#a5e7f0",
+            "#cbb0e3"
         ],
         textStyle:{
           color: 'white',
@@ -197,7 +184,7 @@ export default {
           rows: []
         },
         yearData:{
-          columns: ['Year', 'Amount'],
+          columns: ['year', 'count'],
           rows: []
         },
         paperData:{
@@ -212,49 +199,59 @@ export default {
       }
   },
   mounted(){
-    getRequest("/api/report/wdcld/year?year="+'2018').then(res=>{
-      // console.log("res",res);
-      this.initChart(res.data);
-      // console.log("in")
-
-    })
-
     console.log("outer")
+    this.initChart();
   },
     methods: {
-      initChart(data){
-        for (let i =0; i<10 ;i++){
-        this.auData.rows.push({
-          'Author':"Smith.J",
-          'Paper1':Math.ceil(Math.random()*1000),
-          'Paper2':Math.ceil(Math.random()*1000),
-          'Paper3':Math.ceil(Math.random()*1000),
-          'Paper4':Math.ceil(Math.random()*1000),
-          'Paper5':Math.ceil(Math.random()*1000),
-          });
-        this.paperData.rows.push({
-          'Title':'a long long long long name'+Math.ceil(Math.random()*100),
-          'Cite':Math.ceil(Math.random()*1000)
+      initChart(){
+        console.log("before init")
+        let l=getRequest("/api/report/paper/trend/year");
+        let a=getRequest("/api/report/author/rank/paper_cnt")
+        let p=getRequest("/api/report/paper/rank/citation")
+        let w=getRequest("/api/report/wdcld/year?year="+2019)
+        let res=Promise.all([l,a,p,w]);
+
+        res.then(r=>{
+          console.log("in res",r)
+          this.yearData=r[0].data;
+          // this.
+
         })
-        };
-        var a=0,y=2014;
-        for (let i=0; i<5 ;i++){
-          a=a+Math.ceil(Math.random()*1000)
-          y+=1
-          this.yearData.rows.push({
-            'Year':y.toString(),
-            'Amount':a.toString(),
-          })
-        };
+        console.log("res",res)
+        // for (let i =0; i<10 ;i++){
+        // this.auData.rows.push({
+        //   'Author':"Smith.J",
+        //   'Paper1':Math.ceil(Math.random()*1000),
+        //   'Paper2':Math.ceil(Math.random()*1000),
+        //   'Paper3':Math.ceil(Math.random()*1000),
+        //   'Paper4':Math.ceil(Math.random()*1000),
+        //   'Paper5':Math.ceil(Math.random()*1000),
+        //   });
+        // this.paperData.rows.push({
+        //   'Title':'a long long long long name'+Math.ceil(Math.random()*100),
+        //   'Cite':Math.ceil(Math.random()*1000)
+        // })
+        // };
+        // var a=0,y=2014;
+        // for (let i=0; i<5 ;i++){
+        //   a=a+Math.ceil(Math.random()*1000)
+        //   y+=1
+        //   this.yearData.rows.push({
+        //     'Year':y.toString(),
+        //     'Amount':a.toString(),
+        //   })
+        // };
         //词云
-        this.termData.rows=data
+        // this.termData.rows=data
+
+
       },
-    search(data) {
-      console.log(data);
-    },
-    getClick(e){
-      console.log("in get",e);
-    }
+      search(data) {
+        console.log(data);
+      },
+      getClick(e){
+        console.log("in get",e);
+      }
   }
 }
 </script>

@@ -2,10 +2,12 @@
     <div class="search-bar">
         <el-input class="input-with-select" placeholder="" v-model="searchCon">
             <el-select class="search-pre" v-model="searchType" slot="prepend" placeholder="请选择">
-            <el-option label="All" value="1"></el-option>
-            <el-option label="Essay" value="2"></el-option>
-            <el-option label="Author" value="3"></el-option>
-            <el-option label="Organizarion" value="4"></el-option>
+            <el-option label="All" value="all"></el-option>
+            <el-option label="Title" value="title"></el-option>
+            <el-option label="Author" value="authors"></el-option>
+            <el-option label="Conference" value="conferences"></el-option>
+            <el-option label="Terms" value="terms"></el-option>
+            <el-option label="Affiliation" value="affiliations"></el-option>
             </el-select>
         <el-button slot="append" icon="el-icon-search" @click="submit"></el-button>
         </el-input>
