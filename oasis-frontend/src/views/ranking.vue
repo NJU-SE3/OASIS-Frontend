@@ -5,7 +5,7 @@
         <MyHeader @search="search" ></MyHeader>
       </el-header>
       <el-main style="padding:0 5%">
-        <el-row class="line-ranking">
+        <el-row class="line-ranking ranking">
           <h1>Papers in Last 5 Years</h1>
           <div class="chart">
             <ve-line class="line-chart"
@@ -16,7 +16,7 @@
             height="100%"></ve-line>
           </div>
         </el-row>
-        <el-row class="bar-ranking"  type="flex" align="middle">
+        <el-row class="bar-ranking ranking"  type="flex" align="middle">
           <el-col :span="6">
             <div class="name">
               <h1><em>Top 10</em><br /> authors with papers cite</h1>
@@ -34,7 +34,7 @@
           </div>
           </el-col>
         </el-row>
-        <el-row class="paper-term-ranking"  type="flex" align="middle">
+        <el-row class="paper-term-ranking ranking"  type="flex" align="middle">
           <el-col :span="10">
             <div class="name">
               <h2><em>Top 10</em><br /> authors with papers cite</h2>
@@ -65,6 +65,7 @@
 
 <script>
 import MyHeader from "../components/Header.vue"
+import {getRequest} from "../utils/request.js"
 export default {
     name: 'Ranking',
     components:{
@@ -210,11 +211,20 @@ export default {
       }
   },
   mounted(){
-    this.initChart();
-    console.log(this.yearData)
+    getRequest("/api/report/paper/rank/citation?year="+2018).then(res=>{
+      console.log("res",res);
+      this.initChart();
+      console.log("in")
+
+    })
+
+    console.log("outer")
   },
     methods: {
       initChart(){
+
+
+
         for (let i =0; i<10 ;i++){
         this.auData.rows.push({
           'Author':"Smith.J",
@@ -968,6 +978,9 @@ em{
 }
 .chart{
   height: 450px;
+}
+.ranking{
+  margin:1% 0;
 }
 .bar-ranking{
   overflow: hidden;
