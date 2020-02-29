@@ -68,7 +68,7 @@
 <script>
 import MyHeader from "../components/Header.vue"
 export default {
-    name: 'Ranking',
+    name: 'Copy',
     components:{
       MyHeader,
     },
