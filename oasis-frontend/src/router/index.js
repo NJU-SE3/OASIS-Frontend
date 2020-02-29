@@ -5,6 +5,7 @@ import HelloWorld from '@/components/HelloWorld'
 import MainPage from '@/views/mainpage'
 import SearchRes from '@/views/result'
 import Ranking from '@/views/ranking'
+import Testing from '@/views/copy'
 
 
 
@@ -14,8 +15,8 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'HelloWorld',
-      component: HelloWorld
+      name: 'copy',
+      component: Testing
     },
     {
       path: '/mainpage',
