@@ -189,7 +189,4 @@ export default {
   overflow: hidden;
 }
 
-.bar-chart{
-
-}
 </style>

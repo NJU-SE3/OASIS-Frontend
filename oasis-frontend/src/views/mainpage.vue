@@ -3,7 +3,7 @@
     <div id="search">
       <div class="overlay">
         <div class="o-content">
-            <h1>
+            <h1 class="title">
               OASIS
             </h1>
             <div id="tips">
@@ -50,8 +50,9 @@
                 v-for="(item, index) in nav_list" 
                 :key="index" 
                 :class="{active : (index == current)}"
-                @mouseenter="enter(index)">
-              <el-link :underline="false" href="#">{{ item }}</el-link>
+                @mouseenter="enter(index)"
+                @click="detail(index)">
+              <el-link :underline="false">{{ item }}</el-link>
             </li>
           </ul>
         </div>
@@ -59,13 +60,28 @@
       <el-col :span="14" :offset="2">
       <div class="link-content">
         <div id="content-item-one" :class="{imgActive : pic_one}">
-          <el-image src="/static/mainpage/charts.jpg" alt="ooops" class="img-item" lazy></el-image>
+          <el-image src="/static/mainpage/charts.jpg" 
+                    alt="ooops" 
+                    class="img-item" 
+                    lazy 
+                    @click="detail(0)" 
+                    @mouseenter="enter(0)"></el-image>
         </div>
         <div id="content-item-two" :class="{imgActive : pic_two}">
-          <el-image src="/static/mainpage/TODO1.png" alt="ooops" class="img-item" lazy></el-image>
+          <el-image src="/static/mainpage/TODO1.png" 
+                    alt="ooops" 
+                    class="img-item" 
+                    lazy 
+                    @click="detail(1)"
+                    @mouseenter="enter(1)"></el-image>
         </div>
         <div id="content-item-three" :class="{imgActive : pic_three}">
-          <el-image src="/static/mainpage/TODO2.png" alt="ooops" class="img-item" lazy></el-image>
+          <el-image src="/static/mainpage/TODO2.png" 
+                    alt="ooops" 
+                    class="img-item" 
+                    lazy 
+                    @click="detail(2)"
+                    @mouseenter="enter(2)"></el-image>
         </div>
       </div>
       </el-col>
@@ -110,6 +126,15 @@ export default {
         this.pic_two = false;
       }
     },
+
+    detail(index) {
+      if (index == 0) {
+        this.$router.push("/ranking");
+      }
+      else {
+        console.log("to do");
+      }
+    }
   }
 }
 </script>
@@ -121,6 +146,20 @@ export default {
   position: relative;
   color: white;
 }
+
+.title {
+  font-size: 70px;
+  margin: 0 0 3px 0;
+}
+
+#tips {
+  margin-bottom: 50px;
+}
+
+.search-bar {
+  width: 100%;
+}
+
 #search{
   position: relative;
   height: 100vh;
@@ -175,6 +214,7 @@ export default {
 .imgActive {
   transition: all 1s;
   opacity: 1;
+  cursor: pointer;
 }
 
 /* .img-item {
