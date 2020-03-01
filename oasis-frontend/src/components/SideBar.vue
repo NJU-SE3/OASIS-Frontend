@@ -34,7 +34,7 @@
           <div v-for="(author, index) in authorSummary">
             <el-checkbox class="check-box"
                          v-model="authorSummaryCheck[index]">
-              {{author}}
+              {{author.first}}({{author.second}})
             </el-checkbox>
           </div>
           <div class="apply-button">
@@ -48,7 +48,7 @@
         <el-collapse-item title="Conference" name="2">
           <div v-for="(conference, index) in conferenceSummary">
             <el-checkbox class="check-box" v-model="conferenceSummaryCheck[index]">
-              {{conference}}
+              {{conference.first}}({{conference.second}})
             </el-checkbox>
           </div>
           <div class="apply-button">
@@ -62,7 +62,7 @@
         <el-collapse-item title="Affiliation" name="3">
           <div v-for="(affiliation, index) in affiliationSummary">
             <el-checkbox class="check-box" v-model="affiliationSummaryCheck[index]">
-              {{affiliation}}
+              {{affiliation.first}}({{affiliation.second}})
             </el-checkbox>
           </div>
           <div class="apply-button">
@@ -76,7 +76,7 @@
         <el-collapse-item title="Term" name="4">
           <div v-for="(term, index) in termSummary">
             <el-checkbox class="check-box" v-model="termSummaryCheck[index]">
-              {{term}}
+              {{term.first}}({{term.second}})
             </el-checkbox>
           </div>
           <div class="apply-button">

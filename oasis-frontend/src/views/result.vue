@@ -26,7 +26,7 @@
                                         v-bind:key="index"
                                         v-bind:title="result.title"
                                         v-bind:authors="result.authors"
-                                        v-bind:organization="result.affiliations"
+                                        v-bind:conference="result.conference"
                                         v-bind:year="result.year.toString()"
                                         v-bind:times="result.citationCount.toString()"
                                         v-bind:essayLink="result.pdfLink">
@@ -61,17 +61,17 @@ export default {
   },
 
   created(){
-    this.currentPageChange(1);
     var _this = this;
     bus.$on("fuzzySearch", data => {
       _this.search_type = data.type;
       _this.search_query = data.con;
       _this.search_query = _this.handleBlankSpace(_this.search_query);
+      console.log("search query",_this.search_query);
     })
   },
 
   mounted() {
-    //this.getFuzzySearchResult();
+    this.getFuzzySearchResult();
   },
 
   beforeDestroy() {
@@ -86,100 +86,52 @@ export default {
       search_page_number: 100,
       qid: "",
 
-      summary_term: ["a", "b", "c"],
-      summary_author: ["d", "e", "f"],
-      summary_conference: ["g", "h"],
-      summary_affiliation: ["i", "j", "k"],
+      summary_term: [],
+      summary_author: [],
+      summary_conference: [],
+      summary_affiliation: [],
 
-      current_page: 1,
+      current_page: 0,
       page_size: 10,
-      is_ready: false,
-      results: [
-        { title: 'Synthesis and SAW characteristics of AlN thin films fabricated on Si and GaN using helicon sputtering system',
-        authors: 'Paul Hershey ; Charles B. Silio',
-        organization: '2009 3rd Annual IEEE Systems Conference',
-        year: '2009',
-        times: '8',
-        essayLink: 'https://www.google.com/'},
-        { title: 'Reliable and accurate algorithm to compute the limit cycle locus for uncertain nonlinear systems',
-          authors: 'Paul Hershey ; Charles B. Silio',
-          organization: '2009 3rd Annual IEEE Systems Conference',
-          year: '2009',
-          times: '9',
-          essayLink: 'https://ieeexplore.ieee.org/document/1248999/'},
-        { title: 'Parametric Lyapunov function approach to H/sub 2/ analysis and control of linear parameter-dependent systems',
-          authors: 'Paul Hershey ; Charles B. Silio',
-          organization: '2009 3rd Annual IEEE Systems Conference',
-          year: '2009',
-          times: '100',
-          essayLink: 'https://ieeexplore.ieee.org/document/1248999/'},
-        { title: 'Parametric Lyapunov function approach to H/sub 2/ analysis and control of linear parameter-dependent systems',
-          authors: 'Paul Hershey ; Charles B. Silio',
-          organization: '2009 3rd Annual IEEE Systems Conference',
-          year: '2009',
-          times: '1',
-          essayLink: 'https://ieeexplore.ieee.org/document/1248999/'},
-        { title: 'Parametric Lyapunov function approach to H/sub 2/ analysis and control of linear parameter-dependent systems',
-          authors: 'Paul Hershey ; Charles B. Silio',
-          organization: '2009 3rd Annual IEEE Systems Conference',
-          year: '2009',
-          times: '10',
-          essayLink: 'https://ieeexplore.ieee.org/document/1248999/'},
-        { title: 'Parametric Lyapunov function approach to H/sub 2/ analysis and control of linear parameter-dependent systems',
-          authors: 'Paul Hershey ; Charles B. Silio',
-          organization: '2009 3rd Annual IEEE Systems Conference',
-          year: '2009',
-          times: '11',
-          essayLink: 'https://ieeexplore.ieee.org/document/1248999/'},
-        { title: 'Parametric Lyapunov function approach to H/sub 2/ analysis and control of linear parameter-dependent systems',
-          authors: 'Paul Hershey ; Charles B. Silio',
-          organization: '2009 3rd Annual IEEE Systems Conference',
-          year: '2009',
-          times: '12',
-          essayLink: 'https://ieeexplore.ieee.org/document/1248999/'},
-        { title: 'Parametric Lyapunov function approach to H/sub 2/ analysis and control of linear parameter-dependent systems',
-          authors: 'Paul Hershey ; Charles B. Silio',
-          organization: '2009 3rd Annual IEEE Systems Conference',
-          year: '2009',
-          times: '13',
-          essayLink: 'https://ieeexplore.ieee.org/document/1248999/'},
-      ],
-      displayedResults: [],
     }
   },
 
   methods:{
     handleCurrentChange: function (currentPage) {
+      console.log("!!!!");
       this.current_page = currentPage;
-      this.currentPageChange(currentPage);
-    },
-    currentPageChange(currentPage){
-      let from = (currentPage - 1) * this.page_size;
-      let to = currentPage * this.page_size;
-      this.displayedResults = [];
-      for(; from < to; from++) {
-        if(this.results[from]) {
-          this.displayedResults.push(this.results[from]);
-        }
-      }
+      this.getNextPage();
     },
 
     getFuzzySearchResult(){
-      getRequest("/api/query/paper/list?query=" + this.search_query + "&returnFacets=" + this.search_type)
+      getRequest("/query/paper/list?query=" + this.search_query + "&returnFacets=" + this.search_type)
         .then(res=>{
         console.log("res",res);
-        console.log("in");
         this.search_result = res.data.papers;
         this.qid = res.data.qid;
-        console.log(this.search_result);
+        this.getSummary();
       })
-      console.log("outer");
     },
 
     getSummary() {
-      getRequest("/api/query/paper/summary?qid=" + this.qid).then(res=>{
-
+      getRequest("/query/paper/summary?qid=" + this.qid).then(res=>{
+          console.log("summary", res);
+          this.summary_term = res.data.term;
+          this.summary_author = res.data.author;
+          this.summary_conference = res.data.conference;
+          this.summary_affiliation = res.data.affiliation;
+          console.log(this.summary_author);
       })
+    },
+
+    getNextPage() {
+      getRequest("/query/paper/list?query=" + this.search_query +
+        "&returnFacets=" + this.search_type +
+        "&pageNum=" + this.current_page)
+        .then(res=>{
+          console.log("next page",res);
+          this.search_result = res.data.papers;
+        })
     },
 
     // convert blank space to %20

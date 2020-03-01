@@ -5,7 +5,7 @@
     </div>
     <div class="content">
       <div id="author">{{authors}}</div>
-      <div>{{organization}}</div>
+      <div>{{conference}}</div>
       <div>Year: {{year}} | Conference Paper</div>
       <div>Cited by: Papers ({{times}})</div>
     </div>
@@ -18,7 +18,7 @@
       props:{
         title: String,
         authors: String,
-        organization: String,
+        conference: String,
         year: String,
         times: String,
         essayLink: String,
