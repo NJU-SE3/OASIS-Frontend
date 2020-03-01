@@ -13,24 +13,28 @@
         <el-row :gutter="20" style="margin:3% 2%;" id="content">
           <el-col :span="6" id="options">
             <div style="height:100px;">
-              <side-bar></side-bar>
+              <side-bar
+                v-bind:authorSummary = "summary_author"
+                v-bind:affiliationSummary="summary_affiliation"
+                v-bind:conferenceSummary="summary_conference"
+                v-bind:termSummary="summary_term"></side-bar>
             </div>
           </el-col>
           <el-col :span="18" id="res">
-            <div style="height:500px;">
-              <essay-search-result-card v-for="(result, index) in displayedResults"
+            <div style="height:1200px;">
+              <essay-search-result-card v-for="(result, index) in search_result"
                                         v-bind:key="index"
                                         v-bind:title="result.title"
                                         v-bind:authors="result.authors"
-                                        v-bind:organization="result.organization"
-                                        v-bind:year="result.year"
-                                        v-bind:times="result.times"
-                                        v-bind:essayLink="result.essayLink">
+                                        v-bind:organization="result.affiliations"
+                                        v-bind:year="result.year.toString()"
+                                        v-bind:times="result.citationCount.toString()"
+                                        v-bind:essayLink="result.pdfLink">
               </essay-search-result-card>
             </div>
             <div class="page-pagination">
               <el-pagination layout="prev,pager,next"
-                             :total="results.length"
+                             :total="search_page_number"
                              :current-page="current_page"
                              :page-size="page_size"
                              @current-change="handleCurrentChange">
@@ -60,26 +64,32 @@ export default {
     this.currentPageChange(1);
     var _this = this;
     bus.$on("fuzzySearch", data => {
-      _this.type = data.type;
-      _this.keywords = data.con;
-      console.log(_this.type, ", ", _this.keywords);
+      _this.search_type = data.type;
+      _this.search_query = data.con;
+      _this.search_query = _this.handleBlankSpace(_this.search_query);
     })
   },
 
   mounted() {
-    this.getFuzzySearchResult();
+    //this.getFuzzySearchResult();
   },
 
   beforeDestroy() {
-    // console.log("before destroy");
     bus.$off("fuzzySearch");
   },
 
   data () {
     return {
-      search_query: "system",
-      search_type: "all",
+      search_query: "",
+      search_type: "",
       search_result: null,
+      search_page_number: 100,
+      qid: "",
+
+      summary_term: ["a", "b", "c"],
+      summary_author: ["d", "e", "f"],
+      summary_conference: ["g", "h"],
+      summary_affiliation: ["i", "j", "k"],
 
       current_page: 1,
       page_size: 10,
@@ -135,8 +145,6 @@ export default {
           essayLink: 'https://ieeexplore.ieee.org/document/1248999/'},
       ],
       displayedResults: [],
-      type: "",
-      keywords: ""
     }
   },
 
@@ -157,15 +165,27 @@ export default {
     },
 
     getFuzzySearchResult(){
-      getRequest("/api/query/paper/list?query=system&returnFacets=all")
+      getRequest("/api/query/paper/list?query=" + this.search_query + "&returnFacets=" + this.search_type)
         .then(res=>{
         console.log("res",res);
         console.log("in");
         this.search_result = res.data.papers;
+        this.qid = res.data.qid;
         console.log(this.search_result);
       })
       console.log("outer");
     },
+
+    getSummary() {
+      getRequest("/api/query/paper/summary?qid=" + this.qid).then(res=>{
+
+      })
+    },
+
+    // convert blank space to %20
+    handleBlankSpace(input) {
+      return input.split(" ").join("%20");
+    }
   },
 }
 </script>
@@ -173,9 +193,11 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style>
 .main{
-  position: relative;
-  color: white;
+  color:white;
+  height: 100%;
+  overflow: auto
 }
+
 #header{
   position: relative;
 

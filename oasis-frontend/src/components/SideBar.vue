@@ -10,18 +10,20 @@
         <el-date-picker
           v-model="startYear"
           type="year"
-          placeholder="Start">
+          placeholder="Start"
+          @change="checkYear($event)">
         </el-date-picker>
       </div>
       <div class="year-pick end-year">
         <el-date-picker
           v-model="endYear"
           type="year"
-          placeholder="End">
+          placeholder="End"
+          @change="checkYear($event)">
         </el-date-picker>
       </div>
       <div class="apply-button" v-if="startYear != '' || endYear != ''">
-        <el-button round>
+        <el-button round @click="collectSearchWithin">
           OK
         </el-button>
       </div>
@@ -29,49 +31,57 @@
     <div class="category-select">
       <el-collapse v-model="activeNames" @change="handleChange">
         <el-collapse-item title="Author" name="1">
-          <div>
-            <el-checkbox class="check-box" v-model="essayChecked">Essay</el-checkbox>
-          </div>
-          <div>
-            <el-checkbox class="check-box" v-model="authorChecked">Author</el-checkbox>
-          </div>
-          <div>
-            <el-checkbox class="check-box" v-model="organizationChecked">Organization</el-checkbox>
+          <div v-for="(author, index) in authorSummary">
+            <el-checkbox class="check-box"
+                         v-model="authorSummaryCheck[index]">
+              {{author}}
+            </el-checkbox>
           </div>
           <div class="apply-button">
-            <el-button round v-if="essayChecked || authorChecked || organizationChecked">
+            <el-button round
+                       v-if="showOK(authorSummaryCheck, 'author')"
+                       @click="collectSearchWithin">
               OK
             </el-button>
           </div>
         </el-collapse-item>
-        <el-collapse-item title="Organization" name="2">
-          <div>
-            <el-checkbox class="check-box" v-model="essayChecked">Essay</el-checkbox>
-          </div>
-          <div>
-            <el-checkbox class="check-box" v-model="authorChecked">Author</el-checkbox>
-          </div>
-          <div>
-            <el-checkbox class="check-box" v-model="organizationChecked">Organization</el-checkbox>
+        <el-collapse-item title="Conference" name="2">
+          <div v-for="(conference, index) in conferenceSummary">
+            <el-checkbox class="check-box" v-model="conferenceSummaryCheck[index]">
+              {{conference}}
+            </el-checkbox>
           </div>
           <div class="apply-button">
-            <el-button round v-if="essayChecked || authorChecked || organizationChecked">
+            <el-button round
+                       v-if="showOK(conferenceSummaryCheck, 'conference')"
+                       @click="collectSearchWithin">
               OK
             </el-button>
           </div>
         </el-collapse-item>
-        <el-collapse-item title="Term" name="3">
-          <div>
-            <el-checkbox class="check-box" v-model="essayChecked">Essay</el-checkbox>
-          </div>
-          <div>
-            <el-checkbox class="check-box" v-model="authorChecked">Author</el-checkbox>
-          </div>
-          <div>
-            <el-checkbox class="check-box" v-model="organizationChecked">Organization</el-checkbox>
+        <el-collapse-item title="Affiliation" name="3">
+          <div v-for="(affiliation, index) in affiliationSummary">
+            <el-checkbox class="check-box" v-model="affiliationSummaryCheck[index]">
+              {{affiliation}}
+            </el-checkbox>
           </div>
           <div class="apply-button">
-            <el-button round v-if="essayChecked || authorChecked || organizationChecked">
+            <el-button round
+                       v-if="showOK(affiliationSummaryCheck, 'affiliation')"
+                       @click="collectSearchWithin">
+              OK
+            </el-button>
+          </div>
+        </el-collapse-item>
+        <el-collapse-item title="Term" name="4">
+          <div v-for="(term, index) in termSummary">
+            <el-checkbox class="check-box" v-model="termSummaryCheck[index]">
+              {{term}}
+            </el-checkbox>
+          </div>
+          <div class="apply-button">
+            <el-button round v-if="showOK(termSummaryCheck, 'term')"
+                       @click="collectSearchWithin">
               OK
             </el-button>
           </div>
@@ -88,20 +98,134 @@
       components: {
          'search': search,
       },
+
+      props: {
+        authorSummary: Array,
+        affiliationSummary: Array,
+        termSummary: Array,
+        conferenceSummary: Array,
+      },
+
       data() {
         return {
-          essayChecked: false,
+          searchWithinChecked: false,
+
+          yearChecked: false,
           authorChecked: false,
-          organizationChecked: false,
-          startYear: '',
-          endYear: '',
+          affiliationChecked: false,
+          conferenceChecked: false,
+          termChecked: false,
+
+          authorSummaryCheck: Array(this.authorSummary.length).fill(false),
+          affiliationSummaryCheck: Array(this.affiliationSummary.length).fill(false),
+          termSummaryCheck: Array(this.termSummary.length).fill(false),
+          conferenceSummaryCheck: Array(this.conferenceSummary.length).fill(false),
+
+
+          startYear: "",
+          endYear: "",
           activeNames: [],
+
+          searchWithinQuery: {
+            conference:"",
+            term: "",
+            author: "",
+            year: "",
+            affiliation: "",
+          },
         };
       },
+
+      created() {
+        var nowDate = new Date();
+        this.startYear = nowDate.getFullYear().toString();
+        this.endYear = nowDate.getFullYear().toString();
+      },
+
       methods: {
+        checkYear(value) {
+          this.yearChecked = true;
+        },
+
         handleChange(val) {
-          console.log(val);
-        }
+          //console.log(val);
+        },
+
+        getYearFromDatePick(date) {
+          if(date.toString().indexOf(" ") < 0)
+          {
+            return date.toString();
+          }
+          return date.toString().split(" ")[3];
+        },
+
+        showOK(summaryCheckList, type) {
+          var result = false;
+          summaryCheckList.forEach(item => {result = result || item;});
+          if(type.toString() == "author")
+          {
+            this.authorChecked = result;
+          }
+          else if(type.toString() == "conference")
+          {
+            this.conferenceChecked = result;
+          }
+          else if(type.toString() == "affiliation")
+          {
+            this.affiliationChecked = result;
+          }
+          else if(type.toString() == "term")
+          {
+            this.termChecked = result;
+          }
+          //console.log(this.authorChecked);
+          //console.log(this.conferenceChecked);
+          return result;
+        },
+
+        collectSearchWithin() {
+          if(this.yearChecked) {
+            this.searchWithinQuery.year = this.getYearFromDatePick(this.startYear)
+              + "_" + this.getYearFromDatePick(this.endYear);
+          }
+          if(this.authorChecked) {
+            var author = "";
+            this.authorSummaryCheck.forEach((item,index) => {
+              if(item) {
+                author += this.authorSummary[index] + " ";
+              }
+            });
+            this.searchWithinQuery.author = author;
+          }
+          if(this.conferenceChecked) {
+            var conference = "";
+            this.conferenceSummaryCheck.forEach((item, index) => {
+              if(item) {
+                conference += this.conferenceSummary[index] + " ";
+              }
+            });
+            this.searchWithinQuery.conference = conference;
+          }
+          if(this.affiliationChecked) {
+            var affiliation = "";
+            this.affiliationSummaryCheck.forEach((item, index) => {
+              if(item) {
+                affiliation += this.affiliationSummary[index] + " ";
+              }
+            });
+            this.searchWithinQuery.affiliation = affiliation;
+          }
+          if(this.termChecked) {
+            var term = "";
+            this.termSummaryCheck.forEach((item, index) => {
+              if(item) {
+                term += this.termSummary[index] + " ";
+              }
+            });
+            this.searchWithinQuery.term = term;
+          }
+          console.log(this.searchWithinQuery);
+        },
       }
     };
 </script>

@@ -17,7 +17,7 @@
         name: "essay-search-result-card",
       props:{
         title: String,
-        authors: [String],
+        authors: String,
         organization: String,
         year: String,
         times: String,
