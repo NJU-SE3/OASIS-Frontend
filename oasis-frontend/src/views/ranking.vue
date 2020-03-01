@@ -215,6 +215,9 @@ export default {
       }
   },
   mounted(){
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
+    
     console.log("outer")
     this.initChart();
   },
@@ -272,6 +275,8 @@ em{
 }
 .main{
   color:white;
+  height: 100%;
+  overflow: auto
 }
 .chart{
   height: 450px;

@@ -45,6 +45,9 @@
   import essaySearchResultCard from "../components/EssaySearchResultCard"
   import sideBar from "../components/SideBar"
   import search from "../components/Search"
+  import {getRequest} from "../utils/request.js"
+  import bus from "../utils/bus"
+
 export default {
   name: 'SearchRes',
   components: {
@@ -55,6 +58,25 @@ export default {
 
   created(){
     this.currentPageChange(1);
+    var _this = this;
+    bus.$on("fuzzySearch", data => {
+      _this.type = data.type;
+      _this.keywords = data.con;
+      console.log(_this.type, ", ", _this.keywords);
+    })
+  },
+
+  mounted() {
+    getRequest("/api/query/paper/list?query=system&returnFacets=all").then(res=>{
+      console.log("res",res);
+      console.log("in");
+    })
+    console.log("outer");
+  },
+
+  beforeDestroy() {
+    // console.log("before destroy");
+    bus.$off("fuzzySearch");
   },
 
   data () {
@@ -113,6 +135,8 @@ export default {
           essayLink: 'https://ieeexplore.ieee.org/document/1248999/'},
       ],
       displayedResults: [],
+      type: "",
+      keywords: ""
     }
   },
 

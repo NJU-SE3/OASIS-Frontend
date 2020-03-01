@@ -10,7 +10,7 @@
               —— ——CONNECTING THE KNOWLEDGE—— ——
             </div>
             <div class="bar">
-            <SearchBar></SearchBar>
+            <SearchBar @paperSearch="search"></SearchBar>
             </div>
           </div>
         </div>
@@ -18,9 +18,9 @@
     <!-- <div class="show">
       <div class="link-tab">
         <ul class="tab-list">
-          <li class="tab-list-item" 
-              v-for="(item, index) in nav_list" 
-              :key="index" 
+          <li class="tab-list-item"
+              v-for="(item, index) in nav_list"
+              :key="index"
               :class="{active : (index == current)}"
               @mouseenter="toggle(index)">
             <el-link :underline="false" href="#">{{ item }}</el-link>
@@ -29,8 +29,8 @@
       </div> -->
 
       <!-- <div class="link-content">
-        <div class="content-item" 
-             v-for="(imageUrl, index) in urls" 
+        <div class="content-item"
+             v-for="(imageUrl, index) in urls"
              :key="index"
              v-show="(index == current)">
           <img :src="imageUrl" class="content-img">
@@ -48,9 +48,9 @@
         <el-col :span="6" :offset="2">
         <div class="link-tab">
           <ul class="tab-list">
-            <li class="tab-list-item" 
-                v-for="(item, index) in nav_list" 
-                :key="index" 
+            <li class="tab-list-item"
+                v-for="(item, index) in nav_list"
+                :key="index"
                 :class="{active : (index == current)}"
                 @mouseenter="enter(index)"
                 @click="detail(index)">
@@ -62,26 +62,26 @@
       <el-col :span="14" :offset="2">
       <div class="link-content">
         <div id="content-item-one" :class="{imgActive : pic_one}">
-          <el-image src="/static/mainpage/charts.jpg" 
-                    alt="ooops" 
-                    class="img-item" 
-                    lazy 
-                    @click="detail(0)" 
+          <el-image src="/static/mainpage/charts.jpg"
+                    alt="ooops"
+                    class="img-item"
+                    lazy
+                    @click="detail(0)"
                     @mouseenter="enter(0)"></el-image>
         </div>
         <div id="content-item-two" :class="{imgActive : pic_two}">
-          <el-image src="/static/mainpage/TODO1.png" 
-                    alt="ooops" 
-                    class="img-item" 
-                    lazy 
+          <el-image src="/static/mainpage/TODO1.png"
+                    alt="ooops"
+                    class="img-item"
+                    lazy
                     @click="detail(1)"
                     @mouseenter="enter(1)"></el-image>
         </div>
         <div id="content-item-three" :class="{imgActive : pic_three}">
-          <el-image src="/static/mainpage/TODO2.png" 
-                    alt="ooops" 
-                    class="img-item" 
-                    lazy 
+          <el-image src="/static/mainpage/TODO2.png"
+                    alt="ooops"
+                    class="img-item"
+                    lazy
                     @click="detail(2)"
                     @mouseenter="enter(2)"></el-image>
         </div>
@@ -93,6 +93,7 @@
 
 <script>
 import SearchBar from "../components/Search"
+import bus from "../utils/bus"
 
 export default {
   name: 'MainPage',
@@ -105,8 +106,14 @@ export default {
       current: 0,
       pic_one: true,
       pic_two: false,
-      pic_three: false
+      pic_three: false,
+      search_val: ""
     }
+  },
+
+  beforeDestroy() {
+    var val = this.search_val;
+    bus.$emit("fuzzySearch", val);
   },
 
   methods: {
@@ -137,6 +144,15 @@ export default {
       else {
         console.log("to do");
       }
+    },
+
+    search(value) {
+      // console.log("value: ", value);
+      this.search_val = value;
+      // this.$nextTick(function() {
+      //   bus.$emit("fuzzySearch", value);
+      // })
+      this.$router.push("result");
     }
   }
 }
@@ -146,8 +162,11 @@ export default {
 <style scoped>
 
 .main{
-  position: relative;
-  color: white;
+  /* //position: relative;
+  //color: white; */
+  color:white;
+  height: 100%;
+  overflow: auto
 }
 
 .title {
@@ -172,7 +191,8 @@ export default {
   position: relative;
   height: 100vh;
   min-height: 410px;
-  background-image: url("../assets/mainpage/video-poster_1576231362701.png");
+  /* background-image: url("../assets/mainpage/video-poster_1576231362701.png"); */
+  background-image: url("../assets/mainpage/test.png");
   background-size: 100% 100%;
 }
 .overlay{
