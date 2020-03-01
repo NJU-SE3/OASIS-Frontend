@@ -59,17 +59,17 @@ export default {
   },
 
   mounted() {
-    getRequest("/api/query/paper/list?query=system&returnFacets=all").then(res=>{
-      console.log("res",res);
-      console.log("in");
-    })
-    console.log("outer");
+    this.getFuzzySearchResult();
   },
 
   data () {
     return {
+      search_query: "system",
+      search_type: "all",
+      search_result: null,
+
       current_page: 1,
-      page_size: 1,
+      page_size: 10,
       is_ready: false,
       results: [
         { title: 'Synthesis and SAW characteristics of AlN thin films fabricated on Si and GaN using helicon sputtering system',
@@ -139,6 +139,17 @@ export default {
           this.displayedResults.push(this.results[from]);
         }
       }
+    },
+
+    getFuzzySearchResult(){
+      getRequest("/api/query/paper/list?query=system&returnFacets=all")
+        .then(res=>{
+        console.log("res",res);
+        console.log("in");
+        this.search_result = res.data.papers;
+        console.log(this.search_result);
+      })
+      console.log("outer");
     },
   },
 }
