@@ -8,11 +8,11 @@
         <el-row class="line-ranking ranking">
           <h1>Papers in Last 5 Years</h1>
           <div class="chart">
-            <ve-line class="line-chart"
+            <ve-line
             :data="yearData"
-            :events="auEvents"
             :settings="yearSettings"
             :extend="yearExtand"
+            :loading="load1"
             height="100%"></ve-line>
           </div>
         </el-row>
@@ -24,11 +24,12 @@
           </el-col>
           <el-col :span="16" :offset="1">
             <div class="chart">
-              <ve-histogram class="bar-chart"
-              :data="auData"
+              <ve-histogram
+              :data="auData" 
               :settings="auSettings"
               :events="auEvents"
               height="100%"
+              :loading="load2"
               :extend="auExtend"
               ></ve-histogram>
           </div>
@@ -39,10 +40,12 @@
             <div class="name">
               <h2><em>Top 10</em><br /> authors with papers cite</h2>
               <div class="chart">
-                <ve-ring
+                <ve-ring 
+                class="load-c"
                 :data="paperData"
                 :settings="paperSettings"
                 :events="paperExtand"
+                :loading="load3"
                 :legend-visible="false"
                 height="100%">
                 </ve-ring>
@@ -54,10 +57,12 @@
 
           </el-col>
         </el-row>
-                    <div class="word-cloud">
+            <div class="chart word-cloud">
                <ve-wordcloud
+               class="load-c"
                :data="termData"
-               :settings="termSettings"></ve-wordcloud>
+               :settings="termSettings"
+               :loading="load4"></ve-wordcloud>
           </div>
       </el-main>
     </el-container>
@@ -67,6 +72,8 @@
 <script>
 import MyHeader from "../components/Header.vue"
 import {getRequest} from "../utils/request.js"
+import 'v-charts/lib/style.css';
+
 export default {
     name: 'Ranking',
     components:{
@@ -140,7 +147,13 @@ export default {
         textStyle:{
           color: 'white',
         },
-        color:["#a5e7f0",],
+        "color":[
+            "#a5e7f0",
+            "#516b91",
+            "#59c4e6",
+            "#edafda",
+            "#93b7e3",
+            "#cbb0e3"],
         series: {
           label: {
             normal: {
@@ -160,11 +173,7 @@ export default {
         ],
         textStyle:{
           color: 'white',
-        },
-        // legend: {
-        // type: 'scroll',
-        // bottom: 2
-        // }
+        }
       }
 
       var self = this;
@@ -179,23 +188,30 @@ export default {
       };
 
       return {
-        auData: {
-          columns: ['Author','Paper1','Paper2','Paper3','Paper4','Paper5'],
-          rows: []
-        },
         yearData:{
           columns: ['year', 'count'],
           rows: []
         },
+        auData: {
+          columns: ['Author','Paper1','Paper2','Paper3','Paper4','Paper5'],
+          rows: []
+        },
         paperData:{
-          columns: ['Title','Cite'],
+          columns: ['title','citationCount'],
           rows: []
         },
         termData:{
           columns: ['term', 'count'],
           rows: []
-        }
-        ,
+        },
+        load1:true,
+        load2:true,
+        load3:true,
+        load4:true,
+        // load1:false,
+        // load2:false,
+        // load3:false,
+        // load4:false,
       }
   },
   mounted(){
@@ -207,47 +223,36 @@ export default {
   },
     methods: {
       initChart(){
-        console.log("before init")
+        this.getFir();
+        this.getSec();
+      },
+      getFir(){
         let l=getRequest("/api/report/paper/trend/year");
         let a=getRequest("/api/report/author/rank/paper_cnt")
+        let res=Promise.all([l,a]);
+        res.then(r=>{
+          console.log(r[0].data,r[1].data);
+          this.yearData.rows=r[0].data;
+          this.load1=false;
+          this.auData.rows=r[1].data;
+          this.load2=false;
+          console.log("fin 1")
+        })
+      },
+      getSec(){
+        console.log("beg 2")
         let p=getRequest("/api/report/paper/rank/citation")
         let w=getRequest("/api/report/wdcld/year?year="+2019)
-        let res=Promise.all([l,a,p,w]);
-
+        let res=Promise.all([p,w]);
         res.then(r=>{
-          console.log("in res",r)
-          this.yearData=r[0].data;
-          // this.
+          console.log(r[0].data,r[1].data);
+          // this.paperData.rows=r[0].data;
 
+          this.load3=false;
+          this.termData.rows=r[1].data;
+          this.load4=false;
+          console.log("fin 2")
         })
-        console.log("res",res)
-        // for (let i =0; i<10 ;i++){
-        // this.auData.rows.push({
-        //   'Author':"Smith.J",
-        //   'Paper1':Math.ceil(Math.random()*1000),
-        //   'Paper2':Math.ceil(Math.random()*1000),
-        //   'Paper3':Math.ceil(Math.random()*1000),
-        //   'Paper4':Math.ceil(Math.random()*1000),
-        //   'Paper5':Math.ceil(Math.random()*1000),
-        //   });
-        // this.paperData.rows.push({
-        //   'Title':'a long long long long name'+Math.ceil(Math.random()*100),
-        //   'Cite':Math.ceil(Math.random()*1000)
-        // })
-        // };
-        // var a=0,y=2014;
-        // for (let i=0; i<5 ;i++){
-        //   a=a+Math.ceil(Math.random()*1000)
-        //   y+=1
-        //   this.yearData.rows.push({
-        //     'Year':y.toString(),
-        //     'Amount':a.toString(),
-        //   })
-        // };
-        //词云
-        // this.termData.rows=data
-
-
       },
       search(data) {
         console.log(data);
@@ -259,6 +264,7 @@ export default {
 }
 </script>
 <style scoped>
+
 h1{
   font-size:220%;
   margin:0;
@@ -275,6 +281,9 @@ em{
 .chart{
   height: 450px;
 }
+.chart>>>.v-charts-component-loading {
+  background-color: rgba(0, 0, 0, 0) ; 
+}
 .ranking{
   margin:1% 0;
 }
@@ -290,3 +299,31 @@ em{
   width: 100%;
 }
 </style>
+          // for (let i=0; i < 6; i++) {
+          //   let item=r[0].data[i];
+          //   this.yearData.rows.push({
+          //     'year':item.year.toString(),
+          //     'count':item.count.toString()
+          //   })
+          // }
+          // console.log("year",this.yearData)
+          // this.load1=false;
+          // this.auData.rows=r[1].data;
+
+
+
+          //         for(let i = 0; i<10; i++){
+          // this.auData.rows.push({
+          //   'Author':'SM',
+          //   'Paper1':Math.ceil(Math.random()*1000).toString(),
+          //   'Paper2':Math.ceil(Math.random()*1000).toString(),
+          //   'Paper3':Math.ceil(Math.random()*1000).toString(),
+          //   'Paper4':Math.ceil(Math.random()*1000).toString(),
+          //   'Paper5':Math.ceil(Math.random()*1000).toString(),
+            // 'Paper1':Math.ceil(Math.random()*1000),
+            // 'Paper2':Math.ceil(Math.random()*1000),
+            // 'Paper3':Math.ceil(Math.random()*1000),
+            // 'Paper4':Math.ceil(Math.random()*1000),
+            // 'Paper5':Math.ceil(Math.random()*1000),
+          })
+        }
