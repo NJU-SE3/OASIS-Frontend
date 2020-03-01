@@ -10,7 +10,7 @@
               —— ——CONNECTING THE KNOWLEDGE—— ——
             </div>
             <div class="bar">
-            <SearchBar></SearchBar>
+            <SearchBar @paperSearch="search"></SearchBar>
             </div>
           </div>
         </div>
@@ -93,6 +93,7 @@
 
 <script>
 import SearchBar from "../components/Search"
+import bus from "../utils/bus"
 
 export default {
   name: 'MainPage',
@@ -105,8 +106,14 @@ export default {
       current: 0,
       pic_one: true,
       pic_two: false,
-      pic_three: false
+      pic_three: false,
+      search_val: ""
     }
+  },
+
+  beforeDestroy() {
+    var val = this.search_val;
+    bus.$emit("fuzzySearch", val);
   },
 
   methods: {
@@ -137,6 +144,15 @@ export default {
       else {
         console.log("to do");
       }
+    },
+
+    search(value) {
+      // console.log("value: ", value);
+      this.search_val = value;
+      // this.$nextTick(function() {
+      //   bus.$emit("fuzzySearch", value);
+      // })
+      this.$router.push("result");
     }
   }
 }
@@ -146,8 +162,8 @@ export default {
 <style scoped>
 
 .main{
-  //position: relative;
-  //color: white;
+  /* //position: relative;
+  //color: white; */
   color:white;
   height: 100%;
   overflow: auto
@@ -175,7 +191,8 @@ export default {
   position: relative;
   height: 100vh;
   min-height: 410px;
-  background-image: url("../assets/mainpage/video-poster_1576231362701.png");
+  /* background-image: url("../assets/mainpage/video-poster_1576231362701.png"); */
+  background-image: url("../assets/mainpage/test.png");
   background-size: 100% 100%;
 }
 .overlay{
