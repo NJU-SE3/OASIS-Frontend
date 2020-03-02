@@ -2,7 +2,7 @@
   <div class="side-bar">
     <div class="search-within">
       <div class="indicator">Search within</div>
-      <search></search>
+      <search @paperSearch="searchVal"></search>
     </div>
     <div class="date-pick">
       <div class="indicator">Year pick</div>
@@ -31,7 +31,7 @@
     <div class="category-select">
       <el-collapse v-model="activeNames" @change="handleChange">
         <el-collapse-item title="Author" name="1">
-          <div v-for="(author, index) in authorSummary">
+          <div v-for="(author, index) in authorSummary" :key="index">
             <el-checkbox class="check-box"
                          v-model="authorSummaryCheck[index]">
               {{author.first}}({{author.second}})
@@ -46,7 +46,7 @@
           </div>
         </el-collapse-item>
         <el-collapse-item title="Conference" name="2">
-          <div v-for="(conference, index) in conferenceSummary">
+          <div v-for="(conference, index) in conferenceSummary" :key="index">
             <el-checkbox class="check-box" v-model="conferenceSummaryCheck[index]">
               {{conference.first}}({{conference.second}})
             </el-checkbox>
@@ -60,7 +60,7 @@
           </div>
         </el-collapse-item>
         <el-collapse-item title="Affiliation" name="3">
-          <div v-for="(affiliation, index) in affiliationSummary">
+          <div v-for="(affiliation, index) in affiliationSummary" :key="index">
             <el-checkbox class="check-box" v-model="affiliationSummaryCheck[index]">
               {{affiliation.first}}({{affiliation.second}})
             </el-checkbox>
@@ -74,7 +74,7 @@
           </div>
         </el-collapse-item>
         <el-collapse-item title="Term" name="4">
-          <div v-for="(term, index) in termSummary">
+          <div v-for="(term, index) in termSummary" :key="index">
             <el-checkbox class="check-box" v-model="termSummaryCheck[index]">
               {{term.first}}({{term.second}})
             </el-checkbox>
@@ -148,7 +148,11 @@
         },
 
         handleChange(val) {
-          //console.log(val);
+          console.log(val);
+        },
+
+        searchVal(val) {
+          this.$emit("advancedSearch", val);
         },
 
         getYearFromDatePick(date) {

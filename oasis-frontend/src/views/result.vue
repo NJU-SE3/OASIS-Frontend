@@ -6,7 +6,7 @@
             <h1>
               OASIS
             </h1>
-            <search></search>
+            <search @paperSearch="commonSearch"></search>
           </div>
         </div>
       </el-header>
@@ -17,7 +17,8 @@
                 v-bind:authorSummary = "summary_author"
                 v-bind:affiliationSummary="summary_affiliation"
                 v-bind:conferenceSummary="summary_conference"
-                v-bind:termSummary="summary_term"></side-bar>
+                v-bind:termSummary="summary_term"
+                @advancedSearch="handleAdvancedSearch"></side-bar>
             </div>
           </el-col>
           <el-col :span="18" id="res">
@@ -60,7 +61,77 @@ export default {
     'search': search
   },
 
-  created(){
+
+  data () {
+    return {
+      current_page: 1,
+      page_size: 1,
+      is_ready: false,
+      results: [
+        { title: 'Synthesis and SAW characteristics of AlN thin films fabricated on Si and GaN using helicon sputtering system',
+        authors: 'Paul Hershey ; Charles B. Silio',
+        organization: '2009 3rd Annual IEEE Systems Conference',
+        year: '2009',
+        times: '8',
+        essayLink: 'https://www.google.com/'},
+        { title: 'Reliable and accurate algorithm to compute the limit cycle locus for uncertain nonlinear systems',
+          authors: 'Paul Hershey ; Charles B. Silio',
+          organization: '2009 3rd Annual IEEE Systems Conference',
+          year: '2009',
+          times: '9',
+          essayLink: 'https://ieeexplore.ieee.org/document/1248999/'},
+        { title: 'Parametric Lyapunov function approach to H/sub 2/ analysis and control of linear parameter-dependent systems',
+          authors: 'Paul Hershey ; Charles B. Silio',
+          organization: '2009 3rd Annual IEEE Systems Conference',
+          year: '2009',
+          times: '100',
+          essayLink: 'https://ieeexplore.ieee.org/document/1248999/'},
+        { title: 'Parametric Lyapunov function approach to H/sub 2/ analysis and control of linear parameter-dependent systems',
+          authors: 'Paul Hershey ; Charles B. Silio',
+          organization: '2009 3rd Annual IEEE Systems Conference',
+          year: '2009',
+          times: '1',
+          essayLink: 'https://ieeexplore.ieee.org/document/1248999/'},
+        { title: 'Parametric Lyapunov function approach to H/sub 2/ analysis and control of linear parameter-dependent systems',
+          authors: 'Paul Hershey ; Charles B. Silio',
+          organization: '2009 3rd Annual IEEE Systems Conference',
+          year: '2009',
+          times: '10',
+          essayLink: 'https://ieeexplore.ieee.org/document/1248999/'},
+        { title: 'Parametric Lyapunov function approach to H/sub 2/ analysis and control of linear parameter-dependent systems',
+          authors: 'Paul Hershey ; Charles B. Silio',
+          organization: '2009 3rd Annual IEEE Systems Conference',
+          year: '2009',
+          times: '11',
+          essayLink: 'https://ieeexplore.ieee.org/document/1248999/'},
+        { title: 'Parametric Lyapunov function approach to H/sub 2/ analysis and control of linear parameter-dependent systems',
+          authors: 'Paul Hershey ; Charles B. Silio',
+          organization: '2009 3rd Annual IEEE Systems Conference',
+          year: '2009',
+          times: '12',
+          essayLink: 'https://ieeexplore.ieee.org/document/1248999/'},
+        { title: 'Parametric Lyapunov function approach to H/sub 2/ analysis and control of linear parameter-dependent systems',
+          authors: 'Paul Hershey ; Charles B. Silio',
+          organization: '2009 3rd Annual IEEE Systems Conference',
+          year: '2009',
+          times: '13',
+          essayLink: 'https://ieeexplore.ieee.org/document/1248999/'},
+      ],
+      displayedResults: [],
+      type: {
+        type_main: "",  //主页
+        type_second: "",  //结果页的一级搜索
+        type_advanced: "" //结果页的二级搜索
+      },
+      keywords: {
+        words_main: "",
+        words_second: "",
+        words_advanced: ""
+      }
+    }
+  },
+
+  created() {
     var _this = this;
     bus.$on("fuzzySearch", data => {
       _this.search_type = data.type;
@@ -95,6 +166,29 @@ export default {
     }
   },
 
+  created(){
+    this.currentPageChange(1);
+    var _this = this;
+    bus.$on("fuzzySearch", data => {
+      _this.type.type_main = data.type;
+      _this.keywords.words_main = data.con;
+      console.log(_this.type, ", ", _this.keywords);
+    })
+  },
+
+  mounted() {
+    getRequest("/api/query/paper/list?query=system&returnFacets=all").then(res=>{
+      console.log("res",res);
+      console.log("in");
+    })
+    console.log("outer");
+  },
+
+  beforeDestroy() {
+    // console.log("before destroy");
+    bus.$off("fuzzySearch");
+  },
+
   methods:{
     handleCurrentChange: function (currentPage) {
       this.current_page = currentPage;
@@ -108,6 +202,17 @@ export default {
         this.search_result = res.data;
         this.getSummary();
       })
+    },
+
+    commonSearch(val) {
+      this.type.type_second = val.type;
+      this.keywords.words_second = val.con;
+    },
+
+    handleAdvancedSearch(val) {
+      this.type.type_advanced = val.type;
+      this.keywords.words_advanced = val.con;
+      console.log(this.type, this.keywords);
     },
 
     getSummary() {

@@ -33,6 +33,15 @@ export default{
 </script>
 
 <style>
+.search-bar {
+    font-size: 25px;
+}
+
+.search-bar .input-with-select .el-input__inner {
+    font-size: 20px !important;
+    padding: 6% 1% 6% 2%;
+}
+
   .el-select .el-input {
     width: 9em;
   }
