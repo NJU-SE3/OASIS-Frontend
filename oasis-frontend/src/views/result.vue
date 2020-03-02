@@ -13,24 +13,29 @@
         <el-row :gutter="20" style="margin:3% 2%;" id="content">
           <el-col :span="6" id="options">
             <div style="height:100px;">
-              <side-bar @advancedSearch="handleAdvancedSearch"></side-bar>
+              <side-bar
+                v-bind:authorSummary = "summary_author"
+                v-bind:affiliationSummary="summary_affiliation"
+                v-bind:conferenceSummary="summary_conference"
+                v-bind:termSummary="summary_term"
+                @advancedSearch="handleAdvancedSearch"></side-bar>
             </div>
           </el-col>
           <el-col :span="18" id="res">
-            <div style="height:500px;">
-              <essay-search-result-card v-for="(result, index) in displayedResults"
+            <div style="height:1200px;">
+              <essay-search-result-card v-for="(result, index) in search_result"
                                         v-bind:key="index"
                                         v-bind:title="result.title"
                                         v-bind:authors="result.authors"
-                                        v-bind:organization="result.organization"
-                                        v-bind:year="result.year"
-                                        v-bind:times="result.times"
-                                        v-bind:essayLink="result.essayLink">
+                                        v-bind:conference="result.conference"
+                                        v-bind:year="result.year.toString()"
+                                        v-bind:times="result.citationCount.toString()"
+                                        v-bind:essayLink="result.pdfLink">
               </essay-search-result-card>
             </div>
             <div class="page-pagination">
               <el-pagination layout="prev,pager,next"
-                             :total="results.length"
+                             :total="search_page_number"
                              :current-page="current_page"
                              :page-size="page_size"
                              @current-change="handleCurrentChange">
@@ -123,6 +128,39 @@ export default {
         words_second: "",
         words_advanced: ""
       }
+  created(){
+    var _this = this;
+    bus.$on("fuzzySearch", data => {
+      _this.search_type = data.type;
+      _this.search_query = data.con;
+      _this.search_query = _this.handleBlankSpace(_this.search_query);
+      console.log("search query",_this.search_query);
+    })
+  },
+
+  mounted() {
+    this.getFuzzySearchResult();
+  },
+
+  beforeDestroy() {
+    bus.$off("fuzzySearch");
+  },
+
+  data () {
+    return {
+      search_query: "",
+      search_type: "",
+      search_result: null,
+      search_page_number: 100,
+      qid: "",
+
+      summary_term: [],
+      summary_author: [],
+      summary_conference: [],
+      summary_affiliation: [],
+
+      current_page: 0,
+      page_size: 10,
     }
   },
 
@@ -151,18 +189,19 @@ export default {
 
   methods:{
     handleCurrentChange: function (currentPage) {
+      console.log("!!!!");
       this.current_page = currentPage;
-      this.currentPageChange(currentPage);
+      this.getNextPage();
     },
-    currentPageChange(currentPage){
-      let from = (currentPage - 1) * this.page_size;
-      let to = currentPage * this.page_size;
-      this.displayedResults = [];
-      for(; from < to; from++) {
-        if(this.results[from]) {
-          this.displayedResults.push(this.results[from]);
-        }
-      }
+
+    getFuzzySearchResult(){
+      getRequest("/query/paper/list?query=" + this.search_query + "&returnFacets=" + this.search_type)
+        .then(res=>{
+        console.log("res",res);
+        this.search_result = res.data.papers;
+        this.qid = res.data.qid;
+        this.getSummary();
+      })
     },
 
     commonSearch(val) {
@@ -174,6 +213,32 @@ export default {
       this.type.type_advanced = val.type;
       this.keywords.words_advanced = val.con;
       console.log(this.type, this.keywords);
+    },
+    
+    getSummary() {
+      getRequest("/query/paper/summary?qid=" + this.qid).then(res=>{
+          console.log("summary", res);
+          this.summary_term = res.data.term;
+          this.summary_author = res.data.author;
+          this.summary_conference = res.data.conference;
+          this.summary_affiliation = res.data.affiliation;
+          console.log(this.summary_author);
+      })
+    },
+
+    getNextPage() {
+      getRequest("/query/paper/list?query=" + this.search_query +
+        "&returnFacets=" + this.search_type +
+        "&pageNum=" + this.current_page)
+        .then(res=>{
+          console.log("next page",res);
+          this.search_result = res.data.papers;
+        })
+    },
+
+    // convert blank space to %20
+    handleBlankSpace(input) {
+      return input.split(" ").join("%20");
     }
   },
 }
@@ -182,9 +247,11 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style>
 .main{
-  position: relative;
-  color: white;
+  color:white;
+  height: 100%;
+  overflow: auto
 }
+
 #header{
   position: relative;
 

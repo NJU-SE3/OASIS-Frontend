@@ -19,7 +19,7 @@ export default{
     name: "search-bar",
     data(){
         return{
-            searchType:"1",
+            searchType:"All",
             searchCon:""
         }
     },

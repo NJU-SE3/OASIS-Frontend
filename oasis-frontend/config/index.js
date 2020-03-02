@@ -10,13 +10,16 @@ module.exports = {
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    
+
     proxyTable: {
+      '/query/**': {
+        target: 'http://39.96.75.119:8081',  // 接口域名
+        changeOrigin: true,  //是否跨域
+      },
       '/api/**': {
-        target: 'https://citicup.top',  // 接口域名
-        changeOrigin: true,  //是否跨域 
-        secure: false,             
-      }
+        target: 'http://39.96.75.119:8081',  // 接口域名
+        changeOrigin: true,  //是否跨域
+      },
     },
 
     // Various Dev Server settings
@@ -27,7 +30,7 @@ module.exports = {
     notifyOnErrors: true,
     poll: false, // https://webpack.js.org/configuration/dev-server/#devserver-watchoptions-
 
-    
+
     /**
      * Source Maps
      */
