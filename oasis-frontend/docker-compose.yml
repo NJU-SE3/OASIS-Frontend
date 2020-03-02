@@ -13,6 +13,9 @@ services:
       - LETSENCRYPT_EMAIL=1071956678@qq.com
     networks:
       - proxy
+      - oasis
 networks:
  proxy:
+   external: true
+ oasis:
    external: true
