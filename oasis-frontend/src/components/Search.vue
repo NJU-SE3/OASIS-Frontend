@@ -37,8 +37,11 @@ export default{
     font-size: 25px;
 }
 
+.el-input-group__prepend div.el-select .el-input__inner {
+    text-align: center;
+}
+
 .search-bar .input-with-select .el-input__inner {
-    font-size: 20px !important;
     padding: 6% 1% 6% 2%;
 }
 

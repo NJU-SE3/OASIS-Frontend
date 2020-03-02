@@ -3,7 +3,7 @@
       <el-header id="header" style="height: 35vh;min-height: 270px; padding:0;">
         <div id="overlay">
           <div id="o-content">
-            <h1>
+            <h1 class="title">
               OASIS
             </h1>
             <search @paperSearch="commonSearch"></search>
@@ -242,10 +242,15 @@ export default {
   overflow: auto
 }
 
+.title {
+  font-size: 50px;
+  margin: 0 0 8px 0;
+}
+
 #header{
   position: relative;
 
-  background-image: url("../assets/mainpage/video-poster_1576231362701.png");
+  background-image: url("../assets/mainpage/test.png");
   background-size: 100% auto;
 }
 #overlay{
