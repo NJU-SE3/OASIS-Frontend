@@ -128,7 +128,10 @@ export default {
         words_second: "",
         words_advanced: ""
       }
-  created(){
+    }
+  },
+
+  created() {
     var _this = this;
     bus.$on("fuzzySearch", data => {
       _this.search_type = data.type;
@@ -214,7 +217,7 @@ export default {
       this.keywords.words_advanced = val.con;
       console.log(this.type, this.keywords);
     },
-    
+
     getSummary() {
       getRequest("/query/paper/summary?qid=" + this.qid).then(res=>{
           console.log("summary", res);
