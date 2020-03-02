@@ -5,7 +5,6 @@
 const path = require('path')
 
 module.exports = {
-  publicPath: './',
   dev: {
 
     // Paths
@@ -57,8 +56,6 @@ module.exports = {
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'static',
     assetsPublicPath: './',
-    publicPath: './',
-
 
     /**
      * Source Maps

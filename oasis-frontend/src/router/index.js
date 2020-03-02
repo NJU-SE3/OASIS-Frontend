@@ -26,12 +26,11 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'HelloWorld',
-      component: HelloWorld
+      redirect: '/mainpage'
     },
     {
       path: '/mainpage',
-      name:"MainPage",
+      name: "MainPage",
       component: MainPage,
     },
     {
