@@ -2,7 +2,7 @@
   <div class="side-bar">
     <div class="search-within">
       <div class="indicator">Search within</div>
-      <search></search>
+      <search @paperSearch="searchVal"></search>
     </div>
     <div class="date-pick">
       <div class="indicator">Year pick</div>
@@ -101,6 +101,10 @@
       methods: {
         handleChange(val) {
           console.log(val);
+        },
+
+        searchVal(val) {
+          this.$emit("advancedSearch", val);
         }
       }
     };

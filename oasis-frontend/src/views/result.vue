@@ -6,14 +6,14 @@
             <h1>
               OASIS
             </h1>
-            <search></search>
+            <search @paperSearch="commonSearch"></search>
           </div>
         </div>
       </el-header>
         <el-row :gutter="20" style="margin:3% 2%;" id="content">
           <el-col :span="6" id="options">
             <div style="height:100px;">
-              <side-bar></side-bar>
+              <side-bar @advancedSearch="handleAdvancedSearch"></side-bar>
             </div>
           </el-col>
           <el-col :span="18" id="res">
@@ -56,28 +56,6 @@ export default {
     'search': search
   },
 
-  created(){
-    this.currentPageChange(1);
-    var _this = this;
-    bus.$on("fuzzySearch", data => {
-      _this.type = data.type;
-      _this.keywords = data.con;
-      console.log(_this.type, ", ", _this.keywords);
-    })
-  },
-
-  mounted() {
-    getRequest("/api/query/paper/list?query=system&returnFacets=all").then(res=>{
-      console.log("res",res);
-      console.log("in");
-    })
-    console.log("outer");
-  },
-
-  beforeDestroy() {
-    // console.log("before destroy");
-    bus.$off("fuzzySearch");
-  },
 
   data () {
     return {
@@ -135,9 +113,40 @@ export default {
           essayLink: 'https://ieeexplore.ieee.org/document/1248999/'},
       ],
       displayedResults: [],
-      type: "",
-      keywords: ""
+      type: {
+        type_main: "",  //主页
+        type_second: "",  //结果页的一级搜索
+        type_advanced: "" //结果页的二级搜索
+      },
+      keywords: {
+        words_main: "",
+        words_second: "",
+        words_advanced: ""
+      }
     }
+  },
+
+  created(){
+    this.currentPageChange(1);
+    var _this = this;
+    bus.$on("fuzzySearch", data => {
+      _this.type.type_main = data.type;
+      _this.keywords.words_main = data.con;
+      console.log(_this.type, ", ", _this.keywords);
+    })
+  },
+
+  mounted() {
+    getRequest("/api/query/paper/list?query=system&returnFacets=all").then(res=>{
+      console.log("res",res);
+      console.log("in");
+    })
+    console.log("outer");
+  },
+
+  beforeDestroy() {
+    // console.log("before destroy");
+    bus.$off("fuzzySearch");
   },
 
   methods:{
@@ -155,6 +164,17 @@ export default {
         }
       }
     },
+
+    commonSearch(val) {
+      this.type.type_second = val.type;
+      this.keywords.words_second = val.con;
+    },
+
+    handleAdvancedSearch(val) {
+      this.type.type_advanced = val.type;
+      this.keywords.words_advanced = val.con;
+      console.log(this.type, this.keywords);
+    }
   },
 }
 </script>
