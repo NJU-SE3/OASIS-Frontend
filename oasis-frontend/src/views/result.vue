@@ -18,7 +18,10 @@
                 v-bind:affiliationSummary="summary_affiliation"
                 v-bind:conferenceSummary="summary_conference"
                 v-bind:termSummary="summary_term"
-                @advancedSearch="handleAdvancedSearch"></side-bar>
+                @advancedSearch="handleAdvancedSearch"
+                @searchWithin="processAdvancedSearch">
+
+              </side-bar>
             </div>
           </el-col>
           <el-col :span="18" id="res">
@@ -84,11 +87,11 @@ export default {
       search_query: "",
       search_type: "",
 
-      search_view_query: "",
-      search_view_type: "",
-
       search_within_query: "",
       search_within_type: "",
+      search_within_arguments: "",
+
+      is_search_within: false,
 
       search_result: null,
       search_page_number: 100,
@@ -100,6 +103,8 @@ export default {
 
       current_page: 0,
       page_size: 10,
+
+      advanced_query: null,
     }
   },
 
@@ -110,8 +115,10 @@ export default {
     },
 
     commonSearch(val) {
-      this.search_view_type = val.type;
-      this.search_view_query = val.con;
+      this.search_type = val.type;
+      this.search_query = val.con;
+      this.search_query = this.handleBlankSpace(this.search_query);
+      this.getFuzzySearchResult();
     },
 
     handleAdvancedSearch(val) {
@@ -120,34 +127,103 @@ export default {
       console.log(this.search_within_type, this.search_within_query);
     },
 
+    processAdvancedSearch(val) {
+      this.advanced_query = val;
+
+      this.is_search_within = true;
+      this.search_within_arguments = "";
+
+       var str_arguments = "";
+
+      if(this.advanced_query.conference.length > 0) {
+        this.advanced_query.conference.split(";").forEach(item => {
+          if(item.length > 0) {
+            str_arguments += "refinements=conference:" + item + ";";
+          }
+        });
+      }
+      if(this.advanced_query.term.length > 0) {
+        this.advanced_query.term.split(";").forEach(item => {
+          if(item.length > 0) {
+            str_arguments += "refinements=term:" + item + ";";
+          }
+        });
+      }
+      if(this.advanced_query.author.length > 0) {
+        this.advanced_query.author.split(";").forEach(item => {
+          if(item.length > 0) {
+            str_arguments += "refinements=author:" + item + ";";
+          }
+        });
+      }
+      if(this.advanced_query.year.length > 0) {
+        this.advanced_query.year.split(";").forEach(item => {
+          if(item.length > 0) {
+            str_arguments += "refinements=year:" + item + ";";
+          }
+        });
+      }
+      if(this.advanced_query.affiliation.length > 0){
+        this.advanced_query.affiliation.split(";").forEach(item => {
+          if(item.length > 0) {
+            str_arguments += "refinements=affiliation:" + item + ";";
+          }
+        });
+      }
+      this.search_within_arguments = str_arguments.trim().split(";")
+        .join("&").substring(0, str_arguments.length - 1);
+
+      this.getAdvancedSearchResult();
+    },
+
     getFuzzySearchResult(){
-      getRequest("/query/paper/list?query=" + this.search_query + "&returnFacets=" + this.search_type)
+      this.is_search_within = false;
+      this.search_result = null;
+
+      getRequest("/api/query/paper/list?query=" + this.search_query + "&returnFacets=" + this.search_type)
         .then(res=>{
-          console.log("res",res);
           this.search_result = res.data;
           this.getSummary();
         })
     },
 
     getSummary() {
-      getRequest("/query/paper/summary").then(res=>{
-          console.log("summary", res);
+      getRequest("/api/query/paper/summary").then(res=>{
           this.summary_term = res.data.term;
           this.summary_author = res.data.author;
           this.summary_conference = res.data.conference;
           this.summary_affiliation = res.data.affiliation;
-          console.log(this.summary_author);
       })
     },
 
+    getAdvancedSearchResult() {
+      this.is_search_within = true;
+      console.log("/api/query/paper/refine?" + this.search_within_arguments);
+
+      this.search_result = null;
+      getRequest("/api/query/paper/refine?" + this.search_within_arguments).then(res => {
+        console.log("search within: ", res);
+        this.search_result = res.data;
+      });
+    },
+
     getNextPage() {
-      getRequest("/query/paper/list?query=" + this.search_query +
-        "&returnFacets=" + this.search_type +
-        "&pageNum=" + this.current_page)
-        .then(res=>{
-          console.log("next page",res);
+      this.search_result = null;
+      if(!this.is_search_within) {
+        getRequest("/api/query/paper/list?query=" + this.search_query +
+          "&returnFacets=" + this.search_type +
+          "&pageNum=" + this.current_page)
+          .then(res => {
+            this.search_result = res.data;
+          })
+      }
+      else {
+        getRequest("/api/query/paper/refine?" + this.search_within_arguments +
+        "&pageNum=" + this.current_page).then(res => {
+          console.log("search within: ", res);
           this.search_result = res.data;
-        })
+        });
+      }
     },
 
     // convert blank space to %20

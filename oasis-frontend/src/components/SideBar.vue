@@ -148,7 +148,6 @@
         },
 
         handleChange(val) {
-          console.log(val);
         },
 
         searchVal(val) {
@@ -226,8 +225,7 @@
             });
             this.searchWithinQuery.term = term;
           }
-          console.log(this.searchWithinQuery);
-          this.$emit("search-within", this.searchWithinQuery);
+          this.$emit("searchWithin", this.searchWithinQuery);
         },
       }
     };
