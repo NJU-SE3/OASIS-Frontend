@@ -178,8 +178,6 @@
           {
             this.termChecked = result;
           }
-          //console.log(this.authorChecked);
-          //console.log(this.conferenceChecked);
           return result;
         },
 
@@ -192,7 +190,7 @@
             var author = "";
             this.authorSummaryCheck.forEach((item,index) => {
               if(item) {
-                author += this.authorSummary[index] + " ";
+                author += this.authorSummary[index].first + ";";
               }
             });
             this.searchWithinQuery.author = author;
@@ -201,7 +199,7 @@
             var conference = "";
             this.conferenceSummaryCheck.forEach((item, index) => {
               if(item) {
-                conference += this.conferenceSummary[index] + " ";
+                conference += this.conferenceSummary[index].first + ";";
               }
             });
             this.searchWithinQuery.conference = conference;
@@ -210,7 +208,7 @@
             var affiliation = "";
             this.affiliationSummaryCheck.forEach((item, index) => {
               if(item) {
-                affiliation += this.affiliationSummary[index] + " ";
+                affiliation += this.affiliationSummary[index].first + ";";
               }
             });
             this.searchWithinQuery.affiliation = affiliation;
@@ -219,12 +217,13 @@
             var term = "";
             this.termSummaryCheck.forEach((item, index) => {
               if(item) {
-                term += this.termSummary[index] + " ";
+                term += this.termSummary[index].first + ";";
               }
             });
             this.searchWithinQuery.term = term;
           }
           console.log(this.searchWithinQuery);
+          this.$emit("search-within", this.searchWithinQuery);
         },
       }
     };

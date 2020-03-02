@@ -21,7 +21,7 @@
             </div>
           </el-col>
           <el-col :span="18" id="res">
-            <div style="height:1200px;">
+            <div class="result-card">
               <essay-search-result-card v-for="(result, index) in search_result"
                                         v-bind:key="index"
                                         v-bind:title="result.title"
@@ -84,7 +84,6 @@ export default {
       search_type: "",
       search_result: null,
       search_page_number: 100,
-      qid: "",
 
       summary_term: [],
       summary_author: [],
@@ -98,7 +97,6 @@ export default {
 
   methods:{
     handleCurrentChange: function (currentPage) {
-      console.log("!!!!");
       this.current_page = currentPage;
       this.getNextPage();
     },
@@ -107,14 +105,13 @@ export default {
       getRequest("/query/paper/list?query=" + this.search_query + "&returnFacets=" + this.search_type)
         .then(res=>{
         console.log("res",res);
-        this.search_result = res.data.papers;
-        this.qid = res.data.qid;
+        this.search_result = res.data;
         this.getSummary();
       })
     },
 
     getSummary() {
-      getRequest("/query/paper/summary?qid=" + this.qid).then(res=>{
+      getRequest("/query/paper/summary").then(res=>{
           console.log("summary", res);
           this.summary_term = res.data.term;
           this.summary_author = res.data.author;
@@ -130,7 +127,7 @@ export default {
         "&pageNum=" + this.current_page)
         .then(res=>{
           console.log("next page",res);
-          this.search_result = res.data.papers;
+          this.search_result = res.data;
         })
     },
 
@@ -165,6 +162,10 @@ export default {
   height: 100%;
   width: 100%;
   background-color:rgba(79,79,79,0.10);
+}
+
+.result-card {
+  display: block;
 }
 
 .page-pagination{
