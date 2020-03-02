@@ -123,9 +123,18 @@ export default {
             let au=obj.dataIndex;
             let paper=obj.componentIndex;
             return `<div style="border-bottom: 1px solid rgba(255,255,255,.3);font-size: 18px;padding-bottom: 7px;margin-bottom: 7px">${self.authors[au].papers[paper].title}</div><div class="tool-content" font-size: 14px; text-align:left;"><strong>Author: </strong>${self.authors[au].papers[paper].authors}<br /><strong>Year: </strong>${self.authors[au].papers[paper].year}<br /><strong>Citation: </strong>${self.authors[au].papers[paper].citication}</div>`;
+            }
           }
         }
-      }
+      this.auEvents = {
+        click: function(e){
+          self.auClick(e)
+        },
+        dblclick : function (e) {
+          self.name = e.type
+          console.log("db")
+        }
+      };
 
 
       this.yearSettings ={
@@ -203,15 +212,7 @@ export default {
         }
       }
 
-      this.auEvents = {
-        click: function(e){
-          self.getClick(e)
-        },
-        dblclick : function (e) {
-          self.name = e.type
-          console.log("db")
-        }
-      };
+
 
       return {
         yearData:{
@@ -295,8 +296,14 @@ export default {
       search(data) {
         console.log(data);
       },
-      getClick(e){
-        console.log("in get",e);
+      auClick(e){
+        const loading = this.$loading({
+          lock: true,
+          text: 'Loading',
+          spinner: 'el-icon-loading',
+          background: 'rgba(255, 255, 255, 0.7)'
+        });
+        window.location.href = this.authors[e.dataIndex].papers[e.componentIndex].pdfLink
       }
   }
 }
