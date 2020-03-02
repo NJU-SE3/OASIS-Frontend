@@ -80,11 +80,69 @@ export default {
       MyHeader,
     },
   data () {
+      var self = this;
+      var colors=[
+            "#516b91",
+            "#59c4e6",
+            "#edafda",
+            "#93b7e3",
+            "#a5e7f0",
+            "#cbb0e3"];
+
+    //Author
+        var emphasisStyle = {
+        itemStyle: {
+            barBorderWidth: 1,
+            shadowBlur: 10,
+            shadowOffsetX: 0,
+            shadowOffsetY: 0,
+            shadowColor: 'rgba(0,0,0,0.5)'
+        }
+    };
       this.auSettings = {
         stack: { 'Papers': ['Paper1','Paper2','Paper3','Paper4','Paper5'] },
       }
+      this.auExtend = {
+        textStyle:{
+          color: 'white',
+        },
+        color:colors,
+        series:{
+          emphasis:emphasisStyle,
+        },
+        tooltip:{
+          trigger:"item",
+          enterable:"ture",
+          confine:"ture",
+          padding: 10,
+          backgroundColor: '#222',
+          borderColor: '#777',
+          borderWidth: 1,
+          extraCssText:'width:25em; white-space:pre-wrap',
+          formatter: function (obj) {
+            let au=obj.dataIndex;
+            let paper=obj.componentIndex;
+            return `<div style="border-bottom: 1px solid rgba(255,255,255,.3);font-size: 18px;padding-bottom: 7px;margin-bottom: 7px">${self.authors[au].papers[paper].title}</div><div class="tool-content" font-size: 14px; text-align:left;"><strong>Author: </strong>${self.authors[au].papers[paper].authors}<br /><strong>Year: </strong>${self.authors[au].papers[paper].year}<br /><strong>Citation: </strong>${self.authors[au].papers[paper].citication}</div>`;
+          }
+        }
+      }
+
+
       this.yearSettings ={
-        area: true
+        area: true,
+        color:colors
+      }
+      this.yearExtand={
+        textStyle:{
+          color: 'white',
+        },
+        series: {
+          label: {
+            normal: {
+              show: true
+            }
+          }
+        }
       }
       this.paperSettings ={
         radius: ['88%', '75%'],
@@ -130,38 +188,7 @@ export default {
          shape: 'circle'
 
       }
-      this.auExtend = {
-        textStyle:{
-          color: 'white',
-        },
-          color: [
-            "#516b91",
-            "#59c4e6",
-            "#edafda",
-            "#93b7e3",
-            "#a5e7f0",
-            "#cbb0e3"
-        ],
-      }
-      this.yearExtand={
-        textStyle:{
-          color: 'white',
-        },
-        "color":[
-            "#a5e7f0",
-            "#516b91",
-            "#59c4e6",
-            "#edafda",
-            "#93b7e3",
-            "#cbb0e3"],
-        series: {
-          label: {
-            normal: {
-              show: true
-            }
-          }
-        }
-      }
+
       this.paperExtand = {
          color: [
             "#516b91",
@@ -176,7 +203,6 @@ export default {
         }
       }
 
-      var self = this;
       this.auEvents = {
         click: function(e){
           self.getClick(e)
@@ -234,7 +260,19 @@ export default {
           console.log(r[0].data,r[1].data);
           this.yearData.rows=r[0].data;
           this.load1=false;
-          this.auData.rows=r[1].data;
+          let l=[];
+          for(var i=0; i<10 ; i++){
+            l.push({
+              'Author':r[1].data[i].author,
+              'Paper1':r[1].data[i].papers[0].citationCount,
+              'Paper2':r[1].data[i].papers[1].citationCount,
+              'Paper3':r[1].data[i].papers[2].citationCount,
+              'Paper4':r[1].data[i].papers[3].citationCount,
+              'Paper5':r[1].data[i].papers[4].citationCount,
+            })
+          }
+          this.auData.rows = l;
+          this.authors=r[1].data;
           this.load2=false;
           console.log("fin 1")
         })
@@ -297,6 +335,12 @@ em{
 .word-cloud{
   height: 1000px;
   width: 100%;
+}
+
+
+.ve-histogram>>>.tool-content strong{
+  font-size:150%;
+  color:rgb(255, 253, 108);
 }
 </style>
           // for (let i=0; i < 6; i++) {
