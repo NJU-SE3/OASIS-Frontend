@@ -36,9 +36,10 @@
           </el-col>
         </el-row>
         <el-row class="paper-term-ranking ranking"  type="flex" align="middle">
-          <el-col :span="8">
+          <el-col :span="11">
             <div class="name">
               <h2><em>Top 10</em><br /> authors with papers cite</h2>
+            </div>
               <div class="chart" id="ring">
                 <ve-ring 
                 :data="paperData"
@@ -50,14 +51,10 @@
                 height="100%">
                 </ve-ring>
               </div>
-            </div>
           </el-col>
-          <el-col :span="14" :offset="2" display="flex">
+          <el-col :span="11" :offset="1" display="flex">
             <h2><em>HOOOOOOOT </em> terms!</h2>
-
-          </el-col>
-        </el-row>
-            <div class="chart" id="word-cloud">
+              <div class="chart" id="word-cloud">
                <ve-wordcloud
                :data="termData"
                :settings="termSettings"
@@ -65,6 +62,8 @@
                :loading="load4">
                </ve-wordcloud>
           </div>
+          </el-col>
+        </el-row>
       </el-main>
     </el-container>
   </div>
@@ -156,7 +155,7 @@ export default {
 
     //Paper
       this.paperSettings ={
-        radius: ['75%', '90%'],
+        radius: ['80%', '95%'],
         offsetY:'50%',
         // roseType:'area',
         label:{
@@ -166,7 +165,7 @@ export default {
       this.paperExtend={
         tooltip:{
           trigger:"item",
-          position: ['50%', '50%', '50%','50%'],
+          // position: ['27%', '28%'],
           enterable:"ture",
           confine:"ture",
           padding: 10,
@@ -178,16 +177,9 @@ export default {
           formatter: function (obj) {
             console.log("obj",obj)
             let p=obj.dataIndex;
-            // let paper=obj.componentIndex;
-            return `<div style="border-bottom: 1px solid rgba(255,255,255,.3);font-size: 18px;padding-bottom: 7px;
-            margin-bottom: 7px">${self.papers[p].title}</div><div class="tool-content"
-             font-size: 14px; text-align:left;">
-             <strong>Author: </strong>${self.papers[p].authors}
-             <br /><strong>Year: </strong>${self.papers[p].year}
-             <br /><strong>Citation:
-              </strong>${self.papers[p].citication}</div>`;
-              }
+            return `<div style="border-bottom: 1px solid rgba(255,255,255,.3);font-size: 22px;padding-bottom: 7px;margin-bottom: 7px">${self.papers[p].title}</div><div class="tool-content"style="font-size: 18px; text-align:left;"><strong>Author: </strong>${self.papers[p].authors}<br /><strong>Year: </strong>${self.papers[p].year}<br /><strong>Citation:</strong>${self.papers[p].citication}</div>`;
           }
+        }
       }
       this.paperEvents = {
 
@@ -357,14 +349,16 @@ em{
 .bar-ranking .name{
   margin: 0 0 13% 0;
 }
-.ve-wordcloud {
+/* .ve-wordcloud {
   height: 1000px !important;
   width: 100%;
-}
-
-
+} */
 .chart>>>.tool-content strong{
   font-size:130%;
   color:rgb(255, 253, 108);
+}
+
+#ring,#id{
+  height: 550px;;
 }
 </style>
