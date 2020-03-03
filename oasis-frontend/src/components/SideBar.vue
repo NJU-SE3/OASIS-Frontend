@@ -109,8 +109,18 @@
       watch: {
         authorSummary(){
           this.setValuesToDefault();
-          console.log("up!");
-          console.log(this.authorSummaryCheck);
+        },
+
+        affiliationSummary() {
+          this.setValuesToDefault();
+        },
+
+        termSummary() {
+          this.setValuesToDefault();
+        },
+
+        conferenceSummary(){
+          this.setValuesToDefault();
         },
       },
 

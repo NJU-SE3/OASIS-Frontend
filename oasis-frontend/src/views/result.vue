@@ -25,6 +25,7 @@
             </div>
           </el-col>
           <el-col :span="18" id="res">
+            <div class="no-result-hint" v-if="!has_result">No result!</div>
             <div class="result-card">
               <essay-search-result-card v-for="(result, index) in search_result"
                                         v-bind:key="index"
@@ -96,6 +97,7 @@ export default {
       is_search_within: false,
 
       search_result: null,
+      has_result: true,
       search_affiliation: "",
 
       summary_term: [],
@@ -207,17 +209,25 @@ export default {
 
       getRequest("/api/query/paper/list?query=" + this.search_query + "&returnFacets=" + this.search_type)
         .then(res=>{
-          //console.log(res);
           this.search_result = res.data.papers;
           this.search_page_number = res.data.itemCnt;
 
-          this.getSummary();
+          if(this.search_page_number > 0) {
+            this.getSummary();
+            this.has_result = true;
+          }
+          else {
+            this.has_result = false;
+            this.summary_author = [];
+            this.summary_affiliation = [];
+            this.summary_conference = [];
+            this.summary_term = [];
+          }
         });
     },
 
     getSummary() {
       getRequest("/api/query/paper/summary").then(res=>{
-        console.log(res);
           this.summary_term = res.data.term;
           this.summary_author = res.data.author;
           this.summary_conference = res.data.conference;
@@ -231,7 +241,6 @@ export default {
       this.search_result = null;
 
       getRequest("/api/query/paper/refine?" + this.search_within_arguments).then(res => {
-        //console.log("search within: ", res);
         this.search_result = res.data.papers;
         this.search_page_number = res.data.itemCnt;
       });
@@ -250,7 +259,6 @@ export default {
       else {
         getRequest("/api/query/paper/refine?" + this.search_within_arguments +
         "&pageNum=" + this.current_page).then(res => {
-          //console.log("search within: ", res);
           this.search_result = res.data.papers;
         });
       }
