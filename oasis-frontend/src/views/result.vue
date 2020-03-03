@@ -73,7 +73,6 @@ export default {
       _this.search_type = data.type;
       _this.search_query = data.con;
       _this.search_query = _this.handleBlankSpace(_this.search_query);
-      console.log("search query",_this.search_query);
     })
   },
 
@@ -208,7 +207,7 @@ export default {
 
       getRequest("/api/query/paper/list?query=" + this.search_query + "&returnFacets=" + this.search_type)
         .then(res=>{
-          console.log(res);
+          //console.log(res);
           this.search_result = res.data.papers;
           this.search_page_number = res.data.itemCnt;
 
@@ -231,9 +230,8 @@ export default {
       this.current_page = 0;
       this.search_result = null;
 
-      console.log("/api/query/paper/refine?" + this.search_within_arguments);
       getRequest("/api/query/paper/refine?" + this.search_within_arguments).then(res => {
-        console.log("search within: ", res);
+        //console.log("search within: ", res);
         this.search_result = res.data.papers;
         this.search_page_number = res.data.itemCnt;
       });
@@ -252,7 +250,7 @@ export default {
       else {
         getRequest("/api/query/paper/refine?" + this.search_within_arguments +
         "&pageNum=" + this.current_page).then(res => {
-          console.log("search within: ", res);
+          //console.log("search within: ", res);
           this.search_result = res.data.papers;
         });
       }

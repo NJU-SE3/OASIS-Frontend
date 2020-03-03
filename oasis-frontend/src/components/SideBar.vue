@@ -106,6 +106,14 @@
         conferenceSummary: Array,
       },
 
+      watch: {
+        authorSummary(){
+          this.setValuesToDefault();
+          console.log("up!");
+          console.log(this.authorSummaryCheck);
+        },
+      },
+
       data() {
         return {
           searchWithinChecked: false,
@@ -233,6 +241,19 @@
             this.searchWithinQuery.term = term;
           }
           this.$emit("searchWithin", this.searchWithinQuery);
+        },
+
+        setValuesToDefault() {
+          this.authorSummaryCheck.fill(false);
+          this.conferenceSummaryCheck.fill(false);
+          this.affiliationSummaryCheck.fill(false);
+          this.termSummaryCheck.fill(false);
+
+          this.yearChecked = false;
+          this.authorChecked = false;
+          this.affiliationChecked = false;
+          this.conferenceChecked = false;
+          this.termChecked = false;
         },
       }
     };

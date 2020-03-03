@@ -10,8 +10,16 @@
       <div><span class="sub-title">Affiliation: </span>{{affiliation}}</div>
       <div><span class="sub-title">Cited by: </span>Papers ({{times}})</div>
       <div><span class="sub-title">Terms:</span>
-        <span v-if="!showAllTerms" @click="toggleShowAllTerms">...</span>
-        <span v-if="showAllTerms" @click="toggleShowAllTerms">{{terms}}</span></div>
+        <span v-if="!showAllTerms"
+              @click="toggleShowAllTerms"
+              class="sub-title-terms">
+          ...
+        </span>
+        <span v-if="showAllTerms"
+              @click="toggleShowAllTerms"
+              class="sub-title-terms">
+          {{terms}}
+        </span></div>
     </div>
   </div>
 </template>
@@ -30,8 +38,10 @@
         affiliation: String,
       },
 
-      data: {
-          showAllTerms: false,
+      data() {
+          return {
+            showAllTerms: false,
+          };
       },
 
       methods: {
@@ -57,6 +67,11 @@
 
   .sub-title {
     font-weight: bold;
+  }
+
+  .sub-title-terms {
+    cursor: pointer;
+
   }
 
   a{
