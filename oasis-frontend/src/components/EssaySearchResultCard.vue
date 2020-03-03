@@ -4,10 +4,14 @@
       <a v-bind:href="essayLink">{{title}}</a>
     </div>
     <div class="content">
-      <div id="author">{{authors}}</div>
-      <div>{{conference}}</div>
-      <div>Year: {{year}} | Conference Paper</div>
-      <div>Cited by: Papers ({{times}})</div>
+      <div id="author"><span class="sub-title">Authors: </span>{{authors}}</div>
+      <div><span class="sub-title">Conference: </span>{{conference}}</div>
+      <div><span class="sub-title">Year: </span>{{year}} | Conference Paper</div>
+      <div><span class="sub-title">Affiliation: </span>{{affiliation}}</div>
+      <div><span class="sub-title">Cited by: </span>Papers ({{times}})</div>
+      <div><span class="sub-title">Terms:</span>
+        <span v-if="!showAllTerms" @click="toggleShowAllTerms">...</span>
+        <span v-if="showAllTerms" @click="toggleShowAllTerms">{{terms}}</span></div>
     </div>
   </div>
 </template>
@@ -22,6 +26,18 @@
         year: String,
         times: String,
         essayLink: String,
+        terms: String,
+        affiliation: String,
+      },
+
+      data: {
+          showAllTerms: false,
+      },
+
+      methods: {
+        toggleShowAllTerms() {
+          this.showAllTerms = !this.showAllTerms;
+        }
       },
     }
 </script>
@@ -37,6 +53,10 @@
     font-size: large;
     font-weight: normal;
     margin-bottom: 1%;
+  }
+
+  .sub-title {
+    font-weight: bold;
   }
 
   a{

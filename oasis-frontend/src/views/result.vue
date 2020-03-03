@@ -29,14 +29,17 @@
               <essay-search-result-card v-for="(result, index) in search_result"
                                         v-bind:key="index"
                                         v-bind:title="result.title"
-                                        v-bind:authors="result.authors"
+                                        v-bind:authors="result.authors | getValidItemsForCard"
                                         v-bind:conference="result.conference"
                                         v-bind:year="result.year.toString()"
                                         v-bind:times="result.citationCount.toString()"
+                                        v-bind:terms="result.terms"
+                                        v-bind:affiliation="result.affiliations | getValidItemsForCard"
                                         v-bind:essayLink="result.pdfLink">
               </essay-search-result-card>
             </div>
-            <div class="page-pagination">
+            <div class="page-pagination"
+                 v-if="search_result != null && search_result.length > 0">
               <el-pagination layout="prev,pager,next"
                              :total="search_page_number"
                              :current-page="current_page"
@@ -94,7 +97,7 @@ export default {
       is_search_within: false,
 
       search_result: null,
-      search_page_number: 100,
+      search_affiliation: "",
 
       summary_term: [],
       summary_author: [],
@@ -103,12 +106,35 @@ export default {
 
       current_page: 0,
       page_size: 10,
+      search_page_number: 100,
 
       advanced_query: null,
     }
   },
 
+  filters: {
+    getValidItemsForCard(items) {
+      var list_items = [];
+      var str_items = "";
+      items.split(";").forEach(item => {
+        if(item.length > 0 && item != "NA" && item != " NA"
+          && str_items.indexOf(item) < 0) {
+          str_items += item;
+          list_items.push(item);
+        }
+      });
+      return list_items.join(";");
+    },
+
+    getValidItemsForSideBar(items) {
+      return items.filter(item => {
+        return item.length > 0 && item != "NA" && item != " NA";
+      });
+    },
+  },
+
   methods:{
+
     handleCurrentChange: function (currentPage) {
       this.current_page = currentPage;
       this.getNextPage();
@@ -124,7 +150,6 @@ export default {
     handleAdvancedSearch(val) {
       this.search_within_type = val.type;
       this.search_within_query = val.con;
-      console.log(this.search_within_type, this.search_within_query);
     },
 
     processAdvancedSearch(val) {
@@ -179,16 +204,21 @@ export default {
     getFuzzySearchResult(){
       this.is_search_within = false;
       this.search_result = null;
+      this.current_page = 0;
 
       getRequest("/api/query/paper/list?query=" + this.search_query + "&returnFacets=" + this.search_type)
         .then(res=>{
-          this.search_result = res.data;
+          console.log(res);
+          this.search_result = res.data.papers;
+          this.search_page_number = res.data.itemCnt;
+
           this.getSummary();
-        })
+        });
     },
 
     getSummary() {
       getRequest("/api/query/paper/summary").then(res=>{
+        console.log(res);
           this.summary_term = res.data.term;
           this.summary_author = res.data.author;
           this.summary_conference = res.data.conference;
@@ -198,12 +228,14 @@ export default {
 
     getAdvancedSearchResult() {
       this.is_search_within = true;
-      console.log("/api/query/paper/refine?" + this.search_within_arguments);
-
+      this.current_page = 0;
       this.search_result = null;
+
+      console.log("/api/query/paper/refine?" + this.search_within_arguments);
       getRequest("/api/query/paper/refine?" + this.search_within_arguments).then(res => {
         console.log("search within: ", res);
-        this.search_result = res.data;
+        this.search_result = res.data.papers;
+        this.search_page_number = res.data.itemCnt;
       });
     },
 
@@ -214,14 +246,14 @@ export default {
           "&returnFacets=" + this.search_type +
           "&pageNum=" + this.current_page)
           .then(res => {
-            this.search_result = res.data;
+            this.search_result = res.data.papers;
           })
       }
       else {
         getRequest("/api/query/paper/refine?" + this.search_within_arguments +
         "&pageNum=" + this.current_page).then(res => {
           console.log("search within: ", res);
-          this.search_result = res.data;
+          this.search_result = res.data.papers;
         });
       }
     },

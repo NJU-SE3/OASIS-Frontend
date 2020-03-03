@@ -1,9 +1,9 @@
 <template>
   <div class="side-bar">
-    <div class="search-within">
-      <div class="indicator">Search within</div>
-      <search @paperSearch="searchVal"></search>
-    </div>
+    <!--<div class="search-within">-->
+      <!--<div class="indicator">Search within</div>-->
+      <!--<search @paperSearch="searchVal"></search>-->
+    <!--</div>-->
     <div class="date-pick">
       <div class="indicator">Year pick</div>
       <div class="year-pick start-year">
@@ -31,7 +31,7 @@
     <div class="category-select">
       <el-collapse v-model="activeNames" @change="handleChange">
         <el-collapse-item title="Author" name="1">
-          <div v-for="(author, index) in authorSummary" :key="index">
+          <div v-for="(author, index) in getValidItemsForSideBar(authorSummary)" :key="index">
             <el-checkbox class="check-box"
                          v-model="authorSummaryCheck[index]">
               {{author.first}}({{author.second}})
@@ -60,7 +60,7 @@
           </div>
         </el-collapse-item>
         <el-collapse-item title="Affiliation" name="3">
-          <div v-for="(affiliation, index) in affiliationSummary" :key="index">
+          <div v-for="(affiliation, index) in getValidItemsForSideBar(affiliationSummary)" :key="index">
             <el-checkbox class="check-box" v-model="affiliationSummaryCheck[index]">
               {{affiliation.first}}({{affiliation.second}})
             </el-checkbox>
@@ -143,6 +143,13 @@
       },
 
       methods: {
+        getValidItemsForSideBar(items) {
+          return items.filter(item => {
+            return item.first.length > 0 && item.first != "NA"
+              && item.first != " NA";
+          });
+        },
+
         checkYear(value) {
           this.yearChecked = true;
         },
