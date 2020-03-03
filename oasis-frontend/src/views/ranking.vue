@@ -6,7 +6,7 @@
       </el-header>
       <el-main style="padding:0 5%">
         <el-row class="line-ranking ranking">
-          <h1>Papers in Last 5 Years</h1>
+          <h1><strong>Papers </strong>   in Last 6    <strong> Years</strong></h1>
           <div class="chart">
             <ve-line
             :data="yearData"
@@ -19,7 +19,7 @@
         <el-row class="bar-ranking ranking"  type="flex" align="middle">
           <el-col :span="6">
             <div class="name">
-              <h1><em>Top 10</em><br /> authors with papers cite</h1>
+              <h1><strong>Top 10</strong><br /> authors with papers cite</h1>
             </div>
           </el-col>
           <el-col :span="16" :offset="1">
@@ -36,12 +36,9 @@
           </el-col>
         </el-row>
         <el-row class="paper-term-ranking ranking"  type="flex" align="middle">
-          <el-col :span="11">
-            <div class="name">
-              <h2><em>Top 10</em><br /> authors with papers cite</h2>
-            </div>
+          <el-col :span="12">
               <div class="chart" id="ring">
-                <ve-ring 
+                <ve-ring id="v-ring"
                 :data="paperData"
                 :settings="paperSettings"
                 :extend="paperExtend"
@@ -49,11 +46,17 @@
                 :loading="load3"
                 :legend-visible="false"
                 height="100%">
+                  <h2 id="ring-name"><strong>Top 10</strong><br /> authors with papers cite <br /><em>↖click the ring for more↘</em></h2>
                 </ve-ring>
               </div>
           </el-col>
-          <el-col :span="11" :offset="1" display="flex">
-            <h2><em>HOOOOOOOT </em> terms!</h2>
+          <el-col :span="11" display="flex">
+            <h2><strong>HOOOOOOOOOOT！ </strong><br />terms in  <select id="year-select" v-model="termY" @change="getNew">
+              <option v-for="item in options"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"></option>
+            </select></h2>
               <div class="chart" id="word-cloud">
                <ve-wordcloud
                :data="termData"
@@ -73,6 +76,7 @@
 import MyHeader from "../components/Header.vue"
 import {getRequest} from "../utils/request.js"
 import 'v-charts/lib/style.css';
+import echarts from 'echarts/lib/echarts'
 
 export default {
     name: 'Ranking',
@@ -101,18 +105,40 @@ export default {
     //Year
       this.yearSettings ={
         area: true,
-        color:colors
       }
       this.yearExtend={
         textStyle:{
           color: 'white',
         },
+        color:['#5682c8'],
         series: {
           label: {
             normal: {
               show: true
             }
-          }
+          },
+          lineStyle:{
+            width:'3'
+          },
+          areaStyle:{
+            color:new echarts.graphic.LinearGradient(0,0,1,0, [
+              { offset: 0,  color: "#345379"},
+              { offset: 0.2, color: "#59c4e6",},
+              { offset: 0.4, color: "#9179cb",},
+              { offset: 0.6, color: "#edafda",},
+              { offset: 0.8, color: "#a5e7f0",},
+              { offset: 1, color: "#ffa0dd",},
+              ],)
+          },
+          markPoint:{
+            symbol:'pin', 
+            label:{
+              show:true, 
+              formatter:(params) => {
+                console.log("aaa",params)
+              }
+            }
+          },
         }
       }
 
@@ -141,7 +167,7 @@ export default {
           formatter: function (obj) {
             let au=obj.dataIndex;
             let paper=obj.componentIndex;
-            return `<div style="border-bottom: 1px solid rgba(255,255,255,.3);font-size: 22px;padding-bottom: 7px;margin-bottom: 7px">${self.authors[au].papers[paper].title}</div><div class="tool-content" style="font-size: 18px; text-align:left;"><strong>Author: </strong>${self.authors[au].papers[paper].authors}<br /><strong>Year: </strong>${self.authors[au].papers[paper].year}<br /><strong>Citation: </strong>${self.authors[au].papers[paper].citication}</div>`;
+            return `<div style="border-bottom: 1px solid rgba(255,255,255,.3);font-size: 22px;padding-bottom: 7px;margin-bottom: 7px">${self.authors[au].papers[paper].title}</div><div class="tool-content" style="font-size: 18px; text-align:left;"><strong>Author: </strong>${self.authors[au].papers[paper].authors}<br /><strong>Year: </strong>${self.authors[au].papers[paper].year}<br /><strong>Citation: </strong>${self.authors[au].papers[paper].citationCount}</div>`;
             }
           }
         }
@@ -165,62 +191,54 @@ export default {
       this.paperExtend={
         tooltip:{
           trigger:"item",
-          // position: ['27%', '28%'],
           enterable:"ture",
           confine:"ture",
           padding: 10,
-          // backgroundColor: 'transparent',
           backgroundColor:'#222',
           borderColor: '#777',
           borderWidth: 1,
           extraCssText:'width:25em; white-space:pre-wrap',
           formatter: function (obj) {
-            console.log("obj",obj)
             let p=obj.dataIndex;
-            return `<div style="border-bottom: 1px solid rgba(255,255,255,.3);font-size: 22px;padding-bottom: 7px;margin-bottom: 7px">${self.papers[p].title}</div><div class="tool-content"style="font-size: 18px; text-align:left;"><strong>Author: </strong>${self.papers[p].authors}<br /><strong>Year: </strong>${self.papers[p].year}<br /><strong>Citation:</strong>${self.papers[p].citication}</div>`;
+            return `<div style="border-bottom: 1px solid rgba(255,255,255,.3);font-size: 22px;padding-bottom: 7px;margin-bottom: 7px">${self.paperData.rows[p].title}</div><div class="tool-content"style="font-size: 18px; text-align:left;"><strong>Author: </strong>${self.paperData.rows[p].authors}<br /><strong>Year: </strong>${self.paperData.rows[p].year}<br /><strong>Citation:</strong>${self.paperData.rows[p].citationCount}</div>`;
           }
-        }
+        },
+        color:colors
       }
       this.paperEvents = {
-
+        click: function(e){
+          self.paClick(e)
+        }
       }
 
 
     //Terms
       this.termSettings ={
-        color: [
-            "#e01f54",
-            "#001852",
-            "#f5e8c8",
-            "#b8d2c7",
-            "#c6b38e",
-            "#a4d8c2",
-            "#f3d999",
-            "#d3758f",
-            "#dcc392",
-            "#2e4783",
-            "#82b6e9",
-            "#ff6347",
-            "#a092f1",
-            "#0a915d",
-            "#eaf889",
-            "#6699FF",
-            "#ff6666",
-            "#3cb371",
-            "#d5b158",
-            "#38b6b6"
+        "color": [
+            "#6aa9ff",
+            "#59c4e6",
+            "#edafda",
+            "#93b7e3",
+            "#a5e7f0",
+            "#cbb0e3",
+            "#b884b3",
+            "#74e3ff",
+            "#ddb4ff",
+            "#ff68b5",
+            "#85e3d7",
+            "#5aaef0",
+            "#fd94d1"
         ],
-         shape: 'cardioid',
       }
 
       this.termExtend={
         series: {
-          // drawOutOfBound:true,
           width: '100%',
           height: '100%',
           gridSize: 10,
         }
       }
+      
 
       return {
         yearData:{
@@ -243,19 +261,33 @@ export default {
         load2:true,
         load3:true,
         load4:true,
-        // load1:false,
-        // load2:false,
-        // load3:false,
-        // load4:false,
         authors:[],
-        papers:[]
+        termY:"2019",
+          options: [{
+          value: '2013',
+          label: '2013'
+        }, {
+          value: '2015',
+          label: '2015'
+        }, {
+          value: '2016',
+          label: '2016'
+        }, {
+          value: '2017',
+          label: '2017'
+        }, {
+          value: '2018',
+          label: '2018'
+        },{
+          value: '2019',
+          label: '2019'
+        }],
+
       }
   },
   mounted(){
     document.body.scrollTop = 0;
     document.documentElement.scrollTop = 0;
-    
-    console.log("outer")
     this.initChart();
   },
     methods: {
@@ -296,9 +328,8 @@ export default {
         res.then(r=>{
           console.log(r[0].data,r[1].data);
           this.paperData.rows=r[0].data;
-          this.papers=r[0].data;
           this.load3=false;
-          this.termData.rows=r[1].data;
+          this.termData.rows=r[1].data.slice(1,301);
           this.load4=false;
           console.log("fin 2")
         })
@@ -314,6 +345,26 @@ export default {
           background: 'rgba(255, 255, 255, 0.7)'
         });
         window.location.href = this.authors[e.dataIndex].papers[e.componentIndex].pdfLink
+      },
+      paClick(e){
+        const loading = this.$loading({
+          lock: true,
+          text: 'Loading',
+          spinner: 'el-icon-loading',
+          background: 'rgba(255, 255, 255, 0.7)'
+        });
+        window.location.href = this.paperData.rows[e.dataIndex].pdfLink
+      },
+      getNew(){
+        console.log("new!!",this.termY)
+        this.load4=true;
+        getRequest("/api/report/wdcld/year?year="+this.termY).then(r=>{
+          if(this.termY==2019)
+            this.termData.rows=r.data.slice(1,301);
+          else
+            this.termData.rows=r.data.slice(0,300);
+          this.load4=false;
+        })
       }
   }
 }
@@ -321,11 +372,20 @@ export default {
 <style scoped>
 
 h1{
-  font-size:220%;
+  font-size:200%;
   margin:0;
 }
-em{
+h2{
   font-size:150%;
+}
+strong{
+  font-size:150%;
+  color:rgb(255, 253, 108);
+  font-style:oblique;
+}
+#ring-name em{
+  font-size:80%;
+  font-style:normal;
   color:rgb(255, 253, 108);
 }
 .main{
@@ -349,16 +409,47 @@ em{
 .bar-ranking .name{
   margin: 0 0 13% 0;
 }
-/* .ve-wordcloud {
-  height: 1000px !important;
-  width: 100%;
-} */
 .chart>>>.tool-content strong{
   font-size:130%;
   color:rgb(255, 253, 108);
 }
 
-#ring,#id{
-  height: 550px;;
+#ring{
+  height: 600px;;
+}
+#id{
+  height: 500px;
+}
+
+#v-ring{
+  position: relative;
+}
+#ring-name{
+  position: absolute;
+  top:30%;
+  width:100%;
+  margin: 0 auto 0 auto ;
+  /* padding: 0 10%; */
+  z-index:-1; 
+}
+#year-select option::-ms-expand{ display: none; }
+option{
+    -moz-appearance:none; /* Firefox */
+    -webkit-appearance:none; /* Safari 和 Chrome */
+    appearance:none;
+}
+#year-select{
+  background-color:transparent;
+  font-size:1em;
+  color:white;
+  border:none;
+}
+#year-select option{
+  background-color:white;
+  color:black;
+}
+option:hover{
+    color:#fff;
+    background-color:red;
 }
 </style>
