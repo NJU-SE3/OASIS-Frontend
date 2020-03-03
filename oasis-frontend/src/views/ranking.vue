@@ -6,12 +6,12 @@
       </el-header>
       <el-main style="padding:0 5%">
         <el-row class="line-ranking ranking">
-          <h1>Papers in Last 5 Years</h1>
+          <h1><strong>Papers </strong>   in Last 6    <strong> Years</strong></h1>
           <div class="chart">
             <ve-line
             :data="yearData"
             :settings="yearSettings"
-            :extend="yearExtand"
+            :extend="yearExtend"
             :loading="load1"
             height="100%"></ve-line>
           </div>
@@ -19,7 +19,7 @@
         <el-row class="bar-ranking ranking"  type="flex" align="middle">
           <el-col :span="6">
             <div class="name">
-              <h1><em>Top 10</em><br /> authors with papers cite</h1>
+              <h1><strong>Top 10</strong><br /> authors with papers cite</h1>
             </div>
           </el-col>
           <el-col :span="16" :offset="1">
@@ -36,34 +36,37 @@
           </el-col>
         </el-row>
         <el-row class="paper-term-ranking ranking"  type="flex" align="middle">
-          <el-col :span="8">
-            <div class="name">
-              <h2><em>Top 10</em><br /> authors with papers cite</h2>
-              <div class="chart">
-                <ve-ring 
-                class="load-c"
+          <el-col :span="12">
+              <div class="chart" id="ring">
+                <ve-ring id="v-ring"
                 :data="paperData"
                 :settings="paperSettings"
-                :events="paperExtand"
+                :extend="paperExtend"
+                :events="paperEvents"
                 :loading="load3"
                 :legend-visible="false"
                 height="100%">
+                  <h2 id="ring-name"><strong>Top 10</strong><br /> authors with papers cite <br /><em>↖click the ring for more↘</em></h2>
                 </ve-ring>
               </div>
-            </div>
           </el-col>
-          <el-col :span="14" :offset="2" display="flex">
-            <h2><em>HOOOOOOOT </em> terms!</h2>
-
-          </el-col>
-        </el-row>
-            <div class="chart word-cloud">
+          <el-col :span="11" display="flex">
+            <h2><strong>HOOOOOOOOOOT！ </strong><br />terms in  <select id="year-select" v-model="termY" @change="getNew">
+              <option v-for="item in options"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"></option>
+            </select></h2>
+              <div class="chart" id="word-cloud">
                <ve-wordcloud
-               class="load-c"
                :data="termData"
                :settings="termSettings"
-               :loading="load4"></ve-wordcloud>
+               :extend="termExtend"
+               :loading="load4">
+               </ve-wordcloud>
           </div>
+          </el-col>
+        </el-row>
       </el-main>
     </el-container>
   </div>
@@ -73,6 +76,7 @@
 import MyHeader from "../components/Header.vue"
 import {getRequest} from "../utils/request.js"
 import 'v-charts/lib/style.css';
+import echarts from 'echarts/lib/echarts'
 
 export default {
     name: 'Ranking',
@@ -88,17 +92,51 @@ export default {
             "#93b7e3",
             "#a5e7f0",
             "#cbb0e3"];
-
-    //Author
-        var emphasisStyle = {
+      var emphasisStyle = {
         itemStyle: {
             barBorderWidth: 1,
             shadowBlur: 10,
             shadowOffsetX: 0,
             shadowOffsetY: 0,
             shadowColor: 'rgba(0,0,0,0.5)'
+          }
+      };
+
+    //Year
+      this.yearSettings ={
+        area: true,
+      }
+      this.yearExtend={
+        textStyle:{
+          color: 'white',
+          fontSize:'10'
+        },
+        color:['#5682c8'],
+        animation: true ,
+        series: {
+          label: {
+            normal: {
+              show: true
+            }
+          },
+          lineStyle:{
+            width:'3'
+          },
+          areaStyle:{
+            color:new echarts.graphic.LinearGradient(0,0,1,0, [
+              { offset: 0,  color: "#345379"},
+              { offset: 0.2, color: "#59c4e6",},
+              { offset: 0.4, color: "#9179cb",},
+              { offset: 0.6, color: "#edafda",},
+              { offset: 0.8, color: "#a5e7f0",},
+              { offset: 1, color: "#ffa0dd",},
+              ],)
+          },
         }
-    };
+      }
+
+
+    //Author
       this.auSettings = {
         stack: { 'Papers': ['Paper1','Paper2','Paper3','Paper4','Paper5'] },
       }
@@ -122,97 +160,78 @@ export default {
           formatter: function (obj) {
             let au=obj.dataIndex;
             let paper=obj.componentIndex;
-            return `<div style="border-bottom: 1px solid rgba(255,255,255,.3);font-size: 18px;padding-bottom: 7px;margin-bottom: 7px">${self.authors[au].papers[paper].title}</div><div class="tool-content" font-size: 14px; text-align:left;"><strong>Author: </strong>${self.authors[au].papers[paper].authors}<br /><strong>Year: </strong>${self.authors[au].papers[paper].year}<br /><strong>Citation: </strong>${self.authors[au].papers[paper].citication}</div>`;
+            return `<div style="border-bottom: 1px solid rgba(255,255,255,.3);font-size: 22px;padding-bottom: 7px;margin-bottom: 7px">${self.authors[au].papers[paper].title}</div><div class="tool-content" style="font-size: 18px; text-align:left;"><strong>Author: </strong>${self.authors[au].papers[paper].authors}<br /><strong>Year: </strong>${self.authors[au].papers[paper].year}<br /><strong>Citation: </strong>${self.authors[au].papers[paper].citationCount}</div>`;
             }
           }
         }
       this.auEvents = {
         click: function(e){
           self.auClick(e)
-        },
-        dblclick : function (e) {
-          self.name = e.type
-          console.log("db")
         }
       };
 
 
-      this.yearSettings ={
-        area: true,
-        color:colors
-      }
-      this.yearExtand={
-        textStyle:{
-          color: 'white',
-        },
-        series: {
-          label: {
-            normal: {
-              show: true
-            }
-          }
-        }
-      }
+
+    //Paper
       this.paperSettings ={
-        radius: ['88%', '75%'],
-        // offsetY:'-1%',
+        radius: ['80%', '95%'],
+        offsetY:'50%',
         // roseType:'area',
         label:{
-          normal: {
-            show: false,
-            position: 'center'
-          },
-          emphasis: {
-            show: true,
-            textStyle: {
-              fontSize: '30',
-              fontWeight: 'bold'
-            }
+          show:false,
+        },
+      }
+      this.paperExtend={
+        tooltip:{
+          trigger:"item",
+          enterable:"ture",
+          confine:"ture",
+          padding: 10,
+          backgroundColor:'#222',
+          borderColor: '#777',
+          borderWidth: 1,
+          extraCssText:'width:25em; white-space:pre-wrap',
+          formatter: function (obj) {
+            let p=obj.dataIndex;
+            return `<div style="border-bottom: 1px solid rgba(255,255,255,.3);font-size: 22px;padding-bottom: 7px;margin-bottom: 7px">${self.paperData.rows[p].title}</div><div class="tool-content"style="font-size: 18px; text-align:left;"><strong>Author: </strong>${self.paperData.rows[p].authors}<br /><strong>Year: </strong>${self.paperData.rows[p].year}<br /><strong>Citation:</strong>${self.paperData.rows[p].citationCount}</div>`;
           }
+        },
+        color:colors
+      }
+      this.paperEvents = {
+        click: function(e){
+          self.paClick(e)
         }
       }
+
+
+    //Terms
       this.termSettings ={
-        color: [
-            "#e01f54",
-            "#001852",
-            "#f5e8c8",
-            "#b8d2c7",
-            "#c6b38e",
-            "#a4d8c2",
-            "#f3d999",
-            "#d3758f",
-            "#dcc392",
-            "#2e4783",
-            "#82b6e9",
-            "#ff6347",
-            "#a092f1",
-            "#0a915d",
-            "#eaf889",
-            "#6699FF",
-            "#ff6666",
-            "#3cb371",
-            "#d5b158",
-            "#38b6b6"
-        ],
-         shape: 'circle'
-
-      }
-
-      this.paperExtand = {
-         color: [
-            "#516b91",
+        "color": [
+            "#6aa9ff",
             "#59c4e6",
             "#edafda",
             "#93b7e3",
             "#a5e7f0",
-            "#cbb0e3"
+            "#cbb0e3",
+            "#b884b3",
+            "#74e3ff",
+            "#ddb4ff",
+            "#ff68b5",
+            "#85e3d7",
+            "#5aaef0",
+            "#fd94d1"
         ],
-        textStyle:{
-          color: 'white',
-        }
       }
 
-
+      this.termExtend={
+        series: {
+          width: '100%',
+          height: '100%',
+          gridSize: 10,
+        }
+      }
+      
 
       return {
         yearData:{
@@ -235,60 +254,77 @@ export default {
         load2:true,
         load3:true,
         load4:true,
-        // load1:false,
-        // load2:false,
-        // load3:false,
-        // load4:false,
+        authors:[],
+        termY:"2019",
+          options: [{
+          value: '2013',
+          label: '2013'
+        }, {
+          value: '2015',
+          label: '2015'
+        }, {
+          value: '2016',
+          label: '2016'
+        }, {
+          value: '2017',
+          label: '2017'
+        }, {
+          value: '2018',
+          label: '2018'
+        },{
+          value: '2019',
+          label: '2019'
+        }],
+
       }
   },
   mounted(){
     document.body.scrollTop = 0;
     document.documentElement.scrollTop = 0;
-    
-    console.log("outer")
     this.initChart();
   },
     methods: {
       initChart(){
         this.getFir();
         this.getSec();
+        this.getTrd();
       },
       getFir(){
         let l=getRequest("/api/report/paper/trend/year");
-        let a=getRequest("/api/report/author/rank/paper_cnt")
-        let res=Promise.all([l,a]);
-        res.then(r=>{
-          console.log(r[0].data,r[1].data);
-          this.yearData.rows=r[0].data;
+        // let res=Promise.all([l,a]);
+        l.then(r=>{
+          this.yearData.rows=r.data;
           this.load1=false;
-          let l=[];
-          for(var i=0; i<10 ; i++){
-            l.push({
-              'Author':r[1].data[i].author,
-              'Paper1':r[1].data[i].papers[0].citationCount,
-              'Paper2':r[1].data[i].papers[1].citationCount,
-              'Paper3':r[1].data[i].papers[2].citationCount,
-              'Paper4':r[1].data[i].papers[3].citationCount,
-              'Paper5':r[1].data[i].papers[4].citationCount,
-            })
-          }
-          this.auData.rows = l;
-          this.authors=r[1].data;
-          this.load2=false;
           console.log("fin 1")
         })
       },
       getSec(){
-        console.log("beg 2")
+        getRequest("/api/report/author/rank/paper_cnt").then(r=>{
+          let l=[];
+          for(var i=0; i<10 ; i++){
+            l.push({
+              'Author':r.data[i].author,
+              'Paper1':r.data[i].papers[0].citationCount,
+              'Paper2':r.data[i].papers[1].citationCount,
+              'Paper3':r.data[i].papers[2].citationCount,
+              'Paper4':r.data[i].papers[3].citationCount,
+              'Paper5':r.data[i].papers[4].citationCount,
+            })
+          }
+          this.auData.rows = l;
+          this.authors=r.data;
+          this.load2=false;
+        })
+      },
+      getTrd(){
         let p=getRequest("/api/report/paper/rank/citation")
         let w=getRequest("/api/report/wdcld/year?year="+2019)
         let res=Promise.all([p,w]);
         res.then(r=>{
           console.log(r[0].data,r[1].data);
-          // this.paperData.rows=r[0].data;
-
+          this.paperData.rows=r[0].data;
           this.load3=false;
-          this.termData.rows=r[1].data;
+          this.termData.rows=r[1].data.slice(1,301);
           this.load4=false;
           console.log("fin 2")
         })
@@ -304,6 +340,26 @@ export default {
           background: 'rgba(255, 255, 255, 0.7)'
         });
         window.location.href = this.authors[e.dataIndex].papers[e.componentIndex].pdfLink
+      },
+      paClick(e){
+        const loading = this.$loading({
+          lock: true,
+          text: 'Loading',
+          spinner: 'el-icon-loading',
+          background: 'rgba(255, 255, 255, 0.7)'
+        });
+        window.location.href = this.paperData.rows[e.dataIndex].pdfLink
+      },
+      getNew(){
+        console.log("new!!",this.termY)
+        this.load4=true;
+        getRequest("/api/report/wdcld/year?year="+this.termY).then(r=>{
+          if(this.termY==2019)
+            this.termData.rows=r.data.slice(1,301);
+          else
+            this.termData.rows=r.data.slice(0,300);
+          this.load4=false;
+        })
       }
   }
 }
@@ -311,11 +367,20 @@ export default {
 <style scoped>
 
 h1{
-  font-size:220%;
+  font-size:200%;
   margin:0;
 }
-em{
+h2{
   font-size:150%;
+}
+strong{
+  font-size:150%;
+  color:rgb(255, 253, 108);
+  font-style:oblique;
+}
+#ring-name em{
+  font-size:80%;
+  font-style:normal;
   color:rgb(255, 253, 108);
 }
 .main{
@@ -339,42 +404,47 @@ em{
 .bar-ranking .name{
   margin: 0 0 13% 0;
 }
-.word-cloud{
-  height: 1000px;
-  width: 100%;
-}
-
-
-.ve-histogram>>>.tool-content strong{
-  font-size:150%;
+.chart>>>.tool-content strong{
+  font-size:130%;
   color:rgb(255, 253, 108);
 }
+
+#ring{
+  height: 600px;;
+}
+#id{
+  height: 500px;
+}
+
+#v-ring{
+  position: relative;
+}
+#ring-name{
+  position: absolute;
+  top:30%;
+  width:100%;
+  margin: 0 auto 0 auto ;
+  /* padding: 0 10%; */
+  z-index:-1; 
+}
+#year-select option::-ms-expand{ display: none; }
+option{
+    -moz-appearance:none; /* Firefox */
+    -webkit-appearance:none; /* Safari 和 Chrome */
+    appearance:none;
+}
+#year-select{
+  background-color:transparent;
+  font-size:1em;
+  color:white;
+  border:none;
+}
+#year-select option{
+  background-color:white;
+  color:black;
+}
+option:hover{
+    color:#fff;
+    background-color:red;
+}
 </style>
-          // for (let i=0; i < 6; i++) {
-          //   let item=r[0].data[i];
-          //   this.yearData.rows.push({
-          //     'year':item.year.toString(),
-          //     'count':item.count.toString()
-          //   })
-          // }
-          // console.log("year",this.yearData)
-          // this.load1=false;
-          // this.auData.rows=r[1].data;
-
-
-
-          //         for(let i = 0; i<10; i++){
-          // this.auData.rows.push({
-          //   'Author':'SM',
-          //   'Paper1':Math.ceil(Math.random()*1000).toString(),
-          //   'Paper2':Math.ceil(Math.random()*1000).toString(),
-          //   'Paper3':Math.ceil(Math.random()*1000).toString(),
-          //   'Paper4':Math.ceil(Math.random()*1000).toString(),
-          //   'Paper5':Math.ceil(Math.random()*1000).toString(),
-            // 'Paper1':Math.ceil(Math.random()*1000),
-            // 'Paper2':Math.ceil(Math.random()*1000),
-            // 'Paper3':Math.ceil(Math.random()*1000),
-            // 'Paper4':Math.ceil(Math.random()*1000),
-            // 'Paper5':Math.ceil(Math.random()*1000),
-          })
-        }
