@@ -109,8 +109,10 @@ export default {
       this.yearExtend={
         textStyle:{
           color: 'white',
+          fontSize:'10'
         },
         color:['#5682c8'],
+        animation: true ,
         series: {
           label: {
             normal: {
@@ -129,15 +131,6 @@ export default {
               { offset: 0.8, color: "#a5e7f0",},
               { offset: 1, color: "#ffa0dd",},
               ],)
-          },
-          markPoint:{
-            symbol:'pin', 
-            label:{
-              show:true, 
-              formatter:(params) => {
-                console.log("aaa",params)
-              }
-            }
           },
         }
       }
@@ -294,34 +287,36 @@ export default {
       initChart(){
         this.getFir();
         this.getSec();
+        this.getTrd();
       },
       getFir(){
         let l=getRequest("/api/report/paper/trend/year");
-        let a=getRequest("/api/report/author/rank/paper_cnt")
-        let res=Promise.all([l,a]);
-        res.then(r=>{
-          console.log(r[0].data,r[1].data);
-          this.yearData.rows=r[0].data;
+        // let res=Promise.all([l,a]);
+        l.then(r=>{
+          this.yearData.rows=r.data;
           this.load1=false;
-          let l=[];
-          for(var i=0; i<10 ; i++){
-            l.push({
-              'Author':r[1].data[i].author,
-              'Paper1':r[1].data[i].papers[0].citationCount,
-              'Paper2':r[1].data[i].papers[1].citationCount,
-              'Paper3':r[1].data[i].papers[2].citationCount,
-              'Paper4':r[1].data[i].papers[3].citationCount,
-              'Paper5':r[1].data[i].papers[4].citationCount,
-            })
-          }
-          this.auData.rows = l;
-          this.authors=r[1].data;
-          this.load2=false;
           console.log("fin 1")
         })
       },
       getSec(){
-        console.log("beg 2")
+        getRequest("/api/report/author/rank/paper_cnt").then(r=>{
+          let l=[];
+          for(var i=0; i<10 ; i++){
+            l.push({
+              'Author':r.data[i].author,
+              'Paper1':r.data[i].papers[0].citationCount,
+              'Paper2':r.data[i].papers[1].citationCount,
+              'Paper3':r.data[i].papers[2].citationCount,
+              'Paper4':r.data[i].papers[3].citationCount,
+              'Paper5':r.data[i].papers[4].citationCount,
+            })
+          }
+          this.auData.rows = l;
+          this.authors=r.data;
+          this.load2=false;
+        })
+      },
+      getTrd(){
         let p=getRequest("/api/report/paper/rank/citation")
         let w=getRequest("/api/report/wdcld/year?year="+2019)
         let res=Promise.all([p,w]);
