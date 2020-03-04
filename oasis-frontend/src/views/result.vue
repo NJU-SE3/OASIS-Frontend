@@ -71,6 +71,7 @@ export default {
   created() {
     var _this = this;
     bus.$on("fuzzySearch", data => {
+      // console.log(data);
       _this.search_type = data.type;
       _this.search_query = data.con;
       _this.search_query = _this.handleBlankSpace(_this.search_query);

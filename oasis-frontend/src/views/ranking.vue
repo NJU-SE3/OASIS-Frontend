@@ -77,6 +77,7 @@ import MyHeader from "../components/Header.vue"
 import {getRequest} from "../utils/request.js"
 import 'v-charts/lib/style.css';
 import echarts from 'echarts/lib/echarts'
+import bus from "../utils/bus"
 
 export default {
     name: 'Ranking',
@@ -276,6 +277,8 @@ export default {
           label: '2019'
         }],
 
+
+        keywords: ""
       }
   },
   mounted(){
@@ -283,6 +286,15 @@ export default {
     document.documentElement.scrollTop = 0;
     this.initChart();
   },
+
+  beforeDestroy() {
+    var _this = this;
+    bus.$emit("fuzzySearch", {
+      type: "All",
+      con: _this.keywords
+    })
+  },
+
     methods: {
       initChart(){
         this.getFir();
@@ -330,7 +342,8 @@ export default {
         })
       },
       search(data) {
-        console.log(data);
+        this.keywords = data.value;
+        this.$router.push("result");
       },
       auClick(e){
         const loading = this.$loading({
