@@ -25,8 +25,14 @@ export default{
     },
     methods:{
         submit(){
-            // console.log(this.searchType,"  ",this.searchCon);
-            this.$emit("paperSearch", {type: this.searchType, con: this.searchCon});
+            if (this.searchCon.trim() === "") {
+                this.$message({
+                    message: "请输入要搜索的关键字",
+                    type: "warning"
+                });
+            }
+            else
+                this.$emit("paperSearch", {type: this.searchType, con: this.searchCon});
         }
     }
 }
