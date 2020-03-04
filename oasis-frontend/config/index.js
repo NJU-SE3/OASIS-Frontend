@@ -13,12 +13,12 @@ module.exports = {
 
     proxyTable: {
       '/query/**': {
-        target: 'https://citicup.top',  // 接口域名
+        target: 'https://api.oasi.top',  // 接口域名
         changeOrigin: true,  //是否跨域
         secure: false,
       },
       '/api/**': {
-        target: 'https://citicup.top',  // 接口域名
+        target: 'https://api.oasi.top',  // 接口域名
         changeOrigin: true,  //是否跨域
         secure: false,
       },

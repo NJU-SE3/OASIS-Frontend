@@ -9,7 +9,8 @@
       <div><span class="sub-title">Year: </span>{{year}} | Conference Paper</div>
       <div><span class="sub-title">Affiliation: </span>{{affiliation}}</div>
       <div><span class="sub-title">Cited by: </span>Papers ({{times}})</div>
-      <div><span class="sub-title">Terms:</span>
+      <div><span class="sub-title sub-title-terms"
+                 @click="toggleShowAllTerms">Terms:</span>
         <span v-if="!showAllTerms"
               @click="toggleShowAllTerms"
               class="sub-title-terms">
@@ -72,6 +73,10 @@
   .sub-title-terms {
     cursor: pointer;
 
+  }
+
+  .sub-title-terms:hover {
+    text-decoration: underline;
   }
 
   a{
