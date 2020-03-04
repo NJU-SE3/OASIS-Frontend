@@ -3,7 +3,7 @@
       <el-header id="header" style="height: 35vh;min-height: 270px; padding:0;">
         <div id="overlay">
           <div id="o-content">
-            <h1 class="title">
+            <h1 class="title" @click="gotoMainpage">
               OASIS
             </h1>
             <search @paperSearch="commonSearch"></search>
@@ -31,10 +31,10 @@
                                         v-bind:key="index"
                                         v-bind:title="result.title"
                                         v-bind:authors="result.authors | getValidItemsForCard"
-                                        v-bind:conference="result.conference"
+                                        v-bind:conference="result.conference | getValidItemsForCard"
                                         v-bind:year="result.year.toString()"
                                         v-bind:times="result.citationCount.toString()"
-                                        v-bind:terms="result.terms"
+                                        v-bind:terms="result.terms | getValidItemsForCard"
                                         v-bind:affiliation="result.affiliations | getValidItemsForCard"
                                         v-bind:essayLink="result.pdfLink">
               </essay-search-result-card>
@@ -126,15 +126,12 @@ export default {
       });
       return list_items.join(";");
     },
-
-    getValidItemsForSideBar(items) {
-      return items.filter(item => {
-        return item.length > 0 && item != "NA" && item != " NA";
-      });
-    },
   },
 
   methods:{
+    gotoMainpage(){
+      this.$router.push({path: "/mainpage"});
+    },
 
     handleCurrentChange: function (currentPage) {
       this.current_page = currentPage;
@@ -228,11 +225,11 @@ export default {
 
     getSummary() {
       getRequest("/api/query/paper/summary").then(res=>{
-          this.summary_term = res.data.term;
-          this.summary_author = res.data.author;
-          this.summary_conference = res.data.conference;
-          this.summary_affiliation = res.data.affiliation;
-      })
+          this.summary_term = this.getValidItemsForSideBar(res.data.term);
+          this.summary_author = this.getValidItemsForSideBar(res.data.author);
+          this.summary_conference = this.getValidItemsForSideBar(res.data.conference);
+          this.summary_affiliation = this.getValidItemsForSideBar(res.data.affiliation);
+      });
     },
 
     getAdvancedSearchResult() {
@@ -240,9 +237,22 @@ export default {
       this.current_page = 0;
       this.search_result = null;
 
+      this.search_within_arguments = this.handleBlankSpace(this.search_within_arguments);
+      console.log("/api/query/paper/refine?" + this.search_within_arguments);
       getRequest("/api/query/paper/refine?" + this.search_within_arguments).then(res => {
         this.search_result = res.data.papers;
         this.search_page_number = res.data.itemCnt;
+
+        if(this.search_page_number > 0) {
+          this.has_result = true;
+        }
+        else {
+          this.has_result = false;
+          this.summary_author = [];
+          this.summary_affiliation = [];
+          this.summary_conference = [];
+          this.summary_term = [];
+        }
       });
     },
 
@@ -264,6 +274,13 @@ export default {
       }
     },
 
+    getValidItemsForSideBar(items) {
+      return items.filter(item => {
+        return item.first.length > 0 && item.first != "NA"
+          && item.first != " NA";
+      });
+    },
+
     // convert blank space to %20
     handleBlankSpace(input) {
       return input.split(" ").join("%20");
@@ -283,6 +300,7 @@ export default {
 .title {
   font-size: 50px;
   margin: 0 0 8px 0;
+  cursor: pointer;
 }
 
 #header{

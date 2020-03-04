@@ -31,7 +31,7 @@
     <div class="category-select">
       <el-collapse v-model="activeNames" @change="handleChange">
         <el-collapse-item title="Author" name="1">
-          <div v-for="(author, index) in getValidItemsForSideBar(authorSummary)" :key="index">
+          <div v-for="(author, index) in authorSummary" :key="index">
             <el-checkbox class="check-box"
                          v-model="authorSummaryCheck[index]">
               {{author.first}}({{author.second}})
@@ -60,10 +60,14 @@
           </div>
         </el-collapse-item>
         <el-collapse-item title="Affiliation" name="3">
-          <div v-for="(affiliation, index) in getValidItemsForSideBar(affiliationSummary)" :key="index">
-            <el-checkbox class="check-box" v-model="affiliationSummaryCheck[index]">
-              {{affiliation.first}}({{affiliation.second}})
-            </el-checkbox>
+          <div v-for="(affiliation, index) in affiliationSummary"
+               :key="index">
+            <el-tooltip placement="bottom">
+              <div slot="content">{{affiliation.first}}</div>
+              <el-checkbox class="check-box" v-model="affiliationSummaryCheck[index]">
+                {{affiliation.first}}({{affiliation.second}})
+              </el-checkbox>
+            </el-tooltip>
           </div>
           <div class="apply-button">
             <el-button round
@@ -155,19 +159,10 @@
       },
 
       created() {
-        var nowDate = new Date();
-        this.startYear = nowDate.getFullYear().toString();
-        this.endYear = nowDate.getFullYear().toString();
+        this.setValuesToDefault();
       },
 
       methods: {
-        getValidItemsForSideBar(items) {
-          return items.filter(item => {
-            return item.first.length > 0 && item.first != "NA"
-              && item.first != " NA";
-          });
-        },
-
         checkYear(value) {
           this.yearChecked = true;
         },
@@ -254,6 +249,10 @@
         },
 
         setValuesToDefault() {
+          var nowDate = new Date();
+          this.startYear = nowDate.getFullYear().toString();
+          this.endYear = nowDate.getFullYear().toString();
+
           this.authorSummaryCheck.fill(false);
           this.conferenceSummaryCheck.fill(false);
           this.affiliationSummaryCheck.fill(false);
@@ -358,6 +357,11 @@
 
   .el-button:focus, .el-button:hover{
     color: azure;
+  }
+
+  .el-tooltip__popper.is-dark{
+    color: #444a69;
+    background: rgba(255,255,255,0.7);
   }
 
 </style>
