@@ -1,7 +1,7 @@
 <template>
 	<el-row class="header">
 		<el-col :span="3">
-			<span class="logo">OASIS</span>
+			<span class="logo" @click="backToHome">OASIS</span>
 		</el-col>
 		<el-col :span="7" class="search">
 			<i class="el-icon-search" @click="show = !show"></i>
@@ -27,6 +27,10 @@ export default {
 		onSubmit() {
 			console.log("submit");
 			this.$emit("search", {value: this.keywords});
+		},
+
+		backToHome() {
+			this.$router.push("mainpage");
 		}
 	}
 }
@@ -37,6 +41,10 @@ export default {
 	/* width: 100%; */
 	background: rgba(255, 255, 255, 0.2);
 	height: 53px;
+}
+
+.header .logo {
+	cursor: pointer;
 }
 
 .header > * {
@@ -66,6 +74,7 @@ export default {
 
 .header .search .el-icon-search {
 	margin-right: 8px;
+	cursor: pointer;
 }
 
 .slide-fade-enter-active {
