@@ -237,7 +237,7 @@ export default {
       this.current_page = 0;
       this.search_result = null;
 
-      this.search_within_arguments = this.handleBlankSpace(this.search_within_arguments);
+      //this.search_within_arguments = this.handleBlankSpace(this.search_within_arguments);
       console.log("/api/query/paper/refine?" + this.search_within_arguments);
       getRequest("/api/query/paper/refine?" + this.search_within_arguments).then(res => {
         this.search_result = res.data.papers;
