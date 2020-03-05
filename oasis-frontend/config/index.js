@@ -65,6 +65,16 @@ module.exports = {
     // https://webpack.js.org/configuration/devtool/#production
     devtool: '#source-map',
 
+    proxyTable: {
+      '/query/**': {
+        target: 'http://localhost',  // 接口域名
+        changeOrigin: true,  //是否跨域
+      },
+      '/api/**': {
+        target: 'http://localhost',  // 接口域名
+        changeOrigin: true,  //是否跨域
+      },
+    },
     // Gzip off by default as many popular static hosts such as
     // Surge or Netlify already gzip all static assets for you.
     // Before setting to `true`, make sure to:

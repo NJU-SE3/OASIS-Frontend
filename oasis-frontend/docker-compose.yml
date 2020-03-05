@@ -9,9 +9,9 @@ services:
     build:
       context: .
     environment:
-      - VIRTUAL_HOST=nju.citicup.top
+      - VIRTUAL_HOST=oasi.top
       - VIRTUAL_PORT=80
-      - LETSENCRYPT_HOST=nju.citicup.top
+      - LETSENCRYPT_HOST=oasi.top
       - LETSENCRYPT_EMAIL=1071956678@qq.com
     networks:
       - proxy
