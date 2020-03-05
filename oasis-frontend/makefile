@@ -1,4 +1,4 @@
-target=root@lfm:/root/service/front
+target=root@106.14.140.93:/root/service/front
 
 all: dist resource deploy
 
@@ -12,4 +12,4 @@ resource:
 	scp -r dist ${target}/.
 
 deploy:
-	ssh root@lfm 'cd service/front/ && docker-compose up -d --build'
+	ssh root@106.14.140.93 'cd service/front/ && docker-compose up -d --build'
