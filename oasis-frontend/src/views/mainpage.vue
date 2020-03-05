@@ -227,20 +227,20 @@ export default {
   display: inline-block;
   width: 50%;
   height: 50%;
-  background: pink;
+  /* background: pink; */
 }
 
 .link-content #content-item-two {
   display: inline-block;
   width: 50%;
   height: 50%;
-  background: yellow;
+  /* background: yellow; */
 }
 
 .link-content #content-item-three {
   width: 100%;
   height: 50%;
-  background: white;
+  /* background: white; */
 }
 
 .imgActive {
