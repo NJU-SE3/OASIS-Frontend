@@ -11,7 +11,7 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building'
-                sh 'cd oasis-frontend && npm install'
+                sh 'cd oasis-frontend && npm install && npm run build'
             }
         }
         stage('Deploy') {
