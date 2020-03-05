@@ -71,7 +71,6 @@ export default {
   created() {
     var _this = this;
     bus.$on("fuzzySearch", data => {
-      // console.log(data);
       _this.search_type = data.type;
       _this.search_query = data.con;
       _this.search_query = _this.handleBlankSpace(_this.search_query);
@@ -197,7 +196,12 @@ export default {
       this.search_within_arguments = str_arguments.trim().split(";")
         .join("&").substring(0, str_arguments.length - 1);
 
-      this.getAdvancedSearchResult();
+      if(this.search_within_arguments.length == 0){
+        this.getFuzzySearchResult();
+      }
+      else {
+        this.getAdvancedSearchResult();
+      }
     },
 
     getFuzzySearchResult(){
@@ -238,8 +242,8 @@ export default {
       this.current_page = 0;
       this.search_result = null;
 
-      //this.search_within_arguments = this.handleBlankSpace(this.search_within_arguments);
-      //console.log("/api/query/paper/refine?" + this.search_within_arguments);
+      this.search_within_arguments = this.handleBlankSpace(this.search_within_arguments);
+
       getRequest("/api/query/paper/refine?" + this.search_within_arguments).then(res => {
         this.search_result = res.data.papers;
         this.search_page_number = res.data.itemCnt;
@@ -249,10 +253,6 @@ export default {
         }
         else {
           this.has_result = false;
-          this.summary_author = [];
-          this.summary_affiliation = [];
-          this.summary_conference = [];
-          this.summary_term = [];
         }
       });
     },

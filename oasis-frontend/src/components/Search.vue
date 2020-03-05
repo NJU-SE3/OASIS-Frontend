@@ -27,7 +27,7 @@ export default{
         submit(){
             if (this.searchCon.trim() === "") {
                 this.$message({
-                    message: "请输入要搜索的关键字",
+                    message: "Please enter some key words!",
                     type: "warning"
                 });
             }
@@ -57,8 +57,8 @@ export default{
   .input-with-select  {
     background-color: transparent;
   }
-  .input-with-select .el-input-group__prepend , 
-    .input-with-select .el-input__inner, 
+  .input-with-select .el-input-group__prepend ,
+    .input-with-select .el-input__inner,
     .input-with-select .el-input-group__append{
     background-color: rgba(255,255,255,0.5);
     border-color: transparent;
@@ -85,19 +85,19 @@ export default{
   .el-input-group__append, .el-input-group__prepend{
       padding: 0, 4%;
   }
-    .input-with-select .el-input__inner::-webkit-input-placeholder, textarea::-webkit-input-placeholder { 
-        color: black; 
+    .input-with-select .el-input__inner::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
+        color: black;
         font-size: 65%;
-    } 
-    .input-with-select .el-input__inner:-moz-placeholder, textarea:-moz-placeholder { 
-        color: black; 
+    }
+    .input-with-select .el-input__inner:-moz-placeholder, textarea:-moz-placeholder {
+        color: black;
         font-size: 65%;
-    } 
-    .input-with-select .el-input__inner::-moz-placeholder, textarea::-moz-placeholder { 
-        color: black; 
+    }
+    .input-with-select .el-input__inner::-moz-placeholder, textarea::-moz-placeholder {
+        color: black;
         font-size: 65%;
-    } 
-    .input-with-select .el-input__inner:-ms-input-placeholder, textarea:-ms-input-placeholder { 
+    }
+    .input-with-select .el-input__inner:-ms-input-placeholder, textarea:-ms-input-placeholder {
         color: black;
         font-size: 65%;
     }

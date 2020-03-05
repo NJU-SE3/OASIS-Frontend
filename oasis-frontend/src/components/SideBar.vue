@@ -22,11 +22,6 @@
           @change="checkYear($event)">
         </el-date-picker>
       </div>
-      <div class="apply-button" v-if="startYear != '' || endYear != ''">
-        <el-button round @click="collectSearchWithin">
-          OK
-        </el-button>
-      </div>
     </div>
     <div class="category-select">
       <el-collapse v-model="activeNames" @change="handleChange">
@@ -37,26 +32,12 @@
               {{author.first}}({{author.second}})
             </el-checkbox>
           </div>
-          <div class="apply-button">
-            <el-button round
-                       v-if="showOK(authorSummaryCheck, 'author')"
-                       @click="collectSearchWithin">
-              OK
-            </el-button>
-          </div>
         </el-collapse-item>
         <el-collapse-item title="Conference" name="2">
           <div v-for="(conference, index) in conferenceSummary" :key="index">
             <el-checkbox class="check-box" v-model="conferenceSummaryCheck[index]">
               {{conference.first}}({{conference.second}})
             </el-checkbox>
-          </div>
-          <div class="apply-button">
-            <el-button round
-                       v-if="showOK(conferenceSummaryCheck, 'conference')"
-                       @click="collectSearchWithin">
-              OK
-            </el-button>
           </div>
         </el-collapse-item>
         <el-collapse-item title="Affiliation" name="3">
@@ -69,13 +50,6 @@
               </el-checkbox>
             </el-tooltip>
           </div>
-          <div class="apply-button">
-            <el-button round
-                       v-if="showOK(affiliationSummaryCheck, 'affiliation')"
-                       @click="collectSearchWithin">
-              OK
-            </el-button>
-          </div>
         </el-collapse-item>
         <el-collapse-item title="Term" name="4">
           <div v-for="(term, index) in termSummary" :key="index">
@@ -83,14 +57,14 @@
               {{term.first}}({{term.second}})
             </el-checkbox>
           </div>
-          <div class="apply-button">
-            <el-button round v-if="showOK(termSummaryCheck, 'term')"
-                       @click="collectSearchWithin">
-              OK
-            </el-button>
-          </div>
         </el-collapse-item>
       </el-collapse>
+      <div class="apply-button">
+        <el-button round
+                   @click="collectSearchWithin">
+          OK
+        </el-button>
+      </div>
     </div>
   </div>
 </template>
@@ -182,29 +156,31 @@
           return date.toString().split(" ")[3];
         },
 
-        showOK(summaryCheckList, type) {
-          var result = false;
-          summaryCheckList.forEach(item => {result = result || item;});
-          if(type.toString() == "author")
-          {
-            this.authorChecked = result;
-          }
-          else if(type.toString() == "conference")
-          {
-            this.conferenceChecked = result;
-          }
-          else if(type.toString() == "affiliation")
-          {
-            this.affiliationChecked = result;
-          }
-          else if(type.toString() == "term")
-          {
-            this.termChecked = result;
-          }
-          return result;
-        },
-
         collectSearchWithin() {
+          this.authorChecked = false;
+          this.conferenceChecked = false;
+          this.affiliationChecked = false;
+          this.termChecked = false;
+
+          this.authorSummaryCheck.forEach(item => {
+            this.authorChecked = this.authorChecked || item;
+          });
+          this.conferenceSummaryCheck.forEach(item => {
+            this.conferenceChecked = this.conferenceChecked || item;
+          });
+          this.affiliationSummaryCheck.forEach(item => {
+            this.affiliationChecked = this.affiliationChecked || item;
+          });
+          this.termSummaryCheck.forEach(item => {
+            this.termChecked = this.termChecked || item;
+          });
+
+          this.searchWithinQuery.year = "";
+          this.searchWithinQuery.author = "";
+          this.searchWithinQuery.conference = "";
+          this.searchWithinQuery.affiliation = "";
+          this.searchWithinQuery.term = "";
+
           if(this.yearChecked) {
             this.searchWithinQuery.year = this.getYearFromDatePick(this.startYear)
               + "_" + this.getYearFromDatePick(this.endYear);
@@ -348,6 +324,7 @@
   .apply-button{
     display: block;
     text-align: center;
+    margin-top: 5%;
   }
 
   .el-button.is-round{
