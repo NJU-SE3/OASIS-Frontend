@@ -41,6 +41,7 @@ export default{
 <style>
 .search-bar {
     font-size: 25px;
+    display: flex;
 }
 
 .el-input-group__prepend div.el-select .el-input__inner {
