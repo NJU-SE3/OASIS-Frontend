@@ -4,19 +4,20 @@ pipeline {
         stage('Checkout') {
             steps {
                 echo 'Checkout'
-                checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/NJU-SE3/OASIS-Service']]])
+                git credentialsId: 'jenkinstoken', url: 'http://212.129.149.40/171250027_expelliarmus/frontend-cold4'
+                sh 'npm i npm@latest -g'
             }
         }
         stage('Build') {
             steps {
                 echo 'Building'
-                sh 'make depend'
+                sh 'cd oasis-frontend && npm install'
             }
         }
         stage('Deploy') {
             steps {
                 echo 'Deploying'
-                sh 'make deploy'
+                sh 'cd oasis-frontend && make resource deploy'
             }
         }
     }
