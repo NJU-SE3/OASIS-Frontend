@@ -1,18 +1,16 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
-import HelloWorld from '@/components/HelloWorld'
 import MainPage from '@/views/mainpage'
 import SearchRes from '@/views/result'
 import Ranking from '@/views/ranking'
-import Testing from '@/views/copy'
 import Admin from "@/views/admin"
 
-
+import {getRequest} from "../utils/request"
 
 Vue.use(Router)
 
-export default new Router({
+const router= new Router({
 
   mode: "history",
 
@@ -23,7 +21,7 @@ export default new Router({
       return { x: 0, y: 0 }
     }
   },
-  
+
   routes: [
     {
       path: '/',
@@ -49,5 +47,23 @@ export default new Router({
       name: "Admin",
       component: Admin
     }
-  ]
+  ],
+});
+
+router.beforeEach((to, from, next) => {
+
+  if(from.name=='Admin'){
+    next();
+  }
+  getRequest("/api/permission/paper").then((response) => {
+    if(response.data){
+      next();
+    }
+    else{
+      console.log("error");
+      next("/admin");
+    }
+  })
 })
+
+export default router;
