@@ -73,7 +73,7 @@ export default {
     bus.$on("fuzzySearch", data => {
       _this.search_type = data.type;
       _this.search_query = data.con;
-      _this.search_query = _this.handleBlankSpace(_this.search_query);
+      _this.search_query = _this.convertSpecialChar(_this.search_query);
     })
   },
 
@@ -141,7 +141,7 @@ export default {
     commonSearch(val) {
       this.search_type = val.type;
       this.search_query = val.con;
-      this.search_query = this.handleBlankSpace(this.search_query);
+      this.search_query = this.convertSpecialChar(this.search_query);
       this.getFuzzySearchResult();
     },
 
@@ -242,8 +242,8 @@ export default {
       this.current_page = 0;
       this.search_result = null;
 
-      this.search_within_arguments = this.handleBlankSpace(this.search_within_arguments);
-
+      this.search_within_arguments = this.convertSpecialChar(this.search_within_arguments);
+      
       getRequest("/api/query/paper/refine?" + this.search_within_arguments).then(res => {
         this.search_result = res.data.papers;
         this.search_page_number = res.data.itemCnt;
@@ -283,8 +283,8 @@ export default {
     },
 
     // convert blank space to %20
-    handleBlankSpace(input) {
-      return input.split(" ").join("%20");
+    convertSpecialChar(input) {
+      return input.split(" ").join("%20").split(",").join("%2C");
     }
   },
 }
