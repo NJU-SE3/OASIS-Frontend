@@ -208,6 +208,7 @@
             this.affiliationSummaryCheck.forEach((item, index) => {
               if(item) {
                 affiliation += this.affiliationSummary[index].first + ";";
+                affiliation += this.affiliationSummary[index].first + ";";
               }
             });
             this.searchWithinQuery.affiliation = affiliation;
