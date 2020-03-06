@@ -1,20 +1,26 @@
 <template>
     <div class="admin-main">
-        <!-- <el-button round class="empty" @click="clear">Clear</el-button> -->
+        <el-button round class="empty" @click="clear">Clear</el-button>
         <el-button round class="restore" @click="restore">Initialize</el-button>
     </div>
 </template>
 
 <script>
-import {postRequest} from "../utils/request"
+import {postRequest, deleteRequest} from "../utils/request"
 
 export default {
     name: "admin",
 
     methods: {
-        // clear() {
-        //     alert("clear");
-        // },
+        clear() {
+            deleteRequest("/api/permission/paper")
+                .then(res => {
+                    alert("clear successfully!");
+                })
+                .catch(err => {
+                    alert("clear error");
+                })
+        },
 
         restore() {
             var _this = this;
@@ -42,10 +48,10 @@ export default {
 /* .restore {
     margin-left: 100px;
 } */
-/* 
+
 .admin-main .el-button+.el-button {
     margin-left: 100px;
-} */
+}
 
 .admin-main .el-button {
     background: rgba(255, 255, 255, 0.2);
