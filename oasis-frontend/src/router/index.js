@@ -6,6 +6,7 @@ import MainPage from '@/views/mainpage'
 import SearchRes from '@/views/result'
 import Ranking from '@/views/ranking'
 import Testing from '@/views/copy'
+import Admin from "@/views/admin"
 
 
 
@@ -43,5 +44,10 @@ export default new Router({
       name:"Ranking",
       component: Ranking,
     },
+    {
+      path: '/admin',
+      name: "Admin",
+      component: Admin
+    }
   ]
 })
