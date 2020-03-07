@@ -65,7 +65,7 @@ router.beforeEach((to, from, next) => {
         if(to.name!='MainPage'){
           Message({
             type: "warning",
-            message: '数据载入中，请等待～',
+            message: 'Data has not been initialized.',
             center: true
           })
           next("/mainpage");
