@@ -46,7 +46,7 @@
                 :loading="load3"
                 :legend-visible="false"
                 height="100%">
-                  <h2 id="ring-name"><strong>Top 10</strong><br /> authors with papers cite <br /><em>↖click the ring for more↘</em></h2>
+                  <h2 id="ring-name"><strong>Top 10</strong><br /> cited papers <br /><em>↖click the ring for more↘</em></h2>
                 </ve-ring>
               </div>
           </el-col>
