@@ -70,7 +70,7 @@
                     @mouseenter="enter(0)"></el-image>
         </div>
         <div id="content-item-two" :class="{imgActive : pic_two}">
-          <el-image src="/static/mainpage/TODO1.png"
+          <el-image src="/static/mainpage/TODO1.jpg"
                     alt="ooops"
                     class="img-item"
                     lazy
@@ -78,7 +78,7 @@
                     @mouseenter="enter(1)"></el-image>
         </div>
         <div id="content-item-three" :class="{imgActive : pic_three}">
-          <el-image src="/static/mainpage/TODO2.png"
+          <el-image src="/static/mainpage/TODO2.jpg"
                     alt="ooops"
                     class="img-item"
                     lazy
