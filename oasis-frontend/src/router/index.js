@@ -53,14 +53,10 @@ const router= new Router({
 });
 
 router.beforeEach((to, from, next) => {
-  console.log("to",to)
-  console.log("from",from)
   if(to.name=='Admin'){
-    console.log("in Ad")
     next();
   }else{
     getRequest("/api/permission/paper").then((response) => {
-      console.log("res",response)
       if(response.data){
         next();
       }

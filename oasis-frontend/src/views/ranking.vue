@@ -312,8 +312,17 @@ export default {
       },
       getSec(){
         getRequest("/api/report/author/rank/paper_cnt").then(r=>{
+          console.log("rrr",r);
           let l=[];
           for(var i=0; i<10 ; i++){
+            let len=5-r.data[i].papers.length
+            for (let  j=0; j< len; j++){
+                console.log('A')
+                r.data[i].papers.push({
+                  'citationCount':'0'
+                })
+            }
+            console.log(i,r.data[i].papers)
             l.push({
               'Author':r.data[i].author,
               'Paper1':r.data[i].papers[0].citationCount,
