@@ -44,7 +44,7 @@
           <div v-for="(affiliation, index) in affiliationSummary"
                :key="index">
             <el-tooltip placement="bottom">
-              <div slot="content">{{affiliation.first}}</div>
+              <div slot="content">{{affiliation.first}}({{affiliation.second}})</div>
               <el-checkbox class="check-box" v-model="affiliationSummaryCheck[index]">
                 {{affiliation.first}}({{affiliation.second}})
               </el-checkbox>
