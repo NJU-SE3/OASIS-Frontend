@@ -36,7 +36,9 @@
                                         v-bind:times="result.citationCount.toString()"
                                         v-bind:terms="result.terms | getValidItemsForCard"
                                         v-bind:affiliation="result.affiliations | getValidItemsForCard"
-                                        v-bind:essayLink="result.pdfLink">
+                                        v-bind:essayLink="result.pdfLink"
+                                        v-bind:keyword="search_query"
+                                        v-bind:advanced_keywords="advanced_keywords">
               </essay-search-result-card>
             </div>
             <div class="page-pagination"
@@ -110,6 +112,8 @@ export default {
       search_page_number: 100,
 
       advanced_query: null,
+
+      advanced_keywords: [],
     }
   },
 
@@ -155,6 +159,7 @@ export default {
 
       this.is_search_within = true;
       this.search_within_arguments = "";
+      this.advanced_keywords = [];
 
        var str_arguments = "";
 
@@ -162,6 +167,7 @@ export default {
         this.advanced_query.conference.split(";").forEach(item => {
           if(item.length > 0) {
             str_arguments += "refinements=conference:" + item + ";";
+            this.advanced_keywords.push(item);
           }
         });
       }
@@ -169,6 +175,7 @@ export default {
         this.advanced_query.term.split(";").forEach(item => {
           if(item.length > 0) {
             str_arguments += "refinements=term:" + item + ";";
+            this.advanced_keywords.push(item);
           }
         });
       }
@@ -176,6 +183,7 @@ export default {
         this.advanced_query.author.split(";").forEach(item => {
           if(item.length > 0) {
             str_arguments += "refinements=author:" + item + ";";
+            this.advanced_keywords.push(item);
           }
         });
       }
@@ -183,6 +191,8 @@ export default {
         this.advanced_query.year.split(";").forEach(item => {
           if(item.length > 0) {
             str_arguments += "refinements=year:" + item + ";";
+            this.advanced_keywords.push(item.split("_")[0]);
+            this.advanced_keywords.push(item.split("_")[1]);
           }
         });
       }
@@ -190,6 +200,7 @@ export default {
         this.advanced_query.affiliation.split(";").forEach(item => {
           if(item.length > 0) {
             str_arguments += "refinements=affiliation:" + item + ";";
+            this.advanced_keywords.push(item);
           }
         });
       }
