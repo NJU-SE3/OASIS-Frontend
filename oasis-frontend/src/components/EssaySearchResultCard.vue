@@ -76,20 +76,22 @@
         },
 
         brightenKeyword(val) {
-          return this.brightenOneKeyword(val,this.advanced_keywords);
+          var result = this.brightenKeywordList(val, this.keyword.split("%20"));
+          result = this.brightenKeywordList(result, this.advanced_keywords);
+          return result;
         },
 
-        brightenOneKeyword(val, keywords){
-          val = val + '';
-          var keyword = this.keyword;
+        brightenKeywordList(val,keywords_list){
+          var result = val;
 
-          const Reg = new RegExp(keyword, 'gm');
-          if (val) {
-            return val.replace(Reg, '<span style="background-color: rgba(255,255,255,0.5);' +
-              ' color: white">' + keyword + '</span>')
-          } else {
-            return val
-          }
+          keywords_list.forEach(keyword => {
+            const Reg = new RegExp(keyword, 'gi');
+            if (result) {
+              result = result.replace(Reg, '<span style="background-color: rgba(255,255,255,0.5);' +
+                ' color: white">' + keyword + '</span>');
+            }
+          });
+          return result;
         },
       },
     }
@@ -102,6 +104,12 @@
     text-align: left;
     margin: 0 3% 3% 3%;
   }
+
+  .highlighted {
+    background-color: rgba(255,255,255,0.5);
+    color: white;
+  }
+
   .title{
     font-size: large;
     font-weight: normal;

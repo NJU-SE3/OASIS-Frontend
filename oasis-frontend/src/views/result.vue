@@ -220,6 +220,8 @@ export default {
       this.search_result = null;
       this.current_page = 0;
 
+      this.advanced_keywords = [];
+
       getRequest("/api/query/paper/list?query=" + this.search_query + "&returnFacets=" + this.search_type)
         .then(res=>{
           this.search_result = res.data.papers;
