@@ -1,5 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import {Message} from 'element-ui'
+
 
 import MainPage from '@/views/mainpage'
 import SearchRes from '@/views/result'
@@ -51,19 +53,41 @@ const router= new Router({
 });
 
 router.beforeEach((to, from, next) => {
-
+  console.log("to",to)
+  console.log("from",from)
   if(to.name=='Admin'){
+    console.log("in Ad")
     next();
+  }else{
+    getRequest("/api/permission/paper").then((response) => {
+      console.log("res",response)
+      if(response.data){
+        next();
+      }
+      else{
+        console.log("error");
+        if(to.name!='MainPage'){
+          Message({
+            type: "warning",
+            message: '数据载入中，请等待～',
+            center: true
+          })
+          next("/mainpage");
+        }else{
+          next();
+        }
+      }
+    })
+    .catch(err =>{
+      console.log("err")
+      Message({
+        type: "error",
+        message: '服务正在疯狂恢复中，烦请稍候。',
+        center: true
+      })
+    })
   }
-  getRequest("/api/permission/paper").then((response) => {
-    if(response.data){
-      next();
-    }
-    else{
-      console.log("error");
-      next("/admin");
-    }
-  })
+  
 })
 
 export default router;
