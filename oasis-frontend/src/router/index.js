@@ -52,7 +52,7 @@ const router= new Router({
 
 router.beforeEach((to, from, next) => {
 
-  if(from.name=='Admin'){
+  if(to.name=='Admin'){
     next();
   }
   getRequest("/api/permission/paper").then((response) => {
