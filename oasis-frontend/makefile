@@ -1,4 +1,4 @@
-target=root@106.14.140.93:/root/service/front
+target=root@pzy:/root/nginx
 
 all: dist resource deploy
 
