@@ -325,7 +325,7 @@ export default {
 #header{
   position: relative;
 
-  background-image: url("../assets/mainpage/test.png");
+  background-image: url("../assets/mainpage/index.jpg");
   background-size: 100% auto;
 }
 #overlay{

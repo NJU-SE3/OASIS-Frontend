@@ -191,8 +191,8 @@ export default {
   position: relative;
   height: 100vh;
   min-height: 410px;
-  /* background-image: url("../assets/mainpage/video-poster_1576231362701.png"); */
-  background-image: url("../assets/mainpage/test.png");
+  /* background-image: url("../assets/mainpage/test.png"); */
+  background-image: url("../assets/mainpage/index.jpg");
   background-size: 100% 100%;
 }
 .overlay{
