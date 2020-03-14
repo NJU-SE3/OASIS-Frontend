@@ -34,7 +34,7 @@
                                         v-bind:conference="result.conference | getValidItemsForCard"
                                         v-bind:year="result.year.toString()"
                                         v-bind:times="result.citationCount.toString()"
-                                        v-bind:terms="result.terms | getValidItemsForCard"
+                                        v-bind:terms="result.terms | getValidItemsForCard_terms"
                                         v-bind:affiliation="result.affiliations | getValidItemsForCard"
                                         v-bind:essayLink="result.pdfLink"
                                         v-bind:keyword="search_query"
@@ -129,6 +129,11 @@ export default {
         }
       });
       return list_items.join(";");
+    },
+
+    getValidItemsForCard_terms(items) {
+      var str_terms = items.split("[")[1].split("]")[0].split("'").join("");
+      return str_terms;
     },
   },
 
@@ -243,10 +248,10 @@ export default {
 
     getSummary() {
       getRequest("/api/query/paper/summary").then(res=>{
-          this.summary_term = this.getValidItemsForSideBar(res.data.term);
-          this.summary_author = this.getValidItemsForSideBar(res.data.author);
-          this.summary_conference = this.getValidItemsForSideBar(res.data.conference);
-          this.summary_affiliation = this.getValidItemsForSideBar(res.data.affiliation);
+        this.summary_term = this.getValidItemsForSideBar(res.data.term);
+        this.summary_author = this.getValidItemsForSideBar(res.data.author);
+        this.summary_conference = this.getValidItemsForSideBar(res.data.conference);
+        this.summary_affiliation = this.getValidItemsForSideBar(res.data.affiliation);
       });
     },
 
