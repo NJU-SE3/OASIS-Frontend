@@ -27,7 +27,7 @@ const router= new Router({
   routes: [
     {
       path: '/',
-      redirect: '/admin'
+      redirect: '/mainpage'
     },
     {
       path: '/mainpage',
