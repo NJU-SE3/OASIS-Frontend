@@ -26,7 +26,7 @@
           </el-col>
           <el-col :span="18" id="res">
             <div class="no-result-hint" v-if="!has_result">No result!</div>
-            <div class="result-card">
+            <div class="result-card" v-loading="loading">
               <essay-search-result-card v-for="(result, index) in search_result"
                                         v-bind:key="index"
                                         v-bind:title="result.title"
@@ -34,7 +34,7 @@
                                         v-bind:conference="result.conference | getValidItemsForCard"
                                         v-bind:year="result.year.toString()"
                                         v-bind:times="result.citationCount.toString()"
-                                        v-bind:terms="result.terms | getValidItemsForCard_terms"
+                                        v-bind:terms="result.terms | getValidItemsForCard"
                                         v-bind:affiliation="result.affiliations | getValidItemsForCard"
                                         v-bind:essayLink="result.pdfLink"
                                         v-bind:keyword="search_query"
@@ -89,6 +89,8 @@ export default {
 
   data () {
     return {
+      loading: true,
+
       search_query: "",
       search_type: "",
 
@@ -221,6 +223,8 @@ export default {
     },
 
     getFuzzySearchResult(){
+      this.loading = true;
+
       this.is_search_within = false;
       this.search_result = null;
       this.current_page = 0;
@@ -231,6 +235,8 @@ export default {
         .then(res=>{
           this.search_result = res.data.papers;
           this.search_page_number = res.data.itemCnt;
+
+          this.loading = false;
 
           if(this.search_page_number > 0) {
             this.getSummary();
@@ -256,6 +262,8 @@ export default {
     },
 
     getAdvancedSearchResult() {
+      this.loading = true;
+
       this.is_search_within = true;
       this.current_page = 0;
       this.search_result = null;
@@ -265,6 +273,8 @@ export default {
       getRequest("/api/query/paper/refine?" + this.search_within_arguments).then(res => {
         this.search_result = res.data.papers;
         this.search_page_number = res.data.itemCnt;
+
+        this.loading = false;
 
         if(this.search_page_number > 0) {
           this.has_result = true;
@@ -276,6 +286,7 @@ export default {
     },
 
     getNextPage() {
+      this.loading = true;
       this.search_result = null;
       if(!this.is_search_within) {
         getRequest("/api/query/paper/list?query=" + this.search_query +
@@ -283,12 +294,14 @@ export default {
           "&pageNum=" + this.current_page)
           .then(res => {
             this.search_result = res.data.papers;
+            this.loading = false;
           })
       }
       else {
         getRequest("/api/query/paper/refine?" + this.search_within_arguments +
         "&pageNum=" + this.current_page).then(res => {
           this.search_result = res.data.papers;
+          this.loading = false;
         });
       }
     },
