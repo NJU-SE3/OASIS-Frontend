@@ -6,7 +6,7 @@
             <h1 class="title" @click="gotoMainpage">
               OASIS
             </h1>
-            <search @paperSearch="commonSearch"></search>
+            <search @paperSearch="commonSearch" :searchCon="search_query"></search>
           </div>
         </div>
       </el-header>
