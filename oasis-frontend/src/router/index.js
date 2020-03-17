@@ -7,6 +7,7 @@ import MainPage from '@/views/mainpage'
 import SearchRes from '@/views/result'
 import Ranking from '@/views/ranking'
 import Admin from "@/views/admin"
+import Sort from "@/views/Sort"
 
 import {getRequest} from "../utils/request"
 
@@ -48,6 +49,11 @@ const router= new Router({
       path: '/admin',
       name: "Admin",
       component: Admin
+    },
+    {
+      path: "/sort",
+      name: "Sort",
+      component: Sort
     }
   ],
 });
