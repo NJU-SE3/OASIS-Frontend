@@ -17,11 +17,16 @@
 <script>
 export default{
     name: "search-bar",
-    props: ["searchCon"],
+    props: ["searchContent"],
     data(){
         return{
             searchType:"All",
-            // searchCon:""
+            searchCon: this.searchContent
+        }
+    },
+    watch: {
+        "searchContent": function(val) {
+            this.searchCon = val;
         }
     },
     methods:{

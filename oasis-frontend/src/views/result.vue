@@ -6,7 +6,7 @@
             <h1 class="title" @click="gotoMainpage">
               OASIS
             </h1>
-            <search @paperSearch="commonSearch" :searchCon="search_query"></search>
+            <search @paperSearch="commonSearch" :searchContent="search_query"></search>
           </div>
         </div>
       </el-header>
@@ -116,6 +116,7 @@ export default {
       advanced_query: null,
 
       advanced_keywords: [],
+
     }
   },
 

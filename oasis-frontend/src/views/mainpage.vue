@@ -107,7 +107,7 @@ export default {
       pic_one: true,
       pic_two: false,
       pic_three: false,
-      search_val: ""
+      search_val: "",
     }
   },
 
