@@ -14,23 +14,17 @@
 		</el-header>
 
     <el-row class="main-content">
-      <el-col :span="5" v-if="sort_type == 'author'">
-        <div class="field-filter" style="height: 500px;"></div>
+      <el-col :span="5" v-if="sort_type == 'author'" class="field-filter-bar">
+        <!-- <div class="field-filter" style="height: 500px;"></div> -->
+        <filter-bar :author_fields="author_fields"></filter-bar>
       </el-col>
       <el-col class="sort-table" :span="span_len" :offset="2">
         <div class="sort-table-title">
           Top {{ sort_type }} in all
         </div>
-        <sort-list :list_title="sort_title"></sort-list>
+        <sort-list :list_title="sort_title" :table_data_prop="table_data"></sort-list>
       </el-col>
     </el-row>
-
-    <!-- <div class="sort-table">
-      <div class="sort-table-title">
-        Top {{ sort_type }} in all
-      </div>
-      <sort-list :list_title="sort_title"></sort-list>
-    </div> -->
 
 
 	</el-container>
@@ -39,13 +33,15 @@
 <script>
 import search from "../components/Search"
 import sort_list from "../components/SortList"
+import filter_bar from "../components/FilterBar"
 
 export default {
 	name: "sort",
 
 	components: {
     "search": search,
-    "sort-list": sort_list
+    "sort-list": sort_list,
+    "filter-bar": filter_bar
   },
 
   data() {
@@ -53,11 +49,62 @@ export default {
       searchCon: "",
       sort_title: [],
       sort_type: "",
+      table_data: [],
       field_affi_conf_title: ["Liveness", "PaperCount", "Citation", "AuthorCount", "Heat"],
       author_title: ["Liveness", "PaperCount", "Citation", "Heat"],
       // affiliation_title: ["Liveness", "PaperCount", "Citation", "AuthorCount", "Heat"],
       // conference_title: ["Liveness", "PaperCount", "Citation", "AuthorCount", "Heat"]
-      span_len: 22
+      span_len: 22,
+      author_fields: ["Software Engineering", "Artificial Intelligence", "Computer Network"],
+      author_table_data: [
+        {
+          Name: "testname1",
+          Liveness: 100,
+          PaperCount: 20,
+          Citation: 300,
+          Heat: 45
+        },
+        {
+          Name: "testname2",
+          Liveness: 200,
+          PaperCount: 35,
+          Citation: 200,
+          Heat: 39
+        },
+        {
+          Name: "testname3",
+          Liveness: 120,
+          PaperCount: 30,
+          Citation: 240,
+          Heat: 40
+        }
+      ],
+      field_affi_conf_table_data: [
+        {
+          Name: "testname1",
+          Liveness: 100,
+          PaperCount: 20,
+          Citation: 300,
+          AuthorCount: 250,
+          Heat: 45
+        },
+        {
+          Name: "testname2",
+          Liveness: 200,
+          PaperCount: 35,
+          Citation: 200,
+          AuthorCount: 300,
+          Heat: 39
+        },
+        {
+          Name: "testname3",
+          Liveness: 120,
+          PaperCount: 30,
+          Citation: 240,
+          AuthorCount: 360,
+          Heat: 40
+        }
+      ],
     }
   },
 
@@ -65,10 +112,12 @@ export default {
     this.sort_type = this.$route.query.type;
     if (this.sort_type == "author") {
       this.sort_title = this.author_title;
+      this.table_data = this.author_table_data;
       this.span_len = 17;
     }
     else {
       this.sort_title = this.field_affi_conf_title;
+      this.table_data = this.field_affi_conf_table_data;
     }
   },
 
@@ -114,10 +163,15 @@ export default {
   font-size: 0;
 }
 
-.main-content > .field-filter {
+/* .main-content > .field-filter {
   width: 100%;
   height: 500px;
   background: rosybrown;
+} */
+
+.main-content > .field-filter-bar {
+  /* margin-top: 80px; */
+  padding: 0 80px;
 }
 
 .sort-table {
