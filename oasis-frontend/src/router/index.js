@@ -18,11 +18,11 @@ const router= new Router({
 
   mode: "history",
 
-  scrollBehavior (to, from, savedPosition) {
+  scrollBehavior(to, from, savedPosition) {
     if (savedPosition) {
       return savedPosition
     } else {
-      return { x: 0, y: 0 }
+      return {x: 0, y: 0}
     }
   },
 
@@ -38,12 +38,12 @@ const router= new Router({
     },
     {
       path: '/result',
-      name:"SearchRes",
+      name: "SearchRes",
       component: SearchRes,
     },
     {
       path: '/ranking',
-      name:"Ranking",
+      name: "Ranking",
       component: Ranking,
     },
     {
@@ -57,10 +57,13 @@ const router= new Router({
       component: MockProfile
 
     },
+    {
       path: "/sort",
       name: "Sort",
       component: Sort
     }
+  ]
+}
 router.beforeEach((to, from, next) => {
   if(to.name=='Admin'){
     next();
