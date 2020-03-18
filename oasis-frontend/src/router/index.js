@@ -62,38 +62,39 @@ const router= new Router({
       name: "Sort",
       component: Sort
     }
-  ]
-}
-router.beforeEach((to, from, next) => {
-  if(to.name=='Admin'){
+  ],
+});
+
+  router.beforeEach((to, from, next) => {
+  if (to.name == 'Admin') {
     next();
-  }else{
+  } else {
     getRequest("/api/permission/paper").then((response) => {
-      if(response.data){
+      if (response.data) {
         next();
       }
-      else{
+      else {
         console.log("error");
-        if(to.name!='MainPage'){
+        if (to.name != 'MainPage') {
           Message({
             type: "warning",
             message: 'Data has not been initialized.',
             center: true
           })
           next("/mainpage");
-        }else{
+        } else {
           next();
         }
       }
     })
-    .catch(err =>{
-      console.log("err")
-      Message({
-        type: "error",
-        message: '服务正在疯狂恢复中，烦请稍候。',
-        center: true
+      .catch(err => {
+        console.log("err")
+        Message({
+          type: "error",
+          message: '服务正在疯狂恢复中，烦请稍候。',
+          center: true
+        })
       })
-    })
   }
 
 })
