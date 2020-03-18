@@ -2,8 +2,8 @@
   <div class="card">
     <div class="item" v-for="(item, index) in statistics">
       <span :class= "item.icon" class="item-icon"></span>
-      <span class="item-title">{{item.title}}</span>
-      <span class="item-number">{{item.number}}</span>
+      <span class="item-title">{{item.type}}</span>
+      <span class="item-number">{{item.value}}</span>
     </div>
   </div>
 </template>

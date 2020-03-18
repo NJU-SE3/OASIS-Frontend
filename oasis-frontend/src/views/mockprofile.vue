@@ -23,6 +23,14 @@
           <graph-card></graph-card>
         </div></el-col>
       </el-row>
+      <el-row :gutter="15">
+        <el-col :span="12"><div class="grid-content">
+          <top-ranking-card :topRankingContent="topRankingContent1"></top-ranking-card>
+        </div></el-col>
+        <el-col :span="12"><div class="grid-content">
+          <top-ranking-card :topRankingContent="topRankingContent2"></top-ranking-card>
+        </div></el-col>
+      </el-row>
     </el-main>
   </el-container>
 </template>
@@ -32,10 +40,12 @@
     import BasicIntroCard from "../components/BasicIntroCard.vue";
     import BasicStatisticCard from "../components/BasicStatisticCard.vue";
     import GraphCard from "../components/GraphCard.vue";
+    import TopRankingCard from "../components/TopRankingCard.vue";
 
     export default {
       name: "mockprofile",
       components: {
+        TopRankingCard,
         GraphCard,
         BasicStatisticCard,
         BasicIntroCard,
@@ -43,15 +53,16 @@
         'basic-intro-card': BasicIntroCard,
         'Basic-statistic-card': BasicStatisticCard,
         'graph-card': GraphCard,
+        'top-ranking-card': TopRankingCard,
       },
 
       data() {
         return {
           basicStatistic : [
-            {icon: "el-icon-user", title: "Authors", number: "11,223"},
-            {icon: "el-icon-document", title: "Papers", number: "11,224"},
-            {icon: "el-icon-document", title: "Papers", number: "11,224"},
-            {icon: "el-icon-document", title: "Papers", number: "11,224"},
+            {icon: "el-icon-user", type: "Authors", value: "11,223"},
+            {icon: "el-icon-document", type: "Papers", value: "11,224"},
+            {icon: "el-icon-document", type: "Papers", value: "11,224"},
+            {icon: "el-icon-document", type: "Papers", value: "11,224"},
           ],
           basicIntro: {
             name: "Condensed matter physics",
@@ -76,7 +87,41 @@
             "laws. In particular, they include the laws of quantum mechanics," +
             " electromagnetism and statistical mechanics.",
             details: [{type: "Affiliation", value: "Nanjing University"}],
-          }
+          },
+
+          topRankingContent1: {
+            type: "Author",
+            startIndex: 1,
+            items: [
+              {name: "Physics", value: "1323"},
+              {name: "Physics", value: "1323"},
+              {name: "Physics", value: "1323"},
+              {name: "Physics", value: "1323"},
+              {name: "Physics", value: "1323"},
+              {name: "Physics", value: "1323"},
+              {name: "Physics", value: "1323"},
+              {name: "Physics", value: "1323"},
+              {name: "Physics", value: "1323"},
+              {name: "Physics", value: "1323"},
+            ],
+          },
+
+          topRankingContent2: {
+            type: "",
+            startIndex: 11,
+            items: [
+              {name: "Physics", value: "1323"},
+              {name: "Physics", value: "1323"},
+              {name: "Physics", value: "1323"},
+              {name: "Physics", value: "1323"},
+              {name: "Physics", value: "1323"},
+              {name: "Physics", value: "1323"},
+              {name: "Physics", value: "1323"},
+              {name: "Physics", value: "1323"},
+              {name: "Physics", value: "1323"},
+              {name: "Physics", value: "1323"},
+            ],
+          },
         }
       },
     }

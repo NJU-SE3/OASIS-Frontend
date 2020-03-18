@@ -8,7 +8,7 @@ import Ranking from '@/views/ranking'
 import Admin from "@/views/admin"
 
 import MockProfile from "@/views/mockprofile"
-import Sort from "@/views/Sort"
+import Sort from "@/views/sort"
 
 import {getRequest} from "../utils/request"
 
