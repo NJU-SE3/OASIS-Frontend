@@ -1,7 +1,7 @@
 <template>
 	<div class="sort-list">
 		<el-table :data="table_data" style="width: 100%;" :default-sort = "{prop: 'paper_count', order: 'descending'}">
-			<el-table-column prop="name" label="Name"></el-table-column>
+			<el-table-column prop="Name" label="Name"></el-table-column>
 			<el-table-column v-for="(item, index) in list_title" 
 											 :key="index"
 											 :prop="item"
@@ -16,24 +16,11 @@
 export default {
 	name: "SortList",
 
-	props: ["list_title"],
+	props: ["list_title", "table_data_prop"],
 
 	data() {
 		return {
-			table_data: [
-				{
-					name: "jellyfishding",
-					Liveness: 100,
-					PaperCount: 23,
-					Citation: 189
-				},
-				{
-					name: "noora",
-					Liveness: 200,
-					PaperCount: 26,
-					Citation: 230
-				}
-			]
+			table_data: this.table_data_prop
 		}
 	},
 
