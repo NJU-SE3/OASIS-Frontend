@@ -1,0 +1,171 @@
+<template>
+	<el-container class="main">
+		<el-header id="header" style="height: 35vh;min-height: 270px; padding:0;">
+			<div id="overlay">
+				<div id="o-content" class="content">
+					<h1 class="title">
+						OASIS
+					</h1>
+					<el-input class="filter-input" placeholder="" v-model="searchCon" @keyup.enter.native="filterInRes">
+            <el-button slot="append" icon="el-icon-search" @click="filterInRes"></el-button>
+					</el-input>
+				</div>
+			</div>
+		</el-header>
+
+    <el-row class="main-content">
+      <el-col :span="5" v-if="sort_type == 'author'">
+        <div class="field-filter" style="height: 500px;"></div>
+      </el-col>
+      <el-col class="sort-table" :span="span_len" :offset="2">
+        <div class="sort-table-title">
+          Top {{ sort_type }} in all
+        </div>
+        <sort-list :list_title="sort_title"></sort-list>
+      </el-col>
+    </el-row>
+
+    <!-- <div class="sort-table">
+      <div class="sort-table-title">
+        Top {{ sort_type }} in all
+      </div>
+      <sort-list :list_title="sort_title"></sort-list>
+    </div> -->
+
+
+	</el-container>
+</template>
+
+<script>
+import search from "../components/Search"
+import sort_list from "../components/SortList"
+
+export default {
+	name: "sort",
+
+	components: {
+    "search": search,
+    "sort-list": sort_list
+  },
+
+  data() {
+    return {
+      searchCon: "",
+      sort_title: [],
+      sort_type: "",
+      field_affi_conf_title: ["Liveness", "PaperCount", "Citation", "AuthorCount", "Heat"],
+      author_title: ["Liveness", "PaperCount", "Citation", "Heat"],
+      // affiliation_title: ["Liveness", "PaperCount", "Citation", "AuthorCount", "Heat"],
+      // conference_title: ["Liveness", "PaperCount", "Citation", "AuthorCount", "Heat"]
+      span_len: 22
+    }
+  },
+
+  created() {
+    this.sort_type = this.$route.query.type;
+    if (this.sort_type == "author") {
+      this.sort_title = this.author_title;
+      this.span_len = 17;
+    }
+    else {
+      this.sort_title = this.field_affi_conf_title;
+    }
+  },
+
+  methods: {
+    filterInRes() {
+      console.log(this.searchCon);
+    }
+  }
+}
+</script>
+
+<style>
+.main{
+  color:white;
+  height: 100%;
+  overflow: auto
+}
+
+.title {
+  font-size: 50px;
+  margin: 0 0 8px 0;
+  cursor: pointer;
+}
+
+#header{
+  position: relative;
+
+  background-image: url("../assets/mainpage/index.jpg");
+  background-size: 100% auto;
+}
+#overlay{
+  position: absolute;
+  top: 0;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height: 100%;
+  width: 100%;
+  background-color:rgba(79,79,79,0.10);
+}
+
+.main-content {
+  font-size: 0;
+}
+
+.main-content > .field-filter {
+  width: 100%;
+  height: 500px;
+  background: rosybrown;
+}
+
+.sort-table {
+  /* background: rgba(255, 255, 255, .3); */
+  height: 100%;
+  /* margin: 45px 180px; */
+  padding-right: 100px;
+}
+
+.sort-table  .sort-table-title {
+  font-size: 30px;
+  font-weight: bold;
+  margin: 40px 0 30px 0;
+}
+
+/* .table-content .content-title {
+  display: flex;
+  justify-content: space-around;
+  align-content: space-around;
+}
+
+.table-content .content-title .content-title-item {
+  display: inline-block;
+} */
+
+.filter-input {
+  width: 450px;
+}
+
+.el-input__inner {
+  background: rgba(255,255,255,0.5);
+  border-radius: 2em 0 0 2em;
+  border-right: 0;
+  /* border-color: transparent; */
+}
+
+.el-input__inner:focus {
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.el-input-group__append, .el-input-group__prepend {
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 0 2em 2em 0;
+}
+
+.content > [class*=" el-icon-"], [class^=el-icon-] {
+  color: black;
+}
+
+
+</style>

@@ -2,12 +2,13 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import {Message} from 'element-ui'
 
-
 import MainPage from '@/views/mainpage'
 import SearchRes from '@/views/result'
 import Ranking from '@/views/ranking'
 import Admin from "@/views/admin"
+
 import MockProfile from "@/views/mockprofile"
+import Sort from "@/views/Sort"
 
 import {getRequest} from "../utils/request"
 
@@ -54,10 +55,12 @@ const router= new Router({
       path: '/profile',
       name: "Profile",
       component: MockProfile
-    },
-  ],
-});
 
+    },
+      path: "/sort",
+      name: "Sort",
+      component: Sort
+    }
 router.beforeEach((to, from, next) => {
   if(to.name=='Admin'){
     next();
