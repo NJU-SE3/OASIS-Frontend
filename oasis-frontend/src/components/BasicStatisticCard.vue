@@ -23,7 +23,16 @@
 
 <style scoped>
   ::-webkit-scrollbar {
-    width: 0;
+    width: 12px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    border-radius:10px;
+    background: #b4bccc;
   }
 
   .card {

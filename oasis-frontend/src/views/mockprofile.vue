@@ -14,13 +14,13 @@
       </el-row>
       <el-row :gutter="15">
         <el-col :span="8"><div class="grid-content">
-          <graph-card></graph-card>
+          <graph-card :graphInfo="graphInfo1"></graph-card>
         </div></el-col>
         <el-col :span="8"><div class="grid-content">
-          <graph-card></graph-card>
+          <graph-card :graphInfo="graphInfo2"></graph-card>
         </div></el-col>
         <el-col :span="8"><div class="grid-content">
-          <graph-card></graph-card>
+          <graph-card :graphInfo="graphInfo3"></graph-card>
         </div></el-col>
       </el-row>
       <el-row :gutter="15">
@@ -122,6 +122,48 @@
               {name: "Physics", value: "1323"},
             ],
           },
+
+          graphInfo1: {
+            type: "H-index",
+            chartData: {
+              columns: ['Year', 'Activation'],
+              rows: [
+                { 'Year': 2016, 'Activation': 3530,},
+                { 'Year': 2017, 'Activation': 2923,},
+                { 'Year': 2018, 'Activation': 1723,},
+                { 'Year': 2019, 'Activation': 3792,},
+                { 'Year': 2020, 'Activation': 4593,},
+              ]
+            },
+          },
+
+          graphInfo2: {
+            type: "Papers",
+            chartData: {
+              columns: ['Year', 'Activation'],
+              rows: [
+                { 'Year': 2016, 'Activation': 3530,},
+                { 'Year': 2017, 'Activation': 2923,},
+                { 'Year': 2018, 'Activation': 1723,},
+                { 'Year': 2019, 'Activation': 3792,},
+                { 'Year': 2020, 'Activation': 4593,},
+              ]
+            },
+          },
+
+          graphInfo3: {
+            type: "Citation",
+            chartData: {
+              columns: ['Year', 'Activation'],
+              rows: [
+                { 'Year': 2016, 'Activation': 3530,},
+                { 'Year': 2017, 'Activation': 2923,},
+                { 'Year': 2018, 'Activation': 1723,},
+                { 'Year': 2019, 'Activation': 3792,},
+                { 'Year': 2020, 'Activation': 4593,},
+              ]
+            },
+          }
         }
       },
     }

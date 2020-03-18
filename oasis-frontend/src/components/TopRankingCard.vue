@@ -4,7 +4,7 @@
         <span class="el-icon-data-line icon"></span>
         <span>Top {{topRankingContent.type}} List</span>
       </div>
-      <div class="title" v-if="topRankingContent.type.length <= 0"></div>
+      <div class="title-blank" v-if="topRankingContent.type.length <= 0"></div>
       <div class="content">
         <div class="item" v-for="(item, index) in topRankingContent.items">
           <div class="item-name">
@@ -44,6 +44,10 @@
     font-size: large;
     font-weight: bold;
     padding-top: 10px;
+  }
+
+  .title-blank {
+    height: 20px;
   }
 
   .icon{
