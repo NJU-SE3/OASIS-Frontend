@@ -10,6 +10,8 @@ import Admin from "@/views/admin"
 import MockProfile from "@/views/mockprofile"
 import Sort from "@/views/sort"
 
+import Graph from "@/views/graph_test"
+
 import {getRequest} from "../utils/request"
 
 Vue.use(Router)
@@ -61,6 +63,11 @@ const router= new Router({
       path: "/sort",
       name: "Sort",
       component: Sort
+    },
+    {
+      path:'/graph',
+      name: "Graph",
+      component: Graph
     }
   ],
 });

@@ -5,8 +5,6 @@ import App from './App'
 import router from './router'
 
 
-
-
 import VCharts from 'v-charts'
 
 Vue.use(VCharts)
