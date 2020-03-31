@@ -62,7 +62,6 @@ const router= new Router({
       path: '/profile',
       name: "Profile",
       component: MockProfile
-
     },
     {
       path: "/sort",
@@ -88,7 +87,6 @@ const router= new Router({
       path: "/field-profile",
       name: "FieldProfile",
       component: FieldProfile
-    },
     },
     {
       path:'/graph',
