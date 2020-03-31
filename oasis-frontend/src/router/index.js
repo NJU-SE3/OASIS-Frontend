@@ -10,6 +10,11 @@ import Admin from "@/views/admin"
 import MockProfile from "@/views/mockprofile"
 import Sort from "@/views/sort"
 
+import AuthorProfile from "@/views/authorProfile"
+import AffiliationProfile from "@/views/affiliationProfile"
+import ConferenceProfile from "@/views/conferenceProfile"
+import FieldProfile from "@/views/fieldProfile"
+
 import Graph from "@/views/graph_test"
 
 import {getRequest} from "../utils/request"
@@ -63,6 +68,27 @@ const router= new Router({
       path: "/sort",
       name: "Sort",
       component: Sort
+    },
+    {
+      path: "/author-profile",
+      name: "AuthorProfile",
+      component: AuthorProfile
+    },
+    {
+      path: "/affiliation-profile",
+      name: "AffiliationProfile",
+      component: AffiliationProfile
+    },
+    {
+      path: "/conference-profile",
+      name: "ConferenceProfile",
+      component: ConferenceProfile
+    },
+    {
+      path: "/field-profile",
+      name: "FieldProfile",
+      component: FieldProfile
+    },
     },
     {
       path:'/graph',

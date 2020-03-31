@@ -8,9 +8,6 @@
         <span>{{detail.type}}:</span><span>{{detail.value}}</span>
       </div>
     </div>
-    <div class="introduction">
-      {{intro.introduction}}
-    </div>
   </div>
 </template>
 
@@ -41,23 +38,16 @@
   }
 
   .name {
-    height: 80px;
+    height: 140px;
     color: black;
-    font-size: xx-large;
+    font-size: 50px;
     font-style: italic;
-    padding-top: 20px;
-    /*border: solid pink;*/
+    padding-top: 50px;
    }
 
   .details {
    height: 80px;
-    /*border: solid pink;*/
     font-size: x-large;
-  }
-
-  .introduction {
-    height: 150px;
-    overflow: scroll;
   }
 
 </style>

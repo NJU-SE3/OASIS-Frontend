@@ -53,6 +53,7 @@
     /*border: solid pink;*/
     font-size: x-large;
     padding-right: 5%;
+    /*width: 20%;*/
   }
 
   .item-title {
@@ -63,7 +64,7 @@
   .item-number {
     color: #20a0ff;
     font-style: italic;
-    font-size: xx-large;
+    font-size: 45px;
   }
 
 </style>
