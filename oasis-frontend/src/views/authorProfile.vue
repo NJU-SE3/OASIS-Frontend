@@ -32,11 +32,9 @@
         </div></el-col>
       </el-row>
       <el-row :gutter="15">
-        <el-col :span="12"><div class="grid-content">
-          <top-ranking-card :topRankingContent="topRankingContent1"></top-ranking-card>
-        </div></el-col>
-        <el-col :span="12"><div class="grid-content">
-          <top-ranking-card :topRankingContent="topRankingContent2"></top-ranking-card>
+        <el-col :span="24"><div class="grid-content">
+          <top-ranking-card :topRankingContent="topRankingContent[0]"
+                            :pdfLink="true"></top-ranking-card>
         </div></el-col>
       </el-row>
     </el-main>
@@ -69,6 +67,7 @@
     mounted(){
       this.getBasicInfo();
       this.getTrendInfo();
+      this.getTopRankingInfo();
     },
 
     data() {
@@ -86,39 +85,13 @@
           details: [],
         },
 
-        topRankingContent1: {
-          type: "Author",
-          startIndex: 1,
-          items: [
-            {name: "Physics", value: "1323"},
-            {name: "Physics", value: "1323"},
-            {name: "Physics", value: "1323"},
-            {name: "Physics", value: "1323"},
-            {name: "Physics", value: "1323"},
-            {name: "Physics", value: "1323"},
-            {name: "Physics", value: "1323"},
-            {name: "Physics", value: "1323"},
-            {name: "Physics", value: "1323"},
-            {name: "Physics", value: "1323"},
-          ],
-        },
-
-        topRankingContent2: {
-          type: "",
-          startIndex: 11,
-          items: [
-            {name: "Physics", value: "1323"},
-            {name: "Physics", value: "1323"},
-            {name: "Physics", value: "1323"},
-            {name: "Physics", value: "1323"},
-            {name: "Physics", value: "1323"},
-            {name: "Physics", value: "1323"},
-            {name: "Physics", value: "1323"},
-            {name: "Physics", value: "1323"},
-            {name: "Physics", value: "1323"},
-            {name: "Physics", value: "1323"},
-          ],
-        },
+        topRankingContent: [
+          {
+            type: "Papers",
+            startIndex: 1,
+            items: [],
+          },
+        ],
 
         graphInfoUrlParam: ["activeness","count","citation","heat","H_index"],
         graphInfoType: ["Activeness","Papers","Citation","Heat","H-index"],
@@ -218,7 +191,6 @@
           });
         getRequest("/api/report/paper/trend/year?baseline=count&refinement=" + this.id)
           .then(res=>{
-            console.log(res);
             res.data.forEach(data=> {
               this.graphInfos[1].chartData.rows
                 .push({
@@ -255,6 +227,21 @@
                   "Year": parseInt(data.year),
                   "H-index": parseFloat(data.count).toFixed(1),
                 });
+            });
+          });
+      },
+
+      getTopRankingInfo() {
+        getRequest("/api/paper/list?id=" + this.id)
+          .then(res=>{
+            console.log(res);
+            res.data.forEach(item=> {
+              this.topRankingContent[0].items.push({
+                name: item.title,
+                value: item.citationCount,
+                id: item.id,
+                link: item.pdfLink,
+              })
             });
           });
       },

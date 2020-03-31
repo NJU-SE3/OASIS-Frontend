@@ -14,21 +14,33 @@
       </el-row>
       <el-row :gutter="15">
         <el-col :span="8"><div class="grid-content">
-          <graph-card :graphInfo="graphInfo1"></graph-card>
+          <graph-card :graphInfo="graphInfos[0]"></graph-card>
         </div></el-col>
         <el-col :span="8"><div class="grid-content">
-          <graph-card :graphInfo="graphInfo2"></graph-card>
+          <graph-card :graphInfo="graphInfos[1]"></graph-card>
         </div></el-col>
         <el-col :span="8"><div class="grid-content">
-          <graph-card :graphInfo="graphInfo3"></graph-card>
+          <graph-card :graphInfo="graphInfos[2]"></graph-card>
+        </div></el-col>
+      </el-row>
+      <el-row :gutter="15">
+        <el-col :span="8"><div class="grid-content">
+          <graph-card :graphInfo="graphInfos[3]"></graph-card>
+        </div></el-col>
+        <el-col :span="8"><div class="grid-content">
+          <graph-card :graphInfo="graphInfos[4]"></graph-card>
         </div></el-col>
       </el-row>
       <el-row :gutter="15">
         <el-col :span="12"><div class="grid-content">
-          <top-ranking-card :topRankingContent="topRankingContent1"></top-ranking-card>
+          <top-ranking-card :topRankingContent="topRankingContent[0]"
+                            :pdfLink="false"></top-ranking-card>
         </div></el-col>
-        <el-col :span="12"><div class="grid-content">
-          <top-ranking-card :topRankingContent="topRankingContent2"></top-ranking-card>
+      </el-row>
+      <el-row :gutter="15">
+        <el-col :span="24"><div class="grid-content">
+          <top-ranking-card :topRankingContent="topRankingContent[1]"
+                            :pdfLink="true"></top-ranking-card>
         </div></el-col>
       </el-row>
     </el-main>
@@ -60,6 +72,7 @@
 
     mounted() {
       this.getBasicInfo();
+      this.getTopRankingInfo();
     },
 
     data() {
@@ -68,6 +81,8 @@
         documentIcon: "el-icon-document",
         authorIcon: "el-icon-user",
 
+        id: "5e7a20d1b04a431b0988beb5",
+
         basicStatistic : [],
         basicIntro: {
           name: "",
@@ -75,39 +90,56 @@
           details: [],
         },
 
-        topRankingContent1: {
-          type: "Author",
-          startIndex: 1,
-          items: [
-            {name: "Physics", value: "1323"},
-            {name: "Physics", value: "1323"},
-            {name: "Physics", value: "1323"},
-            {name: "Physics", value: "1323"},
-            {name: "Physics", value: "1323"},
-            {name: "Physics", value: "1323"},
-            {name: "Physics", value: "1323"},
-            {name: "Physics", value: "1323"},
-            {name: "Physics", value: "1323"},
-            {name: "Physics", value: "1323"},
-          ],
-        },
+        topRankingContent: [
+          {
+            type: "Authors",
+            startIndex: 1,
+            items: [],
+          },
+          {
+            type: "Papers",
+            startIndex: 1,
+            items: [],
+          },
+        ],
 
-        topRankingContent2: {
-          type: "",
-          startIndex: 11,
-          items: [
-            {name: "Physics", value: "1323"},
-            {name: "Physics", value: "1323"},
-            {name: "Physics", value: "1323"},
-            {name: "Physics", value: "1323"},
-            {name: "Physics", value: "1323"},
-            {name: "Physics", value: "1323"},
-            {name: "Physics", value: "1323"},
-            {name: "Physics", value: "1323"},
-            {name: "Physics", value: "1323"},
-            {name: "Physics", value: "1323"},
-          ],
-        },
+        graphInfos: [
+          {
+            type: "Activeness",
+            chartData: {
+              columns: ['Year', 'Activeness'],
+              rows: []
+            },
+          },
+          {
+            type: "Papers",
+            chartData: {
+              columns: ['Year', 'Papers'],
+              rows: []
+            },
+          },
+          {
+            type: "Citation",
+            chartData: {
+              columns: ['Year', 'Citation'],
+              rows: []
+            },
+          },
+          {
+            type: "Heat",
+            chartData: {
+              columns: ['Year', 'Heat'],
+              rows: []
+            },
+          },
+          {
+            type: "H-index",
+            chartData: {
+              columns: ['Year', 'H-index'],
+              rows: []
+            },
+          },
+        ],
 
         graphInfo1: {
           type: "H-index",
@@ -122,40 +154,12 @@
             ]
           },
         },
-
-        graphInfo2: {
-          type: "Papers",
-          chartData: {
-            columns: ['Year', 'Activation'],
-            rows: [
-              { 'Year': 2016, 'Activation': 3530,},
-              { 'Year': 2017, 'Activation': 2923,},
-              { 'Year': 2018, 'Activation': 1723,},
-              { 'Year': 2019, 'Activation': 3792,},
-              { 'Year': 2020, 'Activation': 4593,},
-            ]
-          },
-        },
-
-        graphInfo3: {
-          type: "Citation",
-          chartData: {
-            columns: ['Year', 'Activation'],
-            rows: [
-              { 'Year': 2016, 'Activation': 3530,},
-              { 'Year': 2017, 'Activation': 2923,},
-              { 'Year': 2018, 'Activation': 1723,},
-              { 'Year': 2019, 'Activation': 3792,},
-              { 'Year': 2020, 'Activation': 4593,},
-            ]
-          },
-        }
       }
     },
 
     methods: {
       getBasicInfo() {
-        getRequest("/api/affiliation/detail?id=5e7a20d1b04a431b0988beb4")
+        getRequest("/api/affiliation/detail?id=" + this.id)
           .then(res => {
             console.log(res);
             this.basicIntro.name = res.data.affiliationName;
@@ -188,6 +192,32 @@
               },
             );
 
+          });
+      },
+
+      getTopRankingInfo() {
+        getRequest("/api/author/list?refinement=affiliation:" + this.id)
+          .then(res=>{
+            res.data.forEach(item=> {
+              this.topRankingContent[0].items.push({
+                name: item.authorName,
+                value: item.activeness,
+                id: item.id,
+              });
+            });
+          });
+
+        getRequest("/api/paper/list?id=" + this.id)
+          .then(res=>{
+            console.log(res);
+              res.data.forEach(item=> {
+                this.topRankingContent[1].items.push({
+                  name: item.title,
+                  value: item.citationCount,
+                  id: item.id,
+                  link: item.pdfLink,
+                })
+              });
           });
       },
     },
