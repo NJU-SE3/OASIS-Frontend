@@ -5,6 +5,8 @@
 </template>
 
 <script>
+import {getRequest} from "../utils/request.js"
+
 export default {
     name: "Graph",
     data(){
@@ -51,7 +53,11 @@ export default {
                     node:'Xue junjun',
                     value:'130'
                 },
-            ]
+            ],
+            id:"5e7a20d1b04a431b0988beb4",
+            names:[],
+            edges:[],
+            nodes:[]
         }
     },
       methods: {
@@ -63,7 +69,7 @@ export default {
         // 基于准备好的dom，初始化echarts实例
         let myChart = echarts.init(document.getElementById("graph"));
         // 指定图表的配置项和数据
-        this.getData()
+        // this.getData()
         let option = {
         title: {
             text: 'Graph 简单示例'
@@ -114,7 +120,7 @@ export default {
     getData(){
         let names=[]
         let edges=[]
-        console.log(this.relations)
+        // console.log(this.relations)
         let node={
             name:this.relations[0].center,
             value:150,
@@ -139,10 +145,45 @@ export default {
 
         this.names=names
         this.edges=edges
+    },
+    getRealData(){
+        let res= getRequest("/api/graph/affiliation/?id="+this.id)
+        return res
     }
   },
   mounted() {
-    this.drawChart();
+    let get=this.getRealData()
+    get.then(res=>{
+        //保存nodes列表对应关系
+        this.nodes=res.data.nodes
+        let nodes=[]
+        for (const node of res.data.nodes){
+            console.log("node",node)
+            let n={
+                name:node.affiliationName,
+                value:node.affiliationName.length
+            }
+            nodes.push(n)
+        }
+        this.names=nodes
+        let edges=[]
+        const center=this.nodes.findIndex(n => n.id==res.data.edges[0].begin)
+        for (const edge of res.data.edges){
+            console.log("aaa",edge)
+            const tar=this.nodes.findIndex(n => n.id==edge.end)
+            let e={
+                source: center,
+                target: tar
+            }
+            edges.push(e)
+        }
+        this.edges=edges
+        console.log("node",this.names)
+        console.log("edge",this.edges)
+        this.drawChart();
+
+    })
+
   }
 }
 
