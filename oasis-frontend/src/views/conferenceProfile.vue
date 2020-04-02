@@ -49,6 +49,7 @@
   import TopRankingCard from "../components/TopRankingCard.vue";
 
   import {getRequest} from "../utils/request"
+  import {getTrendInfo} from "../utils/trend"
 
   export default {
     name: "conferenceProfile",
@@ -67,6 +68,7 @@
     mounted() {
       this.getBasicInfo();
       this.getTopRankingInfo();
+      getTrendInfo(this.graphInfos, this.id);
     },
 
     data() {

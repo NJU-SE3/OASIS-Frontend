@@ -55,6 +55,7 @@
   import TopRankingCard from "../components/TopRankingCard.vue";
 
   import {getRequest} from "../utils/request"
+  import {getTrendInfo} from "../utils/trend"
 
   export default {
     name: "affiliationProfile",
@@ -73,6 +74,7 @@
     mounted() {
       this.getBasicInfo();
       this.getTopRankingInfo();
+      getTrendInfo(this.graphInfos, this.id);
     },
 
     data() {
@@ -140,20 +142,6 @@
             },
           },
         ],
-
-        graphInfo1: {
-          type: "H-index",
-          chartData: {
-            columns: ['Year', 'Activation'],
-            rows: [
-              { 'Year': 2016, 'Activation': 3530,},
-              { 'Year': 2017, 'Activation': 2923,},
-              { 'Year': 2018, 'Activation': 1723,},
-              { 'Year': 2019, 'Activation': 3792,},
-              { 'Year': 2020, 'Activation': 4593,},
-            ]
-          },
-        },
       }
     },
 

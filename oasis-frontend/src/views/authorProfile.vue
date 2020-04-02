@@ -49,6 +49,7 @@
   import TopRankingCard from "../components/TopRankingCard.vue";
 
   import {getRequest} from "../utils/request"
+  import {getTrendInfo} from "../utils/trend"
 
   export default {
     name: "authorProfile",
@@ -66,7 +67,7 @@
 
     mounted(){
       this.getBasicInfo();
-      this.getTrendInfo();
+      getTrendInfo(this.graphInfos, this.id);
       this.getTopRankingInfo();
     },
 
@@ -174,60 +175,6 @@
                 value: res.data.H_index
               },
             );
-          });
-      },
-
-      getTrendInfo(){
-        getRequest("/api/report/paper/trend/year?baseline=activeness&refinement=" + this.id)
-          .then(res=>{
-            res.data.forEach(data=> {
-              this.graphInfos[0].chartData.rows
-                .push({
-                  "Year": parseInt(data.year),
-                  "Activeness": parseFloat(data.count).toFixed(1),
-                });
-            });
-
-          });
-        getRequest("/api/report/paper/trend/year?baseline=count&refinement=" + this.id)
-          .then(res=>{
-            res.data.forEach(data=> {
-              this.graphInfos[1].chartData.rows
-                .push({
-                  "Year": parseInt(data.year),
-                  "Papers": parseFloat(data.count).toFixed(1),
-                });
-            });
-          });
-        getRequest("/api/report/paper/trend/year?baseline=citation&refinement=" + this.id)
-          .then(res=>{
-            res.data.forEach(data=> {
-              this.graphInfos[2].chartData.rows
-                .push({
-                  "Year": parseInt(data.year),
-                  "Citation": parseFloat(data.count).toFixed(1),
-                });
-            });
-          });
-        getRequest("/api/report/paper/trend/year?baseline=heat&refinement=" + this.id)
-          .then(res=>{
-            res.data.forEach(data=> {
-              this.graphInfos[3].chartData.rows
-                .push({
-                  "Year": parseInt(data.year),
-                  "Heat": parseFloat(data.count).toFixed(1),
-                });
-            });
-          });
-        getRequest("/api/report/paper/trend/year?baseline=H_index&refinement=" + this.id)
-          .then(res=>{
-            res.data.forEach(data=> {
-              this.graphInfos[4].chartData.rows
-                .push({
-                  "Year": parseInt(data.year),
-                  "H-index": parseFloat(data.count).toFixed(1),
-                });
-            });
           });
       },
 

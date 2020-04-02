@@ -4,7 +4,7 @@
       <span class="el-icon-data-analysis type-icon"></span>
       <span>{{graphInfo.type}}</span>
     </div>
-    <div class="graph">
+    <div class="graph" v-loading="graphInfo == null">
       <ve-histogram :data="graphInfo.chartData"
                     :legend-visible="false"
                     :colors="colors"></ve-histogram>
@@ -21,6 +21,7 @@
 
       data () {
         return {
+          // loading: true,
           colors: [ "#93b7e3",],
         }
       }

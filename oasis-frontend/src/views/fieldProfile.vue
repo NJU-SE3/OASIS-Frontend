@@ -57,6 +57,7 @@
   import TopRankingCard from "../components/TopRankingCard.vue";
 
   import {getRequest} from "../utils/request"
+  import {getTrendInfo} from "../utils/trend"
 
   export default {
     name: "fieldProfile",
@@ -75,6 +76,7 @@
     mounted() {
       this.getBasicInfo();
       this.getTopRankingInfo();
+      getTrendInfo(this.graphInfos, this.id);
     },
 
     data() {
@@ -82,7 +84,7 @@
         activenessIcon: "el-icon-star-off",
         documentIcon: "el-icon-document",
 
-        id: "5e7a20d1b04a431b0988bed0",
+        id: "5e8331bc982a43f4fd446b62",
 
         basicStatistic : [],
         basicIntro: {
@@ -233,6 +235,7 @@
             );
           });
       },
+
       getTopRankingInfo() {
         getRequest("/api/author/list?refinement=field:" + this.id)
           .then(res=>{
@@ -258,6 +261,7 @@
             });
           });
       },
+
     },
   }
 </script>
