@@ -171,7 +171,6 @@
 
           });
       },
-
       getTopRankingInfo() {
         getRequest("/api/paper/list?id=" + this.id)
           .then(res=>{

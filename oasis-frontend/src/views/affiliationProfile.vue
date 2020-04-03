@@ -30,11 +30,19 @@
         <el-col :span="8"><div class="grid-content">
           <graph-card :graphInfo="graphInfos[4]"></graph-card>
         </div></el-col>
+        <el-col :span="8"><div class="grid-content">
+          <NodeCard :nodes="nodeInfo.nodes"  
+          :links="nodeInfo.links"></NodeCard>
+        </div></el-col>
       </el-row>
       <el-row :gutter="15">
         <el-col :span="12"><div class="grid-content">
           <top-ranking-card :topRankingContent="topRankingContent[0]"
                             :pdfLink="false"></top-ranking-card>
+        </div></el-col>
+        <el-col :span="12"><div class="grid-content">
+          <NodeCard :nodes="nodeInfo.nodes"  
+          :links="nodeInfo.links"></NodeCard>
         </div></el-col>
       </el-row>
       <el-row :gutter="15">
@@ -53,6 +61,7 @@
   import BasicStatisticCard from "../components/BasicStatisticCard.vue";
   import GraphCard from "../components/GraphCard.vue";
   import TopRankingCard from "../components/TopRankingCard.vue";
+  import NodeCard from "../components/NodeCard"
 
   import {getRequest} from "../utils/request"
   import {getTrendInfo} from "../utils/trend"
@@ -69,12 +78,14 @@
       'Basic-statistic-card': BasicStatisticCard,
       'graph-card': GraphCard,
       'top-ranking-card': TopRankingCard,
+      NodeCard
     },
 
     mounted() {
       this.getBasicInfo();
       this.getTopRankingInfo();
       getTrendInfo(this.graphInfos, this.id);
+      this.getNodeInfo();
     },
 
     data() {
@@ -142,6 +153,10 @@
             },
           },
         ],
+        nodeInfo:{
+          links:[],
+          nodes:[]
+        }
       }
     },
 
@@ -208,6 +223,14 @@
               });
           });
       },
+      getNodeInfo(){
+        getRequest("/api/graph/affiliation/?id="+this.id)
+        .then(res=>{
+          console.log("in res",res)
+          this.nodeInfo.links=res.data.edges
+          this.nodeInfo.nodes=res.data.nodes
+        })
+      }
     },
   }
 </script>
