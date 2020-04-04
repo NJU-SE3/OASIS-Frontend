@@ -2,7 +2,7 @@
   <div class="main">
     <el-container>
       <el-header style="padding:0 0">
-        <MyHeader @search="search" ></MyHeader>
+        <MyHeader></MyHeader>
       </el-header>
       <el-main style="padding:0 5%">
         <el-row class="line-ranking ranking">
@@ -25,7 +25,7 @@
           <el-col :span="16" :offset="1">
             <div class="chart">
               <ve-histogram
-              :data="auData" 
+              :data="auData"
               :settings="auSettings"
               :events="auEvents"
               height="100%"
@@ -232,7 +232,7 @@ export default {
           gridSize: 10,
         }
       }
-      
+
 
       return {
         yearData:{
@@ -285,14 +285,6 @@ export default {
     document.body.scrollTop = 0;
     document.documentElement.scrollTop = 0;
     this.initChart();
-  },
-
-  beforeDestroy() {
-    var _this = this;
-    bus.$emit("fuzzySearch", {
-      type: "All",
-      con: _this.keywords
-    })
   },
 
     methods: {
@@ -350,10 +342,7 @@ export default {
           console.log("fin 2")
         })
       },
-      search(data) {
-        this.keywords = data.value;
-        this.$router.push("result");
-      },
+
       auClick(e){
         const loading = this.$loading({
           lock: true,
@@ -414,7 +403,7 @@ strong{
   height: 450px;
 }
 .chart>>>.v-charts-component-loading {
-  background-color: rgba(0, 0, 0, 0) ; 
+  background-color: rgba(0, 0, 0, 0) ;
 }
 .ranking{
   margin:1% 0;
@@ -447,7 +436,7 @@ strong{
   width:100%;
   margin: 0 auto 0 auto ;
   /* padding: 0 10%; */
-  z-index:-1; 
+  z-index:-1;
 }
 #year-select option::-ms-expand{ display: none; }
 option{
