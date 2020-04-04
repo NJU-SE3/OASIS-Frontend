@@ -53,3 +53,23 @@ export const getTrendInfo = (graphInfos, id)=>{
       });
     });
 };
+
+export const getPapersForProfile = (topRankingContent,id) => {
+  getRequest("/api/paper/list?id=" + id)
+    .then(res=>{
+      res.data.forEach(item=> {
+        topRankingContent.items.push({
+          name: item.title,
+          value: item.citationCount,
+          id: item.id,
+          link: item.pdfLink,
+          values: [
+            {
+              type: "Citation",
+              value: item.citationCount,
+            },
+          ],
+        })
+      });
+    });
+};

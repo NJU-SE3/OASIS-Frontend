@@ -57,7 +57,7 @@
   import TopRankingCard from "../components/TopRankingCard.vue";
 
   import {getRequest} from "../utils/request"
-  import {getTrendInfo} from "../utils/trend"
+  import {getTrendInfo, getPapersForProfile} from "../utils/profileInfo"
 
   export default {
     name: "fieldProfile",
@@ -111,40 +111,6 @@
           },
         ],
 
-        topRankingContent1: {
-          type: "Author",
-          startIndex: 1,
-          items: [
-            {name: "Physics", value: "1323"},
-            {name: "Physics", value: "1323"},
-            {name: "Physics", value: "1323"},
-            {name: "Physics", value: "1323"},
-            {name: "Physics", value: "1323"},
-            {name: "Physics", value: "1323"},
-            {name: "Physics", value: "1323"},
-            {name: "Physics", value: "1323"},
-            {name: "Physics", value: "1323"},
-            {name: "Physics", value: "1323"},
-          ],
-        },
-
-        topRankingContent2: {
-          type: "",
-          startIndex: 11,
-          items: [
-            {name: "Physics", value: "1323"},
-            {name: "Physics", value: "1323"},
-            {name: "Physics", value: "1323"},
-            {name: "Physics", value: "1323"},
-            {name: "Physics", value: "1323"},
-            {name: "Physics", value: "1323"},
-            {name: "Physics", value: "1323"},
-            {name: "Physics", value: "1323"},
-            {name: "Physics", value: "1323"},
-            {name: "Physics", value: "1323"},
-          ],
-        },
-
         graphInfos: [
           {
             type: "Activeness",
@@ -182,20 +148,6 @@
             },
           },
         ],
-
-        graphInfo1: {
-          type: "H-index",
-          chartData: {
-            columns: ['Year', 'Activation'],
-            rows: [
-              { 'Year': 2016, 'Activation': 3530,},
-              { 'Year': 2017, 'Activation': 2923,},
-              { 'Year': 2018, 'Activation': 1723,},
-              { 'Year': 2019, 'Activation': 3792,},
-              { 'Year': 2020, 'Activation': 4593,},
-            ]
-          },
-        },
       }
     },
 
@@ -203,7 +155,6 @@
       getBasicInfo() {
         getRequest("/api/field/detail?id=" + this.id)
           .then(res => {
-            console.log(res);
             this.basicIntro.name = res.data.fieldName;
 
             this.basicStatistic.push(
@@ -239,27 +190,30 @@
       getTopRankingInfo() {
         getRequest("/api/author/list?refinement=field:" + this.id)
           .then(res=>{
+            console.log(res);
             res.data.forEach(item=> {
               this.topRankingContent[0].items.push({
                 name: item.authorName,
-                value: item.activeness,
                 id: item.id,
+                values: [
+                  {
+                    type: "Citation",
+                    value: item.citationCount,
+                  },
+                  {
+                    type: "Papers",
+                    value: item.paperCount,
+                  },
+                  {
+                    type: "Activeness",
+                    value: item.activeness,
+                  },
+                ],
               });
             });
           });
 
-        getRequest("/api/paper/list?id=" + this.id)
-          .then(res=>{
-            console.log(res);
-            res.data.forEach(item=> {
-              this.topRankingContent[2].items.push({
-                name: item.title,
-                value: item.citationCount,
-                id: item.id,
-                link: item.pdfLink,
-              })
-            });
-          });
+        getPapersForProfile(this.topRankingContent[2], this.id);
       },
 
     },

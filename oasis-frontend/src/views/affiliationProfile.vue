@@ -31,7 +31,7 @@
           <graph-card :graphInfo="graphInfos[4]"></graph-card>
         </div></el-col>
         <el-col :span="8"><div class="grid-content">
-          <NodeCard :nodes="nodeInfo.nodes"  
+          <NodeCard :nodes="nodeInfo.nodes"
           :links="nodeInfo.links"></NodeCard>
         </div></el-col>
       </el-row>
@@ -41,7 +41,7 @@
                             :pdfLink="false"></top-ranking-card>
         </div></el-col>
         <el-col :span="12"><div class="grid-content">
-          <NodeCard :nodes="nodeInfo.nodes"  
+          <NodeCard :nodes="nodeInfo.nodes"
           :links="nodeInfo.links"></NodeCard>
         </div></el-col>
       </el-row>
@@ -64,7 +64,7 @@
   import NodeCard from "../components/NodeCard"
 
   import {getRequest} from "../utils/request"
-  import {getTrendInfo} from "../utils/trend"
+  import {getTrendInfo, getPapersForProfile} from "../utils/profileInfo"
 
   export default {
     name: "affiliationProfile",
@@ -204,24 +204,26 @@
             res.data.forEach(item=> {
               this.topRankingContent[0].items.push({
                 name: item.authorName,
-                value: item.activeness,
                 id: item.id,
+                values: [
+                  {
+                    type: "Citation",
+                    value: item.citationCount,
+                  },
+                  {
+                    type: "Papers",
+                    value: item.paperCount,
+                  },
+                  {
+                    type: "Activeness",
+                    value: item.activeness,
+                  },
+                ],
               });
             });
           });
 
-        getRequest("/api/paper/list?id=" + this.id)
-          .then(res=>{
-            console.log(res);
-              res.data.forEach(item=> {
-                this.topRankingContent[1].items.push({
-                  name: item.title,
-                  value: item.citationCount,
-                  id: item.id,
-                  link: item.pdfLink,
-                })
-              });
-          });
+        getPapersForProfile(this.topRankingContent[1], this.id);
       },
       getNodeInfo(){
         getRequest("/api/graph/affiliation/?id="+this.id)

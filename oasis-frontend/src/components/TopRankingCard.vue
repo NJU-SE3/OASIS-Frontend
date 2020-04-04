@@ -17,8 +17,8 @@
               <span class="">{{item.name}}</span>
             </div>
           </a>
-          <div class="item-value">
-            <span>{{item.value}}</span>
+          <div class="item-value" v-for="(singleValue, index) in item.values">
+            <span class="value-type">{{singleValue.type}}: </span><span>{{singleValue.value}}</span>
           </div>
         </div>
       </div>
@@ -101,5 +101,10 @@
     color: #20a0ff;
     font-style: italic;
     font-weight: bold;
+  }
+
+  .value-type {
+    color: #4e4376;
+    font-weight: normal;
   }
 </style>

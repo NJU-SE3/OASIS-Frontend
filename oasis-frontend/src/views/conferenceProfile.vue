@@ -49,7 +49,7 @@
   import TopRankingCard from "../components/TopRankingCard.vue";
 
   import {getRequest} from "../utils/request"
-  import {getTrendInfo} from "../utils/trend"
+  import {getTrendInfo, getPapersForProfile} from "../utils/profileInfo"
 
   export default {
     name: "conferenceProfile",
@@ -172,18 +172,7 @@
           });
       },
       getTopRankingInfo() {
-        getRequest("/api/paper/list?id=" + this.id)
-          .then(res=>{
-            console.log(res);
-            res.data.forEach(item=> {
-              this.topRankingContent[0].items.push({
-                name: item.title,
-                value: item.citationCount,
-                id: item.id,
-                link: item.pdfLink,
-              })
-            });
-          });
+        getPapersForProfile(this.topRankingContent[0], this.id);
       },
     },
   }

@@ -49,7 +49,7 @@
   import TopRankingCard from "../components/TopRankingCard.vue";
 
   import {getRequest} from "../utils/request"
-  import {getTrendInfo} from "../utils/trend"
+  import {getTrendInfo, getPapersForProfile} from "../utils/profileInfo"
 
   export default {
     name: "authorProfile",
@@ -93,9 +93,6 @@
             items: [],
           },
         ],
-
-        graphInfoUrlParam: ["activeness","count","citation","heat","H_index"],
-        graphInfoType: ["Activeness","Papers","Citation","Heat","H-index"],
 
         graphInfos: [
           {
@@ -141,6 +138,7 @@
       getBasicInfo() {
         getRequest("/api/author/detail?id=" + this.id)
           .then(res => {
+            console.log(res);
             this.basicIntro.name = res.data.authorName;
             this.basicIntro.introduction = res.data.bioParagraphs;
             this.basicIntro.details.push({
@@ -179,18 +177,7 @@
       },
 
       getTopRankingInfo() {
-        getRequest("/api/paper/list?id=" + this.id)
-          .then(res=>{
-            console.log(res);
-            res.data.forEach(item=> {
-              this.topRankingContent[0].items.push({
-                name: item.title,
-                value: item.citationCount,
-                id: item.id,
-                link: item.pdfLink,
-              })
-            });
-          });
+        getPapersForProfile(this.topRankingContent[0], this.id);
       },
     },
   }
