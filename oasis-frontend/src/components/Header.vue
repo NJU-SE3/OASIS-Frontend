@@ -13,6 +13,8 @@
 </template>
 
 <script>
+  import bus from "../utils/bus"
+
 export default {
 	name: "my-header",
 
@@ -23,10 +25,18 @@ export default {
 		}
 	},
 
+  beforeDestroy() {
+    var _this = this;
+    bus.$emit("fuzzySearch", {
+      type: "All",
+      con: _this.keywords
+    })
+  },
+
 	methods: {
 		onSubmit() {
 			console.log("submit");
-			this.$emit("search", {value: this.keywords});
+      this.$router.push("result");
 		},
 
 		backToHome() {

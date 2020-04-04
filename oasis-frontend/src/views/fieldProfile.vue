@@ -102,8 +102,8 @@
             items: [],
           },
           {
-            type: "Conferences",
-            router_type: "conference",
+            type: "Affiliations",
+            router_type: "affiliation",
             startIndex: 1,
             items: [],
           },
