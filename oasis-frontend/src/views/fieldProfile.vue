@@ -199,16 +199,40 @@
                 id: item.id,
                 values: [
                   {
-                    type: "Citation",
-                    value: item.citationCount,
+                    type: "Activeness",
+                    value: item.activeness,
                   },
                   {
                     type: "Papers",
                     value: item.paperCount,
                   },
                   {
+                    type: "Citation",
+                    value: item.citationCount,
+                  },
+                ],
+              });
+            });
+          });
+
+        getRequest("/api/affiliation/list?refinement=field:" + this.id)
+          .then(res=>{
+            res.data.forEach(item=> {
+              this.topRankingContent[1].items.push({
+                name: item.affiliationName,
+                id: item.id,
+                values: [
+                  {
                     type: "Activeness",
                     value: item.activeness,
+                  },
+                  {
+                    type: "Papers",
+                    value: item.paperCount,
+                  },
+                  {
+                    type: "Citation",
+                    value: item.citationCount,
                   },
                 ],
               });

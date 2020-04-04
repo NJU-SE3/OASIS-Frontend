@@ -17,8 +17,11 @@
               <span class="">{{item.name}}</span>
             </div>
           </a>
-          <div class="item-value" v-for="(singleValue, index) in item.values">
-            <span class="value-type">{{singleValue.type}}: </span><span>{{singleValue.value}}</span>
+          <div class="item-value">
+            <span v-for="(singleValue, index) in item.values">
+              <span class="value-type">{{singleValue.type}}:
+              </span><span>{{singleValue.value}}    </span>
+            </span>
           </div>
         </div>
       </div>

@@ -204,16 +204,16 @@
                 id: item.id,
                 values: [
                   {
-                    type: "Citation",
-                    value: item.citationCount,
+                    type: "Activeness",
+                    value: item.activeness,
                   },
                   {
                     type: "Papers",
                     value: item.paperCount,
                   },
                   {
-                    type: "Activeness",
-                    value: item.activeness,
+                    type: "Citation",
+                    value: item.citationCount,
                   },
                 ],
               });
