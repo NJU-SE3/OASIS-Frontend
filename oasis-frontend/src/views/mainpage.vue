@@ -19,14 +19,30 @@
     <el-row>
         <el-col :span="14" :offset="2" class="table-tab">
           <div class="link-table">
-           <div class="table-title">Top 30 {{entity}}</div>
-           <el-row>
-            <el-col :span="12">
-              <top-ranking-card class="table-left" :topRankingContent=topLeft></top-ranking-card>
-            </el-col>
-            <el-col :span="12">
-              <top-ranking-card :topRankingContent=topRight></top-ranking-card>
-            </el-col>
+           <div class="table-title">Top 30 {{entity}}s</div>
+            <!-- <el-row  
+              v-loading="loading"
+              element-loading-text="拼命加载中"
+              element-loading-spinner="el-icon-loading"
+              element-loading-background="rgba(0, 0, 0, 0.1)">
+                <el-col :span="12">
+                  <top-ranking-card class="table-left" 
+                  :topRankingContent="topLeft"></top-ranking-card>
+                </el-col>
+                <el-col :span="12">
+                  <top-ranking-card 
+                  :topRankingContent="topRight"></top-ranking-card>
+                </el-col>
+           </el-row> -->
+            <el-row  
+              v-loading="loading"
+              element-loading-text="拼命加载中"
+              element-loading-spinner="el-icon-loading"
+              element-loading-background="rgba(0, 0, 0, 0.1)">
+                <el-col :span="24">
+                  <top-ranking-card class="table-left" 
+                  :topRankingContent="topRanking"></top-ranking-card>
+                </el-col>
            </el-row>
           </div>
         </el-col>
@@ -38,7 +54,8 @@
                   :key="index"
                   :class="{active : (index == table_current)}"
                   @mouseenter="enterTable(index)"
-                  @click="detail(index)">
+                  @click="toSort(index)"
+                   >
                 <el-link :underline="false">{{ item }}</el-link>
               </li>
             </ul>
@@ -98,6 +115,8 @@ import SearchBar from "../components/Search"
 import bus from "../utils/bus"
 import TopRankingCard from "../components/TopRankingCard.vue";
 
+import {getRequest} from "../utils/request"
+
 export default {
   name: 'MainPage',
   components: {
@@ -112,144 +131,33 @@ export default {
       pic_two: false,
       pic_three: false,
       search_val: "",
-      tab_list: ["Authors","Affiliations","Conferences","Fields"],
-      entity:"Authors",
+      tab_list: ["Author","Affiliation","Conference","Field"],
+      entity:"Author",
       table_current:0,
-      topRanking:[
-        [
-          {name: "Physics", value: "1323"},
-          {name: "Physics", value: "1323"},
-          {name: "Physics", value: "1323"},
-          {name: "Physics", value: "1323"},
-          {name: "Physics", value: "1323"},
-          {name: "Physics", value: "1323"},
-          {name: "Physics", value: "1323"},
-          {name: "Physics", value: "1323"},
-          {name: "Physics", value: "1323"},
-          {name: "Physics", value: "1323"},
-          {name: "Physics", value: "1323"},
-          {name: "Physics", value: "1323"},
-          {name: "Physics", value: "1323"},
-          {name: "Physics", value: "1323"},
-          {name: "Physics", value: "1323"},
-          {name: "Physics", value: "1323"},
-          {name: "Physics", value: "1323"},
-          {name: "Physics", value: "1323"},
-          {name: "Physics", value: "1323"},
-          {name: "Physics", value: "1323"},
-        ],
-        [
-          {name: "Math", value: "1323"},
-          {name: "Math", value: "1323"},
-          {name: "Math", value: "1323"},
-          {name: "Math", value: "1323"},
-          {name: "Math", value: "1323"},
-          {name: "Math", value: "1323"},
-          {name: "Math", value: "1323"},
-          {name: "Math", value: "1323"},
-          {name: "Math", value: "1323"},
-          {name: "Math", value: "1323"},
-          {name: "Math", value: "1323"},
-          {name: "Math", value: "1323"},
-          {name: "Math", value: "1323"},
-          {name: "Math", value: "1323"},
-          {name: "Math", value: "1323"},
-          {name: "Math", value: "1323"},
-          {name: "Math", value: "1323"},
-          {name: "Math", value: "1323"},
-          {name: "Math", value: "1323"},
-          {name: "Math", value: "1323"},
-          {name: "Math", value: "1323"},
-          {name: "Math", value: "1323"},
-          {name: "Math", value: "1323"},
-          {name: "Math", value: "1323"},
-          {name: "Math", value: "1323"},
-          {name: "Math", value: "1323"},
-          {name: "Math", value: "1323"},
-          {name: "Math", value: "1323"},
-          {name: "Math", value: "1323"},
-          {name: "Math", value: "1323"},
-        ],
-        [
-          {name:"Field", value: "1323"},
-          {name:"Field", value: "1323"},
-          {name:"Field", value: "1323"},
-          {name:"Field", value: "1323"},
-          {name:"Field", value: "1323"},
-          {name:"Field", value: "1323"},
-          {name:"Field", value: "1323"},
-          {name:"Field", value: "1323"},
-          {name:"Field", value: "1323"},
-          {name:"Field", value: "1323"},
-          {name:"Field", value: "1323"},
-          {name:"Field", value: "1323"},
-          {name:"Field", value: "1323"},
-          {name:"Field", value: "1323"},
-          {name:"Field", value: "1323"},
-          {name:"Field", value: "1323"},
-          {name:"Field", value: "1323"},
-          {name:"Field", value: "1323"},
-          {name:"Field", value: "1323"},
-          {name:"Field", value: "1323"},
-          {name:"Field", value: "1323"},
-          {name:"Field", value: "1323"},
-          {name:"Field", value: "1323"},
-          {name:"Field", value: "1323"},
-          {name:"Field", value: "1323"},
-          {name:"Field", value: "1323"},
-          {name:"Field", value: "1323"},
-          {name:"Field", value: "1323"},
-          {name:"Field", value: "1323"},
-          {name:"Field", value: "1323"},
-        ],
-        [
-          {name:"Conference", value: "1323"},
-          {name:"Conference", value: "1323"},
-          {name:"Conference", value: "1323"},
-          {name:"Conference", value: "1323"},
-          {name:"Conference", value: "1323"},
-          {name:"Conference", value: "1323"},
-          {name:"Conference", value: "1323"},
-          {name:"Conference", value: "1323"},
-          {name:"Conference", value: "1323"},
-          {name:"Conference", value: "1323"},
-          {name:"Conference", value: "1323"},
-          {name:"Conference", value: "1323"},
-          {name:"Conference", value: "1323"},
-          {name:"Conference", value: "1323"},
-          {name:"Conference", value: "1323"},
-          {name:"Conference", value: "1323"},
-          {name:"Conference", value: "1323"},
-          {name:"Conference", value: "1323"},
-          {name:"Conference", value: "1323"},
-          {name:"Conference", value: "1323"},
-          {name:"Conference", value: "1323"},
-          {name:"Conference", value: "1323"},
-          {name:"Conference", value: "1323"},
-          {name:"Conference", value: "1323"},
-          {name:"Conference", value: "1323"},
-          {name:"Conference", value: "1323"},
-          {name:"Conference", value: "1323"},
-          {name:"Conference", value: "1323"},
-          {name:"Conference", value: "1323"},
-          {name:"Conference", value: "1323"},
-        ]
-      ],
-      topLeft: {
-        type: "",
-        startIndex: 1,
-        items: []
-      },
-      topRight: {
-        type: "",
-        startIndex: 11,
-        items: []
-    },
+      table_last:0,
+      topRanking:[],
+      loading:true
     }
   },
+  // computed: {
+  //   topLeft() {
+  //     console.log("this",this.topRanking)
+  //       return {
+  //         type: "",
+  //         startIndex: 1,
+  //         items:this.topRanking.slice(1,10)
+  //       }
+  //     },
+  //   topRight() {
+  //       return {
+  //         type: "",
+  //         startIndex: 11,
+  //         items: this.topRanking.slice(11)
+  //       }
+  //     },
+  // },
   created(){
-    this.topLeft.items=this.topRanking[0].slice(1,10)
-    this.topRight.items=this.topRanking[0].slice(11)
+    this. enterTable(0)
   },
   beforeDestroy() {
     var val = this.search_val;
@@ -287,11 +195,51 @@ export default {
     },
 
     enterTable(index) {
-      this.table_current=index;
-      this.entity=this.tab_list[index];
-      this.topLeft.items=this.topRanking[index].slice(1,10)
-      this.topRight.items=this.topRanking[index].slice(11,20)
-
+      if (index!=this.table_current){
+        this.table_current=index;
+        this.entity=this.tab_list[index];
+        //loading
+        this.loading=true;
+        this.topRanking=[]
+        //getData
+        getRequest("/api/" + this.tab_list[index].toLowerCase() + "/list")
+        .then(res=>{
+          console.log("res",res)
+          let curName=this.tab_list[index].toLowerCase()+"Name"
+          let curTop=[]
+          for (const item of res.data){
+            curTop.push({
+              name:Object.getOwnPropertyDescriptor(item,curName).value,
+              id:item.id,
+              values:[
+                    // {
+                    //   type: "Citation",
+                    //   value: item.citationCount,
+                    // },
+                    // {
+                    //   type: "Papers",
+                    //   value: item.paperCount,
+                    // },
+                    {
+                      type: "Activeness",
+                      value: item.activeness,
+                    },
+              ]
+            })
+          }
+          this.topRanking={
+            type: "",
+            startIndex: 1,
+            items:curTop.slice(1,11)
+          }
+          console.log("curTop",this.topRanking)
+          this.loading=false
+        })
+      }
+      
+    },
+    toSort(index){
+      this.$router.push({path:"/sort?type="+this.tab_list[index].toLowerCase()})
     },
 
     search(value) {

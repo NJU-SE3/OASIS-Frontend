@@ -40,10 +40,6 @@
           <top-ranking-card :topRankingContent="topRankingContent[0]"
                             :pdfLink="false"></top-ranking-card>
         </div></el-col>
-        <el-col :span="12"><div class="grid-content">
-          <NodeCard :nodes="nodeInfo.nodes"
-          :links="nodeInfo.links"></NodeCard>
-        </div></el-col>
       </el-row>
       <el-row :gutter="15">
         <el-col :span="24"><div class="grid-content">

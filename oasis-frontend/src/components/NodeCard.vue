@@ -1,7 +1,8 @@
 <template>
   <div class="card">
     <div class="title">
-
+      <span class="el-icon-data-analysis type-icon"></span>
+      <span>Relations</span>
     </div>
     <div class="graph" v-loading="info == null">
       <div :id="graphId" class="node-graph"></div>
