@@ -139,7 +139,6 @@
       getBasicInfo() {
         getRequest("/api/conference/detail?id=" + this.id)
           .then(res => {
-            console.log(res);
             this.basicIntro.name = res.data.conferenceName;
 
             this.basicStatistic.push(

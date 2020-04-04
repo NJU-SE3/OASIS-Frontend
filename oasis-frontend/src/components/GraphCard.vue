@@ -4,7 +4,7 @@
       <span class="el-icon-data-analysis type-icon"></span>
       <span>{{graphInfo.type}}</span>
     </div>
-    <div class="graph" v-loading="graphInfo == null">
+    <div class="graph" v-loading="graphInfo.chartData.rows.length <= 0">
       <ve-histogram :data="graphInfo.chartData"
                     :legend-visible="false"
                     :colors="colors"></ve-histogram>

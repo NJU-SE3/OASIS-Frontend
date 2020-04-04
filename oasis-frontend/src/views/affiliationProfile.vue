@@ -107,6 +107,7 @@
         topRankingContent: [
           {
             type: "Authors",
+            router_type: "author",
             startIndex: 1,
             items: [],
           },
@@ -165,7 +166,6 @@
       getBasicInfo() {
         getRequest("/api/affiliation/detail?id=" + this.id)
           .then(res => {
-            console.log(res);
             this.basicIntro.name = res.data.affiliationName;
 
             this.basicStatistic.push(
@@ -229,7 +229,6 @@
       getNodeInfo(){
         getRequest("/api/graph/affiliation/?id="+this.id)
         .then(res=>{
-          console.log("in res",res)
           this.nodeInfo.links=res.data.edges
           this.nodeInfo.nodes=res.data.nodes
         })

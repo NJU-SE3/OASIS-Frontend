@@ -36,6 +36,7 @@ import sort_list from "../components/SortList"
 import filter_bar from "../components/FilterBar"
 
 import { getRequest } from "../utils/request"
+import {jump2Profile} from "../utils/profileInfo";
 
 export default {
 	name: "sort",
@@ -98,7 +99,7 @@ export default {
           paperCount: 20,
           citationCount: 300,
           authorCount: 250,
-          
+
         },
         {
           Name: "testname1",
@@ -157,7 +158,7 @@ export default {
           delete element.authorName;
           delete element.affiliationName;
           delete element.bioParagraphs;
-          delete element.trends; 
+          delete element.trends;
         })
       }
       else {
@@ -181,8 +182,7 @@ export default {
     },
 
     jumpToProfile(val) {
-      var toPath = "/" + this.sort_type + "-profile";
-      this.$router.push({ path: toPath, query: { id: val.id }});
+      jump2Profile(this.$router, this.sort_type, val.id);
     }
   }
 }

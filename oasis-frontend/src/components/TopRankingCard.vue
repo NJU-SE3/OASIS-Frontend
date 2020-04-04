@@ -5,9 +5,9 @@
         <span>Top {{topRankingContent.type}} List</span>
       </div>
       <div class="title-blank" v-if="topRankingContent.type.length <= 0"></div>
-      <div class="content">
+      <div class="content" v-loading="topRankingContent.items.length <= 0">
         <div class="item" v-for="(item, index) in topRankingContent.items" :key="index">
-          <div class="item-name" v-if="!pdfLink">
+          <div class="item-name" v-if="!pdfLink" @click="jumpToProfile(item.id)">
             <span class="item-index">{{topRankingContent.startIndex + index}}</span>
             <span class="">{{item.name}}</span>
           </div>
@@ -26,15 +26,23 @@
 </template>
 
 <script>
-    export default {
-        name: "top-ranking-card",
+  import {jump2Profile} from "../utils/profileInfo";
 
-      props: {
-        topRankingContent: Object,
-        extended: Boolean,
-        pdfLink: Boolean,
+  export default {
+    name: "top-ranking-card",
+
+    props: {
+      topRankingContent: Object,
+      extended: Boolean,
+      pdfLink: Boolean,
       },
-    }
+
+    methods: {
+      jumpToProfile(id) {
+        jump2Profile(this.$router, this.topRankingContent.router_type, id);
+      },
+    },
+  }
 </script>
 
 <style scoped>
@@ -62,7 +70,6 @@
 
   .title {
     height: 40px;
-    /*border: solid orange;*/
     font-size: large;
     font-weight: bold;
     padding-top: 10px;
@@ -83,15 +90,18 @@
   }
 
   .item {
-    /*border: solid pink;*/
     height: 35px;
   }
 
   .item-name {
-    /*border: solid orange;*/
     float: left;
     padding-left: 10px;
     display: inline-block;
+  }
+
+  .item-name:hover {
+    cursor: pointer;
+    text-decoration: underline;
   }
 
   .item-value {

@@ -14,6 +14,7 @@ export const getTrendInfo = (graphInfos, id)=>{
     });
   getRequest("/api/report/paper/trend/year?baseline=count&refinement=" + id)
     .then(res=>{
+      console.log(res);
       res.data.forEach(data=> {
         graphInfos[1].chartData.rows
           .push({
@@ -72,4 +73,9 @@ export const getPapersForProfile = (topRankingContent,id) => {
         })
       });
     });
+};
+
+export const jump2Profile = ($router,type, id) => {
+  var toPath = "/" + type + "-profile";
+  $router.push({ path: toPath, query: { id: id }});
 };

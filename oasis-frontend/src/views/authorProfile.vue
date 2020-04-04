@@ -78,7 +78,6 @@
         documentIcon: "el-icon-document",
 
         id: "37085783283",
-        // id:"37061639100",
 
         basicStatistic : [],
         basicIntro: {
@@ -139,7 +138,6 @@
       getBasicInfo() {
         getRequest("/api/author/detail?id=" + this.id)
           .then(res => {
-            console.log(res);
             this.basicIntro.name = res.data.authorName;
             this.basicIntro.introduction = res.data.bioParagraphs;
             this.basicIntro.details.push({

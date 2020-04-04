@@ -97,11 +97,13 @@
         topRankingContent: [
           {
             type: "Authors",
+            router_type: "author",
             startIndex: 1,
             items: [],
           },
           {
             type: "Conferences",
+            router_type: "conference",
             startIndex: 1,
             items: [],
           },
@@ -191,7 +193,6 @@
       getTopRankingInfo() {
         getRequest("/api/author/list?refinement=field:" + this.id)
           .then(res=>{
-            console.log(res);
             res.data.forEach(item=> {
               this.topRankingContent[0].items.push({
                 name: item.authorName,
