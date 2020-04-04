@@ -181,7 +181,8 @@ export default {
     },
 
     jumpToProfile(val) {
-      // send id to profile page
+      var toPath = "/" + this.sort_type + "-profile";
+      this.$router.push({ path: toPath, query: { id: val.id }});
     }
   }
 }

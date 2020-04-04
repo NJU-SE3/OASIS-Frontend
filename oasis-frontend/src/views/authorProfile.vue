@@ -66,6 +66,7 @@
     },
 
     mounted(){
+      this.id = this.$route.query.id;
       this.getBasicInfo();
       getTrendInfo(this.graphInfos, this.id);
       this.getTopRankingInfo();
