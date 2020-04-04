@@ -30,6 +30,11 @@
         <el-col :span="8"><div class="grid-content">
           <graph-card :graphInfo="graphInfos[4]"></graph-card>
         </div></el-col>
+        <el-col :span="8"><div class="grid-content">
+          <NodeCard :nodes="nodeInfo.nodes"
+          :links="nodeInfo.links"
+          type="author"></NodeCard>
+        </div></el-col>
       </el-row>
       <el-row :gutter="15">
         <el-col :span="24"><div class="grid-content">
@@ -47,6 +52,7 @@
   import BasicStatisticCard from "../components/BasicStatisticCard.vue";
   import GraphCard from "../components/GraphCard.vue";
   import TopRankingCard from "../components/TopRankingCard.vue";
+  import NodeCard from "../components/NodeCard"
 
   import {getRequest} from "../utils/request"
   import {getTrendInfo, getPapersForProfile} from "../utils/profileInfo"
@@ -59,6 +65,7 @@
       BasicStatisticCard,
       BasicIntroCard,
       Header,
+      NodeCard,
       'basic-intro-card': BasicIntroCard,
       'Basic-statistic-card': BasicStatisticCard,
       'graph-card': GraphCard,
@@ -70,6 +77,7 @@
       this.getBasicInfo();
       getTrendInfo(this.graphInfos, this.id);
       this.getTopRankingInfo();
+      this.getNodeInfo();
     },
 
     data() {
@@ -131,6 +139,10 @@
             },
           },
         ],
+        nodeInfo:{
+          nodes:[],
+          links:[]
+        }
       }
     },
 
@@ -178,6 +190,15 @@
       getTopRankingInfo() {
         getPapersForProfile(this.topRankingContent[0], this.id);
       },
+
+      getNodeInfo(){
+        getRequest("/api/graph/author/?id="+this.id)
+        .then(res=>{
+          console.log("res",res)
+          this.nodeInfo.links=res.data.edges
+          this.nodeInfo.nodes=res.data.nodes
+        })
+      }
     },
   }
 </script>

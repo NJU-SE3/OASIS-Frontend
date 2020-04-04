@@ -212,6 +212,7 @@ export default {
           let curName=this.tab_list[index].toLowerCase()+"Name"
           let curTop=[]
           for (const item of res.data){
+            // console.log("aaaaaaaaaaaaaaaaaaaaaaa",Object.getOwnPropertyDescriptor(item,curName).value)
             curTop.push({
               name:Object.getOwnPropertyDescriptor(item,curName).value,
               id:item.id,

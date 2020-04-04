@@ -1,6 +1,6 @@
 <template>
     <div class="test_graph">
-        <NodeCard :nodes="nodes"  :links="links" ></NodeCard>
+        <!-- <NodeCard :nodes="nodes"  :links="links" :type="'affiliation'"></NodeCard> -->
         <div id="graph" style="width: 100%;height:700px;"></div>
     </div>
 </template>
@@ -81,9 +81,24 @@ export default {
             title: {
                 text: 'Graph 简单示例'
             },
-            tooltip: {},
             label:{
                 show:false
+            },
+            tooltip: {
+                trigger: 'item' ,
+                formatter(A){
+                    if(A.dataType=="node"){
+                        console.log("node",A)
+        return `<div style="border-bottom: 1px solid rgba(255,255,255,.3);f
+        ont-size: 22px;padding-bottom: 7px;margin-bottom: 7px"
+        >${A.data.name}</div><div 
+        class="tool-content" style="font-size: 18px; text-align:left;
+        "><strong>Activiness: </strong>
+        ${A.data.value}</div>`;
+
+                    }
+
+                }
             },
             animationDurationUpdate: 1500,
             animationEasingUpdate: 'quinticInOut',
@@ -142,13 +157,15 @@ export default {
             let n={
                 name:item.node,
                 value:item.value,
-                symbolSize:item.value
+                symbolSize:item.value,
+                                                
+                
             }
             names.push(n)
             let l={
                 source:item.center,
                 target:item.node,
-                value:item.value
+                value:item.value,
             }
             edges.push(l)
         }
@@ -159,42 +176,46 @@ export default {
     getRealData(){
         let res= getRequest("/api/graph/affiliation/?id="+this.id)
         return res
+    },
+    init(){
+            let get=this.getRealData()
+        get.then(res=>{
+            //保存nodes列表对应关系
+            console.log(res)
+            this.nodes=res.data.nodes
+            this.links=res.data.edges
+            let nodes=[]
+            for (const node of res.data.nodes){
+                // console.log("node",node)
+                let n={
+                    name:node.affiliationName,
+                    value:node.affiliationName.length,
+                }
+                nodes.push(n)
+            }
+            this.names=nodes
+            let edges=[]
+            const center=this.nodes.findIndex(n => n.id==res.data.edges[0].begin)
+            for (const edge of res.data.edges){
+                // console.log("aaa",edge)
+                const tar=this.nodes.findIndex(n => n.id==edge.end)
+                let e={
+                    source: center,
+                    target: tar
+                }
+                edges.push(e)
+            }
+            this.edges=edges
+            // console.log("node",this.names)
+            // console.log("edge",this.edges)
+            this.drawChart();
+
+    })
     }
   },
   mounted() {
-    let get=this.getRealData()
-    get.then(res=>{
-        //保存nodes列表对应关系
-        this.nodes=res.data.nodes
-        this.links=res.data.edges
-        let nodes=[]
-        for (const node of res.data.nodes){
-            // console.log("node",node)
-            let n={
-                name:node.affiliationName,
-                value:node.affiliationName.length,
-            }
-            nodes.push(n)
-        }
-        this.names=nodes
-        let edges=[]
-        const center=this.nodes.findIndex(n => n.id==res.data.edges[0].begin)
-        for (const edge of res.data.edges){
-            // console.log("aaa",edge)
-            const tar=this.nodes.findIndex(n => n.id==edge.end)
-            let e={
-                source: center,
-                target: tar
-            }
-            edges.push(e)
-        }
-        this.edges=edges
-        // console.log("node",this.names)
-        // console.log("edge",this.edges)
-        this.drawChart();
-
-    })
-
+      this.getData()
+      this.drawChart();
   }
 }
 

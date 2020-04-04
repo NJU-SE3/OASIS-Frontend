@@ -20,6 +20,7 @@ require('echarts/lib/component/title');
       props: {
         nodes:Array,
         links:Array,
+        type:String,
       },
       data () {
         return {
@@ -37,7 +38,17 @@ require('echarts/lib/component/title');
               backgroundColor: '#222',
               borderColor: '#777',
               borderWidth: 1,
-              extraCssText:'width:15em; white-space:pre-wrap',
+              extraCssText:'width:10em; white-space:pre-wrap',
+              formatter(node){
+                if(node.dataType=="node"){
+                  // console.log("node",node)
+                  return `<div style="border-bottom: 1px solid rgba(255,255,255,.3);f
+                  ont-size: 22px;padding-bottom: 7px;margin-bottom: 7px"
+                  >${node.data.name}</div><div 
+                  class="tool-content" style="font-size: 18px; text-align:left;
+                  "><strong>Activiness: </strong>${node.data.value}</div>`;
+                }
+              },
             },
             series: [
               {
@@ -49,26 +60,22 @@ require('echarts/lib/component/title');
                 force:{
                     edgeLength : [100,600],
                     initLayout:'circular',
-                    repulsion :2000
-                },
-                tooltip:{
-                  
+                    repulsion :50,
+                    edgeLength:[1,100]
                 },
                 draggable:true,
-                // focusNodeAdjacency:true,
-                symbolSize: 50,
                 roam:'scale',
-                // symbolSize :[10,100],
+                symbolSize:10,
                 shadowColor: 'rgba(0, 0, 0, 0.5)',
                 shadowBlur: 10,
                 label: {
                     show: true
                 },
-                edgeSymbol: ['circle', 'arrow'],
-                edgeSymbolSize: [4, 10],
-                edgeLabel: {
-                    fontSize: 20
-                },
+                // edgeSymbol: ['circle', 'arrow'],
+                // edgeSymbolSize: [4, 10],
+                // edgeLabel: {
+                //     fontSize: 20
+                // },
                 data:this.names,
                 links:this.edges,
                 lineStyle: {
@@ -105,23 +112,31 @@ require('echarts/lib/component/title');
       },
       mounted(){
         this.init()
-        console.log("id",this.graphId)
       },
       methods:{
         init(){
           this.myChart = echarts.init(document.getElementById(this.graphId))
           this.myChart.setOption(this.settings)
         },
+        getSize(){
+
+        },
         getData(){
+          // console.log("node",this.nodes)
+          // console.log("links",this.links)
+          // console.log("type",this.type)
           let nodeList=[]
+          let curN=this.type+"Name"
+          console.log("curN",curN)
           for (const node of this.nodes){
               let n={
-                  name:node.affiliationName,
-                  value:node.affiliationName.length,
+                  name:node[curN],
+                  value:node.activeness,
                   label:{
                     show:false
+                  },
+                  symbolSize:Math.ceil(Math.log(node.activeness+2))*5,
                 }
-              }
               nodeList.push(n)
           }
           this.names=nodeList
@@ -131,7 +146,8 @@ require('echarts/lib/component/title');
               const tar=this.nodes.findIndex(n => n.id==edge.end)
               let e={
                   source: center,
-                  target: tar
+                  target: tar,
+                  value:this.nodes[tar].activeness+2
               }
               edgeList.push(e)
           }

@@ -32,7 +32,8 @@
         </div></el-col>
         <el-col :span="8"><div class="grid-content">
           <NodeCard :nodes="nodeInfo.nodes"
-          :links="nodeInfo.links"></NodeCard>
+          :links="nodeInfo.links"
+          type="affiliation"></NodeCard>
         </div></el-col>
       </el-row>
       <el-row :gutter="15">
@@ -222,6 +223,7 @@
 
         getPapersForProfile(this.topRankingContent[1], this.id);
       },
+      
       getNodeInfo(){
         getRequest("/api/graph/affiliation/?id="+this.id)
         .then(res=>{
