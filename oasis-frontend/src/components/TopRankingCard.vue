@@ -6,7 +6,7 @@
       </div>
       <div class="title-blank" v-if="topRankingContent.type.length <= 0"></div>
       <div class="content">
-        <div class="item" v-for="(item, index) in topRankingContent.items">
+        <div class="item" v-for="(item, index) in topRankingContent.items" :key="index">
           <div class="item-name" v-if="!pdfLink">
             <span class="item-index">{{topRankingContent.startIndex + index}}</span>
             <span class="">{{item.name}}</span>
