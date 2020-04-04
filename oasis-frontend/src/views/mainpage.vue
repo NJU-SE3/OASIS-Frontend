@@ -133,9 +133,13 @@ export default {
       search_val: "",
       tab_list: ["Author","Affiliation","Conference","Field"],
       entity:"Author",
-      table_current:0,
-      table_last:0,
-      topRanking:[],
+      table_current:-1,
+      topRanking:{
+        type:"",
+        router_type: "",
+        startIndex: 1,
+        items:[]
+      },
       loading:true
     }
   },
@@ -195,16 +199,16 @@ export default {
     },
 
     enterTable(index) {
-      if (index!=this.table_current){
+      if (this.table_current==-1 || index!=this.table_current){
         this.table_current=index;
         this.entity=this.tab_list[index];
         //loading
         this.loading=true;
-        this.topRanking=[]
+        this.topRanking.items=[]
         //getData
         getRequest("/api/" + this.tab_list[index].toLowerCase() + "/list")
         .then(res=>{
-          console.log("res",res)
+          // console.log("res",res)
           let curName=this.tab_list[index].toLowerCase()+"Name"
           let curTop=[]
           for (const item of res.data){
@@ -227,18 +231,16 @@ export default {
               ]
             })
           }
-          this.topRanking={
-            type: "",
-            startIndex: 1,
-            items:curTop.slice(1,11)
-          }
-          console.log("curTop",this.topRanking)
+          this.topRanking.items=curTop.slice(1,11)
+          this.topRanking.router_type=this.tab_list[index].toLowerCase()
+          // console.log("curTop",this.topRanking)
           this.loading=false
         })
       }
       
     },
     toSort(index){
+      console.log(index,"index",this.tab_list[index])
       this.$router.push({path:"/sort?type="+this.tab_list[index].toLowerCase()})
     },
 
