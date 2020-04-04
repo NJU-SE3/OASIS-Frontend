@@ -19,7 +19,7 @@
     <el-row>
         <el-col :span="14" :offset="2" class="table-tab">
           <div class="link-table">
-           <div class="table-title">Top 30 {{entity}}s</div>
+           <div class="table-title">Top 10 {{entity}}s</div>
             <!-- <el-row  
               v-loading="loading"
               element-loading-text="拼命加载中"
