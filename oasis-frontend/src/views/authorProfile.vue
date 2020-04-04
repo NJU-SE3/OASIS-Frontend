@@ -214,9 +214,9 @@
     border-radius: 4px;
   }
 
-  .basic-info {
+  /* .basic-info {
 
-  }
+  } */
 
   .grid-content {
     border-radius: 4px;

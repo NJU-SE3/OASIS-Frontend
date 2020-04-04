@@ -22,7 +22,7 @@
         <div class="sort-table-title">
           Top {{ sort_type }} in all
         </div>
-        <sort-list :list_title="sort_title" :table_data_prop="table_data"></sort-list>
+        <sort-list :list_title="sort_title" :table_data_prop="table_data" @getProfile="jumpToProfile"></sort-list>
       </el-col>
     </el-row>
 
@@ -34,6 +34,8 @@
 import search from "../components/Search"
 import sort_list from "../components/SortList"
 import filter_bar from "../components/FilterBar"
+
+import { getRequest } from "../utils/request"
 
 export default {
 	name: "sort",
@@ -50,8 +52,9 @@ export default {
       sort_title: [],
       sort_type: "",
       table_data: [],
-      field_affi_conf_title: ["Liveness", "PaperCount", "Citation", "AuthorCount", "Heat"],
-      author_title: ["Liveness", "PaperCount", "Citation", "Heat"],
+      field_affi_conf_title: ["activeness", "paperCount", "citationCount", "authorCount", "heat", "H_index"],
+      // field_affi_conf_title: ["activeness", "paperCount", "citationCount", "heat", "H_index", "id"],
+      author_title: ["activeness", "paperCount", "citationCount", "heat", "H_index"],
       // affiliation_title: ["Liveness", "PaperCount", "Citation", "AuthorCount", "Heat"],
       // conference_title: ["Liveness", "PaperCount", "Citation", "AuthorCount", "Heat"]
       span_len: 22,
@@ -82,29 +85,31 @@ export default {
       field_affi_conf_table_data: [
         {
           Name: "testname1",
-          Liveness: 100,
-          PaperCount: 20,
-          Citation: 300,
-          AuthorCount: 250,
-          Heat: 45
+          activeness: 100,
+          paperCount: 20,
+          citationCount: 300,
+          authorCount: 250,
+          heat: 45
         },
         {
-          Name: "testname2",
-          Liveness: 200,
-          PaperCount: 35,
-          Citation: 200,
-          AuthorCount: 300,
-          Heat: 39
+          activeness: 100,
+          Name: "testname1",
+          heat: 45,
+          paperCount: 20,
+          citationCount: 300,
+          authorCount: 250,
+          
         },
         {
-          Name: "testname3",
-          Liveness: 120,
-          PaperCount: 30,
-          Citation: 240,
-          AuthorCount: 360,
-          Heat: 40
+          Name: "testname1",
+          activeness: 100,
+          paperCount: 20,
+          citationCount: 300,
+          authorCount: 250,
+          heat: 45
         }
       ],
+      assist_data: []
     }
   },
 
@@ -112,18 +117,71 @@ export default {
     this.sort_type = this.$route.query.type;
     if (this.sort_type == "author") {
       this.sort_title = this.author_title;
-      this.table_data = this.author_table_data;
+      // this.table_data = this.author_table_data;
       this.span_len = 17;
     }
     else {
       this.sort_title = this.field_affi_conf_title;
-      this.table_data = this.field_affi_conf_table_data;
+      // this.table_data = this.field_affi_conf_table_data;
     }
+
+    // /api/field/list
+    var url = "/api/" + this.sort_type + "/list";
+    var _this = this;
+    getRequest(url)
+        .then(res => {
+          console.log(res);
+          _this.handleTableData(res.data);
+          console.log(_this.table_data);
+          // console.log("end");
+        })
+        .catch(err => {
+          console.log(err);
+        })
+
   },
 
   methods: {
     filterInRes() {
       console.log(this.searchCon);
+    },
+
+    handleTableData(rawData) {
+      // console.log("rawData: ", rawData);
+
+      if (this.sort_type === "author") {
+        rawData.forEach(element => {
+          element.name = element.authorName;
+          element.heat = Math.round(element.heat * 100) / 100;
+
+          delete element.authorName;
+          delete element.affiliationName;
+          delete element.bioParagraphs;
+          delete element.trends; 
+        })
+      }
+      else {
+        var type = this.sort_type;
+        rawData.forEach(element => {
+          element.heat = Math.round(element.heat * 100) / 100;
+          if (type === "affiliation") {
+            element.name = element.affiliationName;
+          }
+          else if (type === "conference") {
+            element.name = element.conferenceName;
+          }
+          else {
+            element.name = element.fieldName;
+          }
+        })
+      }
+
+
+      this.table_data = rawData;
+    },
+
+    jumpToProfile(val) {
+      // send id to profile page
     }
   }
 }
