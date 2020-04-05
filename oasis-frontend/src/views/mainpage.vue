@@ -209,9 +209,10 @@ export default {
         getRequest("/api/" + this.tab_list[index].toLowerCase() + "/list")
         .then(res=>{
           // console.log("res",res)
+          let data=res.data.data
           let curName=this.tab_list[index].toLowerCase()+"Name"
           let curTop=[]
-          for (const item of res.data){
+          for (const item of data){
             // console.log("aaaaaaaaaaaaaaaaaaaaaaa",Object.getOwnPropertyDescriptor(item,curName).value)
             curTop.push({
               name:Object.getOwnPropertyDescriptor(item,curName).value,
