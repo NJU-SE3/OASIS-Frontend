@@ -208,7 +208,7 @@ export default {
         //getData
         getRequest("/api/" + this.tab_list[index].toLowerCase() + "/list")
         .then(res=>{
-          console.log("in",res)
+          // console.log("in",res)
           let data=res.data.data
           let curName=this.tab_list[index].toLowerCase()+"Name"
           let curTop=[]

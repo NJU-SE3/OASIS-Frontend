@@ -24,7 +24,7 @@
           <div class="item-value">
             <span v-for="(singleValue, index) in item.values" :key="index">
               <span class="value-type">{{singleValue.type}}:
-              </span><span>{{singleValue.value}}    </span>
+              </span><span>{{Math.round(singleValue.value)}}    </span>
             </span>
           </div>
         </div>
@@ -42,8 +42,7 @@
       topRankingContent: Object,
       extended: Boolean,
       pdfLink: Boolean,
-      },
-
+    },
     methods: {
       jumpToProfile(id) {
         jump2Profile(this.$router, this.topRankingContent.router_type, id);
