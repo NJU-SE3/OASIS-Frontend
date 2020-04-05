@@ -208,14 +208,14 @@ export default {
         //getData
         getRequest("/api/" + this.tab_list[index].toLowerCase() + "/list")
         .then(res=>{
-          console.log("res",res)
+          console.log("in",res)
           let data=res.data.data
           let curName=this.tab_list[index].toLowerCase()+"Name"
           let curTop=[]
           for (const item of data){
             // console.log("aaaaaaaaaaaaaaaaaaaaaaa",Object.getOwnPropertyDescriptor(item,curName).value)
             curTop.push({
-              name:Object.getOwnPropertyDescriptor(item,curName).value,
+              name:(index==2 ? "["+item.year+"] " :"" )+ Object.getOwnPropertyDescriptor(item,curName).value,
               id:item.id,
               values:[
                     // {
@@ -413,9 +413,9 @@ export default {
     margin: 45px 0;
   }
 
-  .table-left{
+  /* .table-left{
     border-right: #fff 10px;
-  }
+  } */
   .table-tab{
     margin-left:13%
   }
