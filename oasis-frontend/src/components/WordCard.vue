@@ -5,7 +5,7 @@
       <span>Relations</span>
     </div>
     <div class="graph" v-loading="loading">
-      <ve-wordcloud
+      <ve-wordcloud class="word-cloud"
         :data="wordData"
         :settings="wordSettings"
         :extend="wordExtend">
@@ -18,27 +18,24 @@
     export default {
       name: "graph-card",
       props: {
-        data: Object,
+        data: Array,
       },
-
       data () {
         return {
           loading: false,
           wordSettings:{
             "color": [
-                "#6aa9ff",
-                "#59c4e6",
-                "#edafda",
-                "#93b7e3",
-                "#a5e7f0",
-                "#cbb0e3",
-                "#b884b3",
-                "#74e3ff",
-                "#ddb4ff",
-                "#ff68b5",
-                "#85e3d7",
-                "#5aaef0",
-                "#fd94d1"
+"#c12e34",
+            "#e6b600",
+            "#0098d9",
+            "#e01f54",
+            "#38b6b6",
+            "#8c6ac4",
+            "#2b821d",
+            "#005eaa",
+            "#339ca8",
+            "#cda819",
+            "#32a487",
             ],
           },
           wordExtend:{
@@ -48,18 +45,26 @@
               gridSize: 10,
             }
           },
-          wordData:{
-
+        }
+      },
+      computed:{
+        wordData(){
+          let d=[]
+          for (const item of this.data){
+            d.push({
+              term: item.fieldName,
+              count: item.activeness
+            })
           }
+          return {
+            columns: ['term', 'count'],
+            rows:d
+            }
         }
       },
       mounted(){
-        this.getData()
       },
       methods:{
-        getData(){
-          console.log(this.data)
-        }
       }
     }
 </script>
@@ -99,5 +104,15 @@
     font-size: large;
     font-weight: bold;
   }
-
+  .graph{
+    width:95%;
+    height: 90%;
+  }
+  /* .card{
+    width:100%;
+    height:100%;
+  } */
+  .word-cloud{
+    padding:2%;
+  }
 </style>

@@ -299,12 +299,12 @@ export default {
         l.then(r=>{
           this.yearData.rows=r.data;
           this.load1=false;
-          console.log("fin 1")
+          // console.log("fin 1")
         })
       },
       getSec(){
         getRequest("/api/report/author/rank/paper_cnt").then(r=>{
-          console.log("rrr",r);
+          // console.log("rrr",r);
           let l=[];
           for(var i=0; i<10 ; i++){
             let len=5-r.data[i].papers.length
@@ -314,7 +314,7 @@ export default {
                   'citationCount':'0'
                 })
             }
-            console.log(i,r.data[i].papers)
+            // console.log(i,r.data[i].papers)
             l.push({
               'Author':r.data[i].author,
               'Paper1':r.data[i].papers[0].citationCount,
@@ -334,12 +334,13 @@ export default {
         let w=getRequest("/api/report/wdcld/year?year="+2019)
         let res=Promise.all([p,w]);
         res.then(r=>{
-          console.log(r[0].data,r[1].data);
+          // console.log(r[0].data,r[1].data);
           this.paperData.rows=r[0].data;
           this.load3=false;
           this.termData.rows=r[1].data.slice(1,301);
+          console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",r[1].data)
           this.load4=false;
-          console.log("fin 2")
+          // console.log("fin 2")
         })
       },
 
@@ -362,7 +363,7 @@ export default {
         window.location.href = this.paperData.rows[e.dataIndex].pdfLink
       },
       getNew(){
-        console.log("new!!",this.termY)
+        // console.log("new!!",this.termY)
         this.load4=true;
         getRequest("/api/report/wdcld/year?year="+this.termY).then(r=>{
           if(this.termY==2019)

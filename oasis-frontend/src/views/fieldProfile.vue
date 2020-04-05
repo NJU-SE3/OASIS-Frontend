@@ -30,6 +30,9 @@
         <el-col :span="8"><div class="grid-content">
           <graph-card :graphInfo="graphInfos[4]"></graph-card>
         </div></el-col>
+        <el-col :span="8"><div class="grid-content">
+          <WordCard :data="wordData"></WordCard>
+        </div></el-col>
       </el-row>
       <el-row :gutter="15">
         <el-col :span="12"><div class="grid-content">
@@ -55,6 +58,7 @@
   import BasicStatisticCard from "../components/BasicStatisticCard.vue";
   import GraphCard from "../components/GraphCard.vue";
   import TopRankingCard from "../components/TopRankingCard.vue";
+  import WordCard from "../components/WordCard.vue";
 
   import {getRequest} from "../utils/request"
   import {getTrendInfo, getPapersForProfile} from "../utils/profileInfo"
@@ -67,6 +71,7 @@
       BasicStatisticCard,
       BasicIntroCard,
       Header,
+      WordCard,
       'basic-intro-card': BasicIntroCard,
       'Basic-statistic-card': BasicStatisticCard,
       'graph-card': GraphCard,
@@ -78,6 +83,7 @@
       this.getBasicInfo();
       this.getTopRankingInfo();
       getTrendInfo(this.graphInfos, this.id);
+      this.getWordCloud()
     },
 
     data() {
@@ -151,6 +157,8 @@
             },
           },
         ],
+
+        wordData:[]
       }
     },
 
@@ -242,6 +250,13 @@
         getPapersForProfile(this.topRankingContent[2], this.id);
       },
 
+      getWordCloud(){
+        getRequest("/api/graph/field/?id="+this.id)
+        .then(res=>{
+          console.log("res",res.data.nodes)
+          this.wordData=res.data.nodes
+        })
+      }
     },
   }
 </script>
