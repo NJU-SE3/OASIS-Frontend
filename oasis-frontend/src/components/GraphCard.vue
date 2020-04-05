@@ -6,8 +6,10 @@
     </div>
     <div class="graph" v-loading="graphInfo.chartData.rows.length <= 0">
       <ve-histogram :data="graphInfo.chartData"
+                    :extend="extendSettings"
                     :legend-visible="false"
-                    :colors="colors"></ve-histogram>
+                    :colors="colors"
+                     height="100%"></ve-histogram>
     </div>
   </div>
 </template>
@@ -23,6 +25,11 @@
         return {
           // loading: true,
           colors: [ "#93b7e3",],
+          extendSettings:{
+            series: {
+              barMaxWidth: 40,
+            }
+          }
         }
       }
     }
@@ -48,7 +55,9 @@
     border-radius: 4px;
     color: #4e4376;
     height: 350px;
-    overflow: scroll;
+    overflow-y: hidden;
+    overflow-x: hidden;
+    /* overflow: auto; */
   }
 
   .title{
@@ -62,6 +71,10 @@
   .type-icon {
     font-size: large;
     font-weight: bold;
+  }
+  .graph{
+    height: 100%;
+    width: 100%;
   }
 
 </style>

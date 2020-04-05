@@ -25,18 +25,20 @@
           loading: false,
           wordSettings:{
             "color": [
-"#c12e34",
-            "#e6b600",
-            "#0098d9",
-            "#e01f54",
-            "#38b6b6",
-            "#8c6ac4",
-            "#2b821d",
-            "#005eaa",
-            "#339ca8",
-            "#cda819",
-            "#32a487",
+              "#c12e34",
+              "#e6b600",
+              "#0098d9",
+              "#e01f54",
+              "#38b6b6",
+              "#8c6ac4",
+              "#2b821d",
+              "#005eaa",
+              "#339ca8",
+              "#cda819",
+              "#32a487",
             ],
+            sizeMin: 1,
+            sizeMax: 40
           },
           wordExtend:{
             series: {
