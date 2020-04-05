@@ -3,12 +3,9 @@
 		<el-header id="header" style="height: 35vh;min-height: 270px; padding:0;">
 			<div id="overlay">
 				<div id="o-content" class="content">
-					<h1 class="title">
+					<h1 class="title"  @click="gotoMainpage">
 						OASIS
 					</h1>
-					<!-- <el-input class="filter-input" placeholder="" v-model="searchCon" @keyup.enter.native="filterInRes">
-            <el-button slot="append" icon="el-icon-search" @click="filterInRes"></el-button>
-					</el-input> -->
           <search @paperSearch="commonSearch" :searchContent="searchCon.con"></search>
 				</div>
 			</div>
@@ -26,7 +23,8 @@
         <sort-list :list_title="sort_title" 
                    :table_data_prop="table_data" 
                    :loading="shouldLoad"
-                   @getProfile="jumpToProfile"></sort-list>
+                   @getProfile="jumpToProfile">
+        </sort-list>
       </el-col>
     </el-row>
 
@@ -77,7 +75,7 @@ export default {
       origin_data: [],
       field_summary: [],
       shouldLoad: true,
-      search_page_number: 100,
+      search_page_number: 20,
       current_page: 0,
       page_size: 20
     }
@@ -116,7 +114,7 @@ export default {
       var _this = this;
       getRequest(url)
           .then(res => {
-            console.log(res);
+            // console.log(res);
             _this.handleTableData(res.data.data);
             _this.search_page_number = res.data.itemCnt;
             // _this.getFieldSummary();
@@ -136,25 +134,6 @@ export default {
         .catch(err => {
           console.log(err);
         })
-    },
-
-    filterInRes() {
-      // console.log(this.searchCon);
-
-      if (this.searchCon === "") {
-        this.table_data = this.origin_data;
-        return;
-      }
-
-      var filterRes = new Array(0);
-      var _this = this;
-      _this.origin_data.forEach(item => {
-        if (item.name.indexOf(_this.searchCon) != -1) {
-          filterRes.push(item);
-        }
-      });
-      _this.table_data = filterRes;
-
     },
 
     handleTableData(rawData) {
@@ -195,6 +174,7 @@ export default {
 
     searchByField(data) {
       console.log("searchByField: ", data);
+      // 根据领域筛选作者
     },
 
     getNextPage(updatedPage) {
@@ -217,6 +197,9 @@ export default {
       this.$router.push("result");
     },
 
+    gotoMainpage() {
+      this.$router.push("mainpage");
+    }
     
   }
 }

@@ -2,7 +2,9 @@
 	<div class="sort-list">
 		<el-table :data="table_data" style="width: 100%;" 
 				  :default-sort = "{prop: 'paper_count', order: 'descending'}"
-				  @row-click="clickItem">
+				  @row-click="clickItem"
+				  v-loading="table_data.length === 0"
+				  element-loading-background="rgba(255, 255, 255, 0.3)">
 			<el-table-column prop="name" label="name" :show-overflow-tooltip="true"></el-table-column>
 			<el-table-column v-for="(item, index) in list_title" 
 											 :key="index"
