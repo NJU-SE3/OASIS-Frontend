@@ -20,20 +20,6 @@
         <el-col :span="14" :offset="2" class="table-tab">
           <div class="link-table">
            <div class="table-title">Top 10 {{entity}}s</div>
-            <!-- <el-row  
-              v-loading="loading"
-              element-loading-text="拼命加载中"
-              element-loading-spinner="el-icon-loading"
-              element-loading-background="rgba(0, 0, 0, 0.1)">
-                <el-col :span="12">
-                  <top-ranking-card class="table-left" 
-                  :topRankingContent="topLeft"></top-ranking-card>
-                </el-col>
-                <el-col :span="12">
-                  <top-ranking-card 
-                  :topRankingContent="topRight"></top-ranking-card>
-                </el-col>
-           </el-row> -->
             <el-row  
               v-loading="loading"
               element-loading-text="拼命加载中"
@@ -78,7 +64,7 @@
           </ul>
         </div>
       </el-col>
-      <el-col :span="14" :offset="2">
+      <el-col :span="14" :offset="1">
         <div class="link-content">
           <div id="content-item-one" :class="{imgActive : pic_one}">
             <el-image src="/static/mainpage/charts.jpg"
@@ -208,7 +194,7 @@ export default {
         //getData
         getRequest("/api/" + this.tab_list[index].toLowerCase() + "/list")
         .then(res=>{
-          console.log("in",res)
+          // console.log("in",res)
           let data=res.data.data
           let curName=this.tab_list[index].toLowerCase()+"Name"
           let curTop=[]
