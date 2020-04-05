@@ -22,13 +22,14 @@
         </div>
         <sort-list :list_title="sort_title" 
                    :table_data_prop="table_data" 
-                   :loading="shouldLoad"
+                   v-loading="shouldLoad"
+				           element-loading-background="rgba(255, 255, 255, 0.3)"
                    @getProfile="jumpToProfile">
         </sort-list>
       </el-col>
     </el-row>
 
-    <el-row class="page-footer">
+    <el-row class="page-footer" v-if="not_field_filter">
       <pagination :search_page_number="search_page_number"
                   :current_page="current_page"
                   :page_size="page_size"
@@ -75,6 +76,7 @@ export default {
       origin_data: [],
       field_summary: [],
       shouldLoad: true,
+      not_field_filter: true,
       search_page_number: 20,
       current_page: 0,
       page_size: 20
@@ -99,7 +101,6 @@ export default {
     if (this.sort_type === "author") {
       this.getAuthorFieldSummary();
     }
-
   },
 
   beforeDestroy() {
@@ -117,7 +118,8 @@ export default {
             // console.log(res);
             _this.handleTableData(res.data.data);
             _this.search_page_number = res.data.itemCnt;
-            // _this.getFieldSummary();
+            _this.shouldLoad = false;
+            _this.not_field_filter = true;
           })
           .catch(err => {
             console.log(err);
@@ -127,13 +129,26 @@ export default {
     // /api/author/fieldSummary
     getAuthorFieldSummary() {
       var url = "/api/author/fieldSummary";
+      var _this = this;
       getRequest(url)
         .then(res => {
           console.log(res);
+          _this.author_fields = _this.getFieldName(res.data);
+          _this.shouldLoad = false;
         })
         .catch(err => {
           console.log(err);
         })
+    },
+
+    getFieldName(data) {
+      var field = [];
+
+      data.forEach(item => {
+        field.push(item.fieldName);
+      });
+      
+      return field;
     },
 
     handleTableData(rawData) {
@@ -141,6 +156,7 @@ export default {
         rawData.forEach(element => {
           element.name = element.authorName;
           element.heat = Math.round(element.heat * 100) / 100;
+          element.activeness = Math.round(element.activeness * 100) / 100;
 
           delete element.authorName;
           delete element.affiliationName;
@@ -173,8 +189,35 @@ export default {
     },
 
     searchByField(data) {
-      console.log("searchByField: ", data);
-      // 根据领域筛选作者
+      var checkedField = data.checked;
+      this.shouldLoad = true;
+
+      // 如果没有checked的内容，返回全部
+      if (checkedField.length == 0) {
+        this.getList();
+      }
+
+      // 有checked
+      // 1. 对空格进行转义
+      // 2. 请求
+      this.not_field_filter = false;
+      var requestField = ""
+      checkedField.forEach(item => {
+        item.replace(/\s+/g,"%20");
+        requestField += ("fieldName=" + item + "&");
+      });
+
+      var url = "/api/author/list/refine?" + requestField.substring(0, requestField.length - 1);
+      var _this = this;
+      getRequest(url)
+        .then(res => {
+          _this.handleTableData(res.data);
+          _this.shouldLoad = false;
+        })
+        .catch(err => {
+          console.log(err);
+        })
+
     },
 
     getNextPage(updatedPage) {
@@ -192,8 +235,6 @@ export default {
 
     commonSearch(value) {
       this.searchCon = value;
-      // console.log("common search: ", this.searchCon);
-      // console.log(value);
       this.$router.push("result");
     },
 
@@ -302,5 +343,4 @@ export default {
   text-align: center;
   margin: 40px 0;
 }
-
 </style>

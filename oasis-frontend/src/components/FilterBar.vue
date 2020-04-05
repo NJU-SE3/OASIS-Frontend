@@ -3,7 +3,7 @@
 		<div class="filter-title" style="width: 100%;">Field</div>
 		<div class="empty-tip" v-if="this.fields.length == 0">暂无数据</div>
 		<div class="bar-content">
-			<el-checkbox-group v-model="checked_items" class="checkbox-group" @change="filterField">
+			<el-checkbox-group v-model="checked_items" class="checkbox-group">
 				<el-checkbox v-for="(item, index) in fields" 
 										 :key="index" 
 										 :label="item"
@@ -11,6 +11,7 @@
 										 style="display: block;"></el-checkbox>
 			</el-checkbox-group>
 		</div>
+		<el-button class="submit" round @click="filterField">OK</el-button>
 	</div>
 </template>
 
@@ -64,11 +65,13 @@ export default {
 }
 
 .checkbox-group > * {
-	margin: 5px 0;
+	margin: 10px 0;
+	/* font-size: 2em; */
 }
 
 /* .checkbox-item {
 	display: block;
+	margin-bottom: 5px;
 } */
 
 .filter-bar  .el-checkbox {
@@ -77,5 +80,18 @@ export default {
 
 .filter-bar .el-checkbox__input.is-checked+.el-checkbox__label {
 	color: inherit;
+}
+
+.filter-bar .submit {
+	text-align: center;
+	margin-top: 20px;
+}
+
+.el-button.is-round{
+  background-color: rgba(255,255,255,0.5);
+  border: transparent;
+}
+.el-button:focus, .el-button:hover{
+  color: azure;
 }
 </style>
