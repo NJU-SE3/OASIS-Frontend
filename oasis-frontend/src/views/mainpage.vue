@@ -399,7 +399,7 @@ export default {
 /* 表格 */
 
   .table-title{
-      font-size: 60px;
+      font-size: 3em;
       color: #fff;
       font-weight: bold;
       /* font-style: italic; */

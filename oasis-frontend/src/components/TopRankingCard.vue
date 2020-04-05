@@ -7,18 +7,22 @@
       <div class="title-blank" v-if="topRankingContent.type.length <= 0"></div>
       <div class="content" v-loading="topRankingContent.items.length <= 0">
         <div class="item" v-for="(item, index) in topRankingContent.items" :key="index">
-          <div class="item-name" v-if="!pdfLink" @click="jumpToProfile(item.id)">
-            <span class="item-index">{{topRankingContent.startIndex + index}}</span>
-            <span class="">{{item.name}}</span>
-          </div>
+          <el-tooltip class="tool-tip" effect="light" :content="item.name" placement="top-start">
+            <div class="item-name" v-if="!pdfLink" @click="jumpToProfile(item.id)">
+              <span class="item-index">{{topRankingContent.startIndex + index}}</span>
+              <span class="">{{item.name}}</span>
+            </div>
+          </el-tooltip>
+          <el-tooltip class="tool-tip" effect="light" :content="item.name" placement="top-start">
           <a v-bind:href="item.link" v-if="pdfLink">
             <div class="item-name">
               <span class="item-index">{{topRankingContent.startIndex + index}}</span>
               <span class="">{{item.name}}</span>
             </div>
           </a>
+          </el-tooltip>
           <div class="item-value">
-            <span v-for="(singleValue, index) in item.values">
+            <span v-for="(singleValue, index) in item.values" :key="index">
               <span class="value-type">{{singleValue.type}}:
               </span><span>{{singleValue.value}}    </span>
             </span>
@@ -63,12 +67,15 @@
   }
 
   .card {
-    background-color: azure;
-    opacity: 0.7;
+    /* background-color: azure;
+    opacity: 0.5; */
+    background: rgba(255, 255, 255, 0.4);
     border-radius: 4px;
-    color: #4e4376;
+    /* color: #4e4376; */
+    color: #eeeeee;
     height: 400px;
-    overflow: scroll;
+    overflow: hidden;
+    width: 100%;
   }
 
   .title {
@@ -83,7 +90,8 @@
   }
 
   a{
-    color: #4e4376;
+    /* color: #4e4376; */
+    color: #eeeeee;
     text-decoration: transparent;
   }
 
@@ -96,10 +104,16 @@
     height: 35px;
   }
 
+
   .item-name {
-    float: left;
-    padding-left: 10px;
+    padding-left: 30px;
     display: inline-block;
+    width: 50%;
+    text-align: left;
+    float: left;
+    white-space: nowrap;  
+    text-overflow:ellipsis; 
+    overflow:hidden;
   }
 
   .item-name:hover {
@@ -109,15 +123,18 @@
 
   .item-value {
     float: right;
-    padding-right: 10px;
+    /* text-align: right; */
+    /* width: 25%; */
+    padding-right: 30px;
     display: inline-block;
-    color: #20a0ff;
+    color: #1f78bb;
     font-style: italic;
     font-weight: bold;
   }
 
   .value-type {
     color: #4e4376;
+    /* color: #eeeeee; */
     font-weight: normal;
   }
 </style>

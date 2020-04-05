@@ -4,7 +4,7 @@
       {{intro.name}}
     </div>
     <div class="details" v-if="intro.details.length > 0">
-      <div class="detail" v-for="(detail, index) in intro.details">
+      <div class="detail" v-for="(detail, index) in intro.details" :key="index">
         <span>{{detail.type}}:</span><span>{{detail.value}}</span>
       </div>
     </div>
@@ -26,8 +26,9 @@
   }
 
   .card {
-    background-color: azure;
-    opacity: 0.7;
+    /* background-color: azure;
+    opacity: 0.7; */
+    background: rgba(255, 255, 255, 0.3);
     border-radius: 4px;
     color: #4e4376;
     height: 350px;
