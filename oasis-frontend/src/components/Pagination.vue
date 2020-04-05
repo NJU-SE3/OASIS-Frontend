@@ -1,8 +1,8 @@
 <template>
   <el-pagination layout="prev,pager,next"
-                 :total="search_page_number"
-                 :current-page="current_page"
-                 :page-size="page_size"
+                 :total="search_page_num_prop"
+                 :current-page="curr_page_prop"
+                 :page-size="page_size_prop"
                  @current-change="handleCurrentChange">
   </el-pagination>
 </template>
@@ -17,10 +17,30 @@
         page_size: Number,
       },
 
+      data() {
+        return {
+          search_page_num_prop: this.search_page_number,
+          curr_page_prop: this.current_page,
+          page_size_prop: this.page_size
+        }
+      },
+
+      watch: {
+        "search_page_number": function(val) {
+          this.search_page_num_prop = val;
+        },
+        "current_page": function(val) {
+          this.curr_page_prop = val;
+        },
+        "page_size": function(val) {
+          this.page_size_prop = val;
+        }
+      },
+
       methods: {
         handleCurrentChange: function (currentPage) {
-          this.current_page = currentPage;
-          this.$emit("page-change", this.current_page);
+          this.curr_page_prop = currentPage;
+          this.$emit("page-change", this.curr_page_prop);
         },
       },
     }

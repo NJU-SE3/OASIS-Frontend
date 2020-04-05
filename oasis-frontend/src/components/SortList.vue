@@ -7,8 +7,7 @@
 			<el-table-column v-for="(item, index) in list_title" 
 											 :key="index"
 											 :prop="item"
-											 :label="item"
-											 sortable>
+											 :label="item">
 			</el-table-column>
 		</el-table>
 	</div>

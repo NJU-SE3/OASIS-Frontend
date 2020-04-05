@@ -16,14 +16,25 @@
     <el-row class="main-content">
       <el-col :span="5" v-if="sort_type == 'author'" class="field-filter-bar">
         <!-- <div class="field-filter" style="height: 500px;"></div> -->
-        <filter-bar :author_fields="author_fields"></filter-bar>
+        <filter-bar :author_fields="author_fields" @filterField="searchByField"></filter-bar>
       </el-col>
       <el-col class="sort-table" :span="span_len" :offset="2">
         <div class="sort-table-title">
           Top {{ sort_type }} in all
         </div>
-        <sort-list :list_title="sort_title" :table_data_prop="table_data" @getProfile="jumpToProfile"></sort-list>
+        <sort-list :list_title="sort_title" 
+                   :table_data_prop="table_data" 
+                   :loading="shouldLoad"
+                   @getProfile="jumpToProfile"></sort-list>
       </el-col>
+    </el-row>
+
+    <el-row class="page-footer">
+      <pagination :search_page_number="search_page_number"
+                  :current_page="current_page"
+                  :page_size="page_size"
+                  @page-change="getNextPage">
+      </pagination>
     </el-row>
 
 
@@ -34,6 +45,7 @@
 import search from "../components/Search"
 import sort_list from "../components/SortList"
 import filter_bar from "../components/FilterBar"
+import pagination from "../components/Pagination"
 
 import { getRequest } from "../utils/request"
 import {jump2Profile} from "../utils/profileInfo";
@@ -44,7 +56,8 @@ export default {
 	components: {
     "search": search,
     "sort-list": sort_list,
-    "filter-bar": filter_bar
+    "filter-bar": filter_bar,
+    "pagination": pagination
   },
 
   data() {
@@ -54,63 +67,16 @@ export default {
       sort_type: "",
       table_data: [],
       field_affi_conf_title: ["activeness", "paperCount", "citationCount", "authorCount", "heat", "H_index"],
-      // field_affi_conf_title: ["activeness", "paperCount", "citationCount", "heat", "H_index", "id"],
       author_title: ["activeness", "paperCount", "citationCount", "heat", "H_index"],
-      // affiliation_title: ["Liveness", "PaperCount", "Citation", "AuthorCount", "Heat"],
-      // conference_title: ["Liveness", "PaperCount", "Citation", "AuthorCount", "Heat"]
       span_len: 22,
-      author_fields: ["Software Engineering", "Artificial Intelligence", "Computer Network"],
-      author_table_data: [
-        {
-          Name: "testname1",
-          Liveness: 100,
-          PaperCount: 20,
-          Citation: 300,
-          Heat: 45
-        },
-        {
-          Name: "testname2",
-          Liveness: 200,
-          PaperCount: 35,
-          Citation: 200,
-          Heat: 39
-        },
-        {
-          Name: "testname3",
-          Liveness: 120,
-          PaperCount: 30,
-          Citation: 240,
-          Heat: 40
-        }
-      ],
-      field_affi_conf_table_data: [
-        {
-          Name: "testname1",
-          activeness: 100,
-          paperCount: 20,
-          citationCount: 300,
-          authorCount: 250,
-          heat: 45
-        },
-        {
-          activeness: 100,
-          Name: "testname1",
-          heat: 45,
-          paperCount: 20,
-          citationCount: 300,
-          authorCount: 250,
-
-        },
-        {
-          Name: "testname1",
-          activeness: 100,
-          paperCount: 20,
-          citationCount: 300,
-          authorCount: 250,
-          heat: 45
-        }
-      ],
-      assist_data: []
+      // author_fields: ["Software Engineering", "Artificial Intelligence", "Computer Network"],
+      author_fields: [],
+      origin_data: [],
+      field_summary: [],
+      shouldLoad: true,
+      search_page_number: 100,
+      current_page: 0,
+      page_size: 20
     }
   },
 
@@ -118,23 +84,20 @@ export default {
     this.sort_type = this.$route.query.type;
     if (this.sort_type == "author") {
       this.sort_title = this.author_title;
-      // this.table_data = this.author_table_data;
       this.span_len = 17;
     }
     else {
       this.sort_title = this.field_affi_conf_title;
-      // this.table_data = this.field_affi_conf_table_data;
     }
 
     // /api/field/list
-    var url = "/api/" + this.sort_type + "/list";
+    var url = "/api/" + this.sort_type + "/list?pageNum=" + this.current_page;
     var _this = this;
     getRequest(url)
         .then(res => {
-          console.log(res);
+          // console.log(res);
           _this.handleTableData(res.data);
-          console.log(_this.table_data);
-          // console.log("end");
+          // _this.getFieldSummary();
         })
         .catch(err => {
           console.log(err);
@@ -144,12 +107,25 @@ export default {
 
   methods: {
     filterInRes() {
-      console.log(this.searchCon);
+      // console.log(this.searchCon);
+
+      if (this.searchCon === "") {
+        this.table_data = this.origin_data;
+        return;
+      }
+
+      var filterRes = new Array(0);
+      var _this = this;
+      _this.origin_data.forEach(item => {
+        if (item.name.indexOf(_this.searchCon) != -1) {
+          filterRes.push(item);
+        }
+      });
+      _this.table_data = filterRes;
+
     },
 
     handleTableData(rawData) {
-      // console.log("rawData: ", rawData);
-
       if (this.sort_type === "author") {
         rawData.forEach(element => {
           element.name = element.authorName;
@@ -177,12 +153,29 @@ export default {
         })
       }
 
-
+      this.origin_data = rawData;
       this.table_data = rawData;
     },
 
     jumpToProfile(val) {
       jump2Profile(this.$router, this.sort_type, val.id);
+    },
+
+    searchByField(data) {
+      console.log("searchByField: ", data);
+    },
+
+    getNextPage(updatedPage) {
+      var _this = this;
+      _this.current_page = updatedPage;
+      var url = "/api/" + _this.sort_type + "/list?pageNum=" + _this.current_page;
+      getRequest(url)
+        .then(res => {
+          _this.handleTableData(res.data);
+        })
+        .catch(err => {
+          console.log(err);
+        })
     }
   }
 }
@@ -280,5 +273,10 @@ export default {
   color: black;
 }
 
+.page-footer{
+  display: block;
+  text-align: center;
+  margin: 40px 0;
+}
 
 </style>

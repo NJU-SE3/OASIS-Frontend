@@ -1,6 +1,7 @@
 <template>
 	<div class="filter-bar">
-		<div class="filter-title" style="width: 100%;">Filed</div>
+		<div class="filter-title" style="width: 100%;">Field</div>
+		<div class="empty-tip" v-if="this.fields.length == 0">暂无数据</div>
 		<div class="bar-content">
 			<el-checkbox-group v-model="checked_items" class="checkbox-group" @change="filterField">
 				<el-checkbox v-for="(item, index) in fields" 
@@ -28,9 +29,20 @@ export default {
 		}
 	},
 
+	watch: {
+		"author_fields": function(val) {
+			this.fields = val;
+		}
+	},
+
+	created() {
+		console.log(this.fields.length);
+	},
+
 	methods: {
 		filterField() {
 			console.log(this.checked_items);
+			this.$emit("filterField", { checked: this.checked_items });
 		}
 	}
 }
