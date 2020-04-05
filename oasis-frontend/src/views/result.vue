@@ -43,12 +43,11 @@
             </div>
             <div class="page-pagination"
                  v-if="search_result != null && search_result.length > 0">
-              <el-pagination layout="prev,pager,next"
-                             :total="search_page_number"
-                             :current-page="current_page"
-                             :page-size="page_size"
-                             @current-change="handleCurrentChange">
-              </el-pagination>
+              <my-pagination :search_page_number="search_page_number"
+                             :current_page="current_page"
+                             :page_size="page_size"
+                             @page-change="getNextPage">
+              </my-pagination>
             </div>
           </el-col>
         </el-row>
@@ -59,6 +58,7 @@
   import essaySearchResultCard from "../components/EssaySearchResultCard"
   import sideBar from "../components/SideBar"
   import search from "../components/Search"
+  import pagination from "../components/Pagination"
   import {getRequest} from "../utils/request.js"
   import bus from "../utils/bus"
 
@@ -67,7 +67,8 @@ export default {
   components: {
     'essay-search-result-card': essaySearchResultCard,
     'side-bar': sideBar,
-    'search': search
+    'search': search,
+    'my-pagination': pagination,
   },
 
   created() {
@@ -143,11 +144,6 @@ export default {
   methods:{
     gotoMainpage(){
       this.$router.push({path: "/mainpage"});
-    },
-
-    handleCurrentChange: function (currentPage) {
-      this.current_page = currentPage;
-      this.getNextPage();
     },
 
     commonSearch(val) {
@@ -286,7 +282,8 @@ export default {
       });
     },
 
-    getNextPage() {
+    getNextPage(updatedPage) {
+      this.current_page = updatedPage;
       this.loading = true;
       this.search_result = null;
       if(!this.is_search_within) {
@@ -360,27 +357,5 @@ export default {
 .page-pagination{
   display: block;
   text-align: right;
-}
-
-.el-pagination button:disabled {
-  background-color: rgba(255,255,255,0.5);
-}
-
-.el-pagination .btn-prev {
-  border-radius: 2em 0 0 2em;
-  background-color: rgba(255,255,255,0.5);
-}
-
-.el-pager li {
-  background-color: rgba(255,255,255,0.5);
-}
-
-.el-pager li.active {
-  color: azure;
-}
-
-.el-pagination .btn-next {
-  background-color: rgba(255,255,255,0.5);
-  border-radius: 0 2em 2em 0;
 }
 </style>
