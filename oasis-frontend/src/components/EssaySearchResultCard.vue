@@ -9,36 +9,39 @@
     </div>
     <div class="content">
       <div id="author"><span class="sub-title">Authors: </span>
-      <template>
-        <span v-html="brightenKeyword(authors)" ></span>
+      <template v-for="(author, index) in authors">
+        <span class="profile-entity"
+              v-html="brightenKeyword(author.authorName)"
+              @click="jumpToProfile('author', author.id)"></span>
+        <span>; </span>
       </template>
       </div>
       <div><span class="sub-title">Conference: </span>
         <template>
-          <span v-html="brightenKeyword(conference)" ></span>
+          <span class="profile-entity"
+                v-html="brightenKeyword(conference.conferenceName)"
+                @click="jumpToProfile('conference', conference.id)"></span>
         </template>
       </div>
       <div><span class="sub-title">Year: </span>{{year}} | Conference Paper
       </div>
       <div><span class="sub-title">Affiliation: </span>
-        <template>
-          <span v-html="brightenKeyword(affiliation)" ></span>
+        <template v-for="(affiliation, index) in affiliations">
+          <span class="profile-entity"
+                v-html="brightenKeyword(affiliation.affiliationName)"
+                @click="jumpToProfile('affiliation', affiliation.id)" ></span>
+          <span>; </span>
         </template>
       </div>
       <div><span class="sub-title">Cited by: </span>Papers ({{times}})
       </div>
       <div><span class="sub-title sub-title-terms"
-                 @click="toggleShowAllTerms">Terms:</span>
-        <span v-if="!showAllTerms"
-              @click="toggleShowAllTerms"
-              class="sub-title-terms">
-          ...
-        </span>
-        <template>
-          <span v-html="brightenKeyword(terms)"
-                v-if="showAllTerms"
-                @click="toggleShowAllTerms"
-                class="sub-title-terms"></span>
+                 @click="toggleShowAllTerms">Fields:</span>
+        <template v-for="(field, index) in fields">
+          <span class="profile-entity"
+                v-html="brightenKeyword(field.fieldName)"
+                @click="jumpToProfile('field', field.id)" ></span>
+          <span>; </span>
         </template>
       </div>
     </div>
@@ -46,17 +49,19 @@
 </template>
 
 <script>
+  import {jump2Profile} from "../utils/profileInfo";
+
     export default {
         name: "essay-search-result-card",
       props:{
         title: String,
-        authors: String,
-        conference: String,
+        authors: Array,
+        conference: Object,
         year: String,
         times: String,
         essayLink: String,
-        terms: String,
-        affiliation: String,
+        fields: Array,
+        affiliations: Array,
 
         keyword: String,
         advanced_keywords: Array,
@@ -93,6 +98,10 @@
           });
           return result;
         },
+
+        jumpToProfile(type, id) {
+          jump2Profile(this.$router, type, id);
+        }
       },
     }
 </script>
@@ -140,5 +149,10 @@
 
   .content{
     color: darkgrey;
+  }
+
+  .profile-entity:hover {
+    cursor: pointer;
+    text-decoration: underline;
   }
 </style>

@@ -30,12 +30,12 @@
               <essay-search-result-card v-for="(result, index) in search_result"
                                         v-bind:key="index"
                                         v-bind:title="result.title"
-                                        v-bind:authors="result.authors | getValidItemsForCard"
-                                        v-bind:conference="result.conference | getValidItemsForCard"
+                                        v-bind:authors="result.authorLink"
+                                        v-bind:conference="result.conferenceLink"
                                         v-bind:year="result.year.toString()"
                                         v-bind:times="result.citationCount.toString()"
-                                        v-bind:terms="result.terms | getValidItemsForCard"
-                                        v-bind:affiliation="result.affiliations | getValidItemsForCard"
+                                        v-bind:fields="result.fieldLink"
+                                        v-bind:affiliations="result.affiliationLink"
                                         v-bind:essayLink="result.pdfLink"
                                         v-bind:keyword="search_query"
                                         v-bind:advanced_keywords="advanced_keywords">
@@ -119,26 +119,6 @@ export default {
       advanced_keywords: [],
 
     }
-  },
-
-  filters: {
-    getValidItemsForCard(items) {
-      var list_items = [];
-      var str_items = "";
-      items.split(";").forEach(item => {
-        if(item.length > 0 && item != "NA" && item != " NA"
-          && str_items.indexOf(item) < 0) {
-          str_items += item;
-          list_items.push(item);
-        }
-      });
-      return list_items.join(";");
-    },
-
-    getValidItemsForCard_terms(items) {
-      var str_terms = items.split("[")[1].split("]")[0].split("'").join("");
-      return str_terms;
-    },
   },
 
   methods:{
@@ -230,6 +210,7 @@ export default {
 
       getRequest("/api/query/paper/list?query=" + this.search_query + "&returnFacets=" + this.search_type)
         .then(res=>{
+          console.log(res.data);
           this.search_result = res.data.papers;
           this.search_page_number = res.data.itemCnt;
 
