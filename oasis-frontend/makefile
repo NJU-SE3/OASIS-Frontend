@@ -1,4 +1,4 @@
-target=root@lfm:/root/nginx
+target=root@lfm:/root/service/front
 
 all: dist resource deploy
 
