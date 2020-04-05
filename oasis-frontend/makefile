@@ -1,4 +1,4 @@
-target=root@lfm:/root/service/front
+target=root@106.14.140.93:/root/service/front
 
 all: dist resource deploy
 
