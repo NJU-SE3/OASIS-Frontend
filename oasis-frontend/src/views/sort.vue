@@ -6,9 +6,10 @@
 					<h1 class="title">
 						OASIS
 					</h1>
-					<el-input class="filter-input" placeholder="" v-model="searchCon" @keyup.enter.native="filterInRes">
+					<!-- <el-input class="filter-input" placeholder="" v-model="searchCon" @keyup.enter.native="filterInRes">
             <el-button slot="append" icon="el-icon-search" @click="filterInRes"></el-button>
-					</el-input>
+					</el-input> -->
+          <search @paperSearch="commonSearch" :searchContent="searchCon.con"></search>
 				</div>
 			</div>
 		</el-header>
@@ -20,7 +21,7 @@
       </el-col>
       <el-col class="sort-table" :span="span_len" :offset="2">
         <div class="sort-table-title">
-          Top {{ sort_type }} in all
+          All {{ sort_type }}s
         </div>
         <sort-list :list_title="sort_title" 
                    :table_data_prop="table_data" 
@@ -49,6 +50,7 @@ import pagination from "../components/Pagination"
 
 import { getRequest } from "../utils/request"
 import {jump2Profile} from "../utils/profileInfo";
+import bus from "../utils/bus"
 
 export default {
 	name: "sort",
@@ -57,16 +59,17 @@ export default {
     "search": search,
     "sort-list": sort_list,
     "filter-bar": filter_bar,
-    "pagination": pagination
+    "pagination": pagination,
   },
 
   data() {
     return {
-      searchCon: "",
+      searchCon: Object,
       sort_title: [],
       sort_type: "",
       table_data: [],
-      field_affi_conf_title: ["activeness", "paperCount", "citationCount", "authorCount", "heat", "H_index"],
+      field_affi_title: ["activeness", "paperCount", "citationCount", "authorCount", "heat", "H_index"],
+      conf_title: ["year", "activeness", "paperCount", "citationCount", "authorCount", "heat", "H_index"],
       author_title: ["activeness", "paperCount", "citationCount", "heat", "H_index"],
       span_len: 22,
       // author_fields: ["Software Engineering", "Artificial Intelligence", "Computer Network"],
@@ -82,30 +85,59 @@ export default {
 
   created() {
     this.sort_type = this.$route.query.type;
-    if (this.sort_type == "author") {
+    if (this.sort_type === "author") {
       this.sort_title = this.author_title;
       this.span_len = 17;
     }
+    else if (this.sort_type === "conference"){
+      this.sort_title = this.conf_title;
+    }
     else {
-      this.sort_title = this.field_affi_conf_title;
+      this.sort_title = this.field_affi_title;
     }
 
-    // /api/field/list
-    var url = "/api/" + this.sort_type + "/list?pageNum=" + this.current_page;
-    var _this = this;
-    getRequest(url)
+    this.getList();
+
+    if (this.sort_type === "author") {
+      this.getAuthorFieldSummary();
+    }
+
+  },
+
+  beforeDestroy() {
+    bus.$emit("fuzzySearch", this.searchCon);
+  },
+
+  methods: {
+
+    getList() {
+      // /api/field/list
+      var url = "/api/" + this.sort_type + "/list?pageNum=" + this.current_page;
+      var _this = this;
+      getRequest(url)
+          .then(res => {
+            console.log(res);
+            _this.handleTableData(res.data.data);
+            _this.search_page_number = res.data.itemCnt;
+            // _this.getFieldSummary();
+          })
+          .catch(err => {
+            console.log(err);
+          })
+    },
+
+    // /api/author/fieldSummary
+    getAuthorFieldSummary() {
+      var url = "/api/author/fieldSummary";
+      getRequest(url)
         .then(res => {
-          // console.log(res);
-          _this.handleTableData(res.data);
-          // _this.getFieldSummary();
+          console.log(res);
         })
         .catch(err => {
           console.log(err);
         })
+    },
 
-  },
-
-  methods: {
     filterInRes() {
       // console.log(this.searchCon);
 
@@ -171,12 +203,21 @@ export default {
       var url = "/api/" + _this.sort_type + "/list?pageNum=" + _this.current_page;
       getRequest(url)
         .then(res => {
-          _this.handleTableData(res.data);
+          _this.handleTableData(res.data.data);
         })
         .catch(err => {
           console.log(err);
         })
-    }
+    },
+
+    commonSearch(value) {
+      this.searchCon = value;
+      // console.log("common search: ", this.searchCon);
+      // console.log(value);
+      this.$router.push("result");
+    },
+
+    
   }
 }
 </script>
