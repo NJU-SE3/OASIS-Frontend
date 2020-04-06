@@ -155,8 +155,6 @@ export default {
       if (this.sort_type === "author") {
         rawData.forEach(element => {
           element.name = element.authorName;
-          element.heat = Math.round(element.heat * 100) / 100;
-          element.activeness = Math.round(element.activeness * 100) / 100;
 
           delete element.authorName;
           delete element.affiliationName;
@@ -179,6 +177,12 @@ export default {
           }
         })
       }
+
+      // 处理活跃度和热度的位数
+      rawData.forEach(element => {
+        element.heat = Math.round(element.heat * 100) / 100;
+        element.activeness = Math.round(element.activeness * 100) / 100;
+      })
 
       this.origin_data = rawData;
       this.table_data = rawData;
