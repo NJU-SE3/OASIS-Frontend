@@ -270,8 +270,8 @@
     border-radius: 4px;
   }
 
-  .basic-info {
-
+  .basic-info, .grid-content {
+    margin:1% 1%;
   }
 
   .grid-content {

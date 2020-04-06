@@ -49,27 +49,33 @@
 
   .normal-card{
     background-color: azure;
+    box-sizing: border-box;
     opacity: 0.7;
     border-radius: 4px;
     color: #4e4376;
     height: 350px;
     overflow: scroll;
+    padding :5% 2% 0 0;
+    text-align: left;
   }
   .shadow-card{
     background-color: azure;
+    box-sizing: border-box;
     opacity: 0.7;
     border-radius: 4px;
     color: #4e4376;
     height: 350px;
     overflow: scroll;
-    box-shadow: 8px 8px 14px 0 rgba(253, 253, 253, 0.726)
+    box-shadow: 8px 8px 14px 0 rgba(253, 253, 253, 0.726);
+    padding :5% 2% 0 0;
+    text-align: left;
     /* overflow: auto; */
   }
 
 
   .item {
     /*border: solid pink;*/
-    padding: 10%;
+    padding: 4% 5% ;
   }
 
   .item-icon {
@@ -81,13 +87,14 @@
 
   .item-title {
     font-size: x-large;
-    padding-right: 10%;
+    padding-right: 5%;
   }
 
   .item-number {
     color: #20a0ff;
     font-style: italic;
-    font-size: 45px;
+    font-weight: bold;
+    font-size: x-large;
   }
 
 </style>

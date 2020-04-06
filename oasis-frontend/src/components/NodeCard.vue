@@ -61,7 +61,7 @@ require('echarts/lib/component/title');
                     edgeLength : [100,600],
                     initLayout:'circular',
                     repulsion :50,
-                    edgeLength:[1,100]
+                    edgeLength:[30,150]
                 },
                 draggable:true,
                 roam:'scale',
@@ -130,7 +130,7 @@ require('echarts/lib/component/title');
                   label:{
                     show:false
                   },
-                  symbolSize:Math.ceil(Math.log(node.activeness+2))*5,
+                  symbolSize:Math.ceil(Math.log(node.activeness+2))*7,
                 }
               nodeList.push(n)
           }

@@ -41,20 +41,24 @@
   .normal-card{
     background: rgba(255, 255, 255, 0.3);
     border-radius: 4px;
+    box-sizing: border-box;
     color: #4e4376;
     height: 350px;
     overflow: scroll;
     text-align: left;
+    padding :5% 2% 0 0;
     padding-left: 30px;
     padding-right: 30px;
   }
   .shadow-card{
     background: rgba(255, 255, 255, 0.3);
     border-radius: 4px;
+    box-sizing: border-box;
     color: #4e4376;
     height: 350px;
     overflow: scroll;
     text-align: left;
+    padding :5% 2% 0 0;
     padding-left: 30px;
     padding-right: 30px;
     box-shadow: 8px 8px 14px 0 rgba(253, 253, 253, 0.726)
