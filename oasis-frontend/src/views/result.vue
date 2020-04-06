@@ -210,7 +210,6 @@ export default {
 
       getRequest("/api/query/paper/list?query=" + this.search_query + "&returnFacets=" + this.search_type)
         .then(res=>{
-          console.log(res.data);
           this.search_result = res.data.papers;
           this.search_page_number = res.data.itemCnt;
 

@@ -37,6 +37,11 @@
         </div></el-col>
       </el-row>
       <el-row :gutter="15">
+        <el-col :span="8"><div class="grid-content">
+          <pie-chart-card :chartData="pieChartData"></pie-chart-card>
+        </div></el-col>
+      </el-row>
+      <el-row :gutter="15">
         <el-col :span="24"><div class="grid-content">
           <top-ranking-card :topRankingContent="topRankingContent[0]"
                             :pdfLink="true"></top-ranking-card>
@@ -53,9 +58,10 @@
   import GraphCard from "../components/GraphCard.vue";
   import TopRankingCard from "../components/TopRankingCard.vue";
   import NodeCard from "../components/NodeCard"
+  import PieChartCard from "../components/PieChartCard"
 
   import {getRequest} from "../utils/request"
-  import {getTrendInfo, getPapersForProfile} from "../utils/profileInfo"
+  import {getTrendInfo, getPapersForProfile, getPieChartData} from "../utils/profileInfo"
 
   export default {
     name: "authorProfile",
@@ -70,6 +76,7 @@
       'Basic-statistic-card': BasicStatisticCard,
       'graph-card': GraphCard,
       'top-ranking-card': TopRankingCard,
+      'pie-chart-card': PieChartCard,
     },
 
     mounted(){
@@ -78,6 +85,7 @@
       getTrendInfo(this.graphInfos, this.id);
       this.getTopRankingInfo();
       this.getNodeInfo();
+      this.getPieChartData();
     },
 
     data() {
@@ -142,7 +150,12 @@
         nodeInfo:{
           nodes:[],
           links:[]
-        }
+        },
+
+        pieChartData: {
+          columns: ['Fields', 'Proportion'],
+          rows: [],
+        },
       }
     },
 
@@ -198,6 +211,10 @@
           this.nodeInfo.links=res.data.edges
           this.nodeInfo.nodes=res.data.nodes
         })
+      },
+
+      getPieChartData() {
+          getPieChartData(this.pieChartData, this.id);
       }
     },
   }
@@ -229,7 +246,7 @@
     border-radius: 4px;
     min-height: 36px;
     margin: 1%;
-    
+
   }
   .row-bg {
     padding: 10px 0;

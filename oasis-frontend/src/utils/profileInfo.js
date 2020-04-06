@@ -60,7 +60,6 @@ export const getTrendInfo = (graphInfos, id)=>{
     });
   getRequest("/api/report/paper/trend/year?baseline=H_index&refinement=" + id)
     .then(res=> {
-      console.log(res);
       res.data.forEach(data => {
         if (isNewData(recordedYears5, data.year)) {
           graphInfos[4].chartData.rows
@@ -104,4 +103,38 @@ export const isNewData = (recorderYears, year) =>{
     return true;
   }
   return false;
+};
+
+export const getPieChartData = (data, id) => {
+  getRequest("/api/field/distribution?id=" + id).then(res => {
+    var total = 0;
+    res.data.forEach(item=>{
+      total += item.count;
+      data.rows.push({
+        Fields: item.fieldName,
+        Proportion: item.count,
+      });
+    });
+    trimPieChartData(data.rows);
+
+    if(data.rows.length > 20) {
+      var trimedData = [];
+      for (var i = 0; i < 19; i++) {
+        trimedData.push(data.rows[i]);
+        total -= data.rows[i].Proportion;
+      }
+
+      trimedData.push({
+        Fields: "Others",
+        Proportion: total,
+      });
+      data.rows = trimedData;
+    }
+  });
+};
+
+export const trimPieChartData = (data) =>{
+  data.sort(function (a, b) {
+    return (b.Proportion - a.Proportion)
+  });
 };

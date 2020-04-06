@@ -30,6 +30,9 @@
         <el-col :span="8"><div class="grid-content">
           <graph-card :graphInfo="graphInfos[4]"></graph-card>
         </div></el-col>
+        <el-col :span="8"><div class="grid-content">
+          <pie-chart-card :chartData="pieChartData"></pie-chart-card>
+        </div></el-col>
       </el-row>
       <el-row :gutter="15">
         <el-col :span="24"><div class="grid-content">
@@ -47,9 +50,10 @@
   import BasicStatisticCard from "../components/BasicStatisticCard.vue";
   import GraphCard from "../components/GraphCard.vue";
   import TopRankingCard from "../components/TopRankingCard.vue";
+  import PieChartCard from "../components/PieChartCard"
 
   import {getRequest} from "../utils/request"
-  import {getTrendInfo, getPapersForProfile} from "../utils/profileInfo"
+  import {getTrendInfo, getPapersForProfile,getPieChartData} from "../utils/profileInfo"
 
   export default {
     name: "conferenceProfile",
@@ -63,6 +67,7 @@
       'Basic-statistic-card': BasicStatisticCard,
       'graph-card': GraphCard,
       'top-ranking-card': TopRankingCard,
+      'pie-chart-card': PieChartCard,
     },
 
     mounted() {
@@ -70,6 +75,7 @@
       this.getBasicInfo();
       this.getTopRankingInfo();
       getTrendInfo(this.graphInfos, this.id);
+      this.getPieChartData();
     },
 
     data() {
@@ -131,6 +137,10 @@
             },
           },
         ],
+        pieChartData: {
+          columns: ['Fields', 'Proportion'],
+          rows: [],
+        },
 
       }
     },
@@ -174,6 +184,10 @@
       getTopRankingInfo() {
         getPapersForProfile(this.topRankingContent[0], this.id);
       },
+
+      getPieChartData() {
+        getPieChartData(this.pieChartData, this.id);
+      }
     },
   }
 </script>
