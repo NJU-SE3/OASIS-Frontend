@@ -6,7 +6,7 @@
     </div>
     <div class="graph" v-loading="loading">
       <ve-pie :data="chartData"
-              :legend-visible="false"></ve-pie>
+              :legend-visible="false" :settings="chartSettings"></ve-pie>
     </div>
   </div>
 </template>
@@ -20,6 +20,9 @@
       },
 
       data() {
+        this.chartSettings = {
+          offsetY: 150
+        };
           return{
             loading: false,
             cardClass:"normal-card"
