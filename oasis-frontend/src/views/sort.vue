@@ -199,6 +199,7 @@ export default {
       // 如果没有checked的内容，返回全部
       if (checkedField.length == 0) {
         this.getList();
+        return;
       }
 
       // 有checked
