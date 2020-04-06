@@ -9,24 +9,18 @@ import {Message} from 'element-ui'
 // axios.defaults.baseURL = '/api'
 
 axios.interceptors.response.use(
-  response => {
-      // 如果返回的状态码为200，说明接口请求成功，可以正常拿到数据
-      // 否则的话抛出错误
-      if (response.status === 200) {
-          return Promise.resolve(response);
-      } else {
-        //4开头状态码
-        if(response.status >=400 && response.status <500)
-          return Promise.reject(response);
-          else{
-            Message.error({message:'出错了，请稍后重试～'})
-            return Promise.reject(response);
-          }
-      }
+    response => {
+      return Promise.resolve(response);
     },
     err =>{
-      console.log(err)
-      Message.error({message:'出错了，请稍后重试～'})
+      console.log("aaaaaa",err)
+      if(response.status >=400 && response.status <500){
+        return Promise.reject(response);
+      }
+        else{
+          Message.error({message:'出错了，请稍后重试～'})
+          return Promise.reject(response);
+        }
     }
 )
 
