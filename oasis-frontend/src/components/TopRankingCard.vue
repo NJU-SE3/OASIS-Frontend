@@ -1,5 +1,5 @@
 <template>
-    <div class="card">
+    <div :class="cardClass" @mouseenter="shadow" @mouseleave="normal">
       <div class="title" v-if="topRankingContent.type.length > 0">
         <span class="el-icon-data-line icon"></span>
         <span>Top {{topRankingContent.type}} List</span>
@@ -43,10 +43,21 @@
       extended: Boolean,
       pdfLink: Boolean,
     },
+    data() {
+        return{
+          cardClass:"normal-card"
+        }
+    },
     methods: {
       jumpToProfile(id) {
         jump2Profile(this.$router, this.topRankingContent.router_type, id);
       },
+      shadow(){
+        this.cardClass="shadow-card"
+      },
+      normal(){
+        this.cardClass="normal-card"
+      }
     },
   }
 </script>
@@ -65,7 +76,18 @@
     background: #b4bccc;
   }
 
-  .card {
+  /* .card {
+    /* background-color: azure;
+    opacity: 0.5; 
+    background: rgba(255, 255, 255, 0.4);
+    border-radius: 4px;
+    /* color: #4e4376; 
+    color: #eeeeee;
+    height: 400px;
+    overflow: hidden;
+    width: 100%;
+  } */
+  .normal-card{
     /* background-color: azure;
     opacity: 0.5; */
     background: rgba(255, 255, 255, 0.4);
@@ -75,6 +97,18 @@
     height: 400px;
     overflow: hidden;
     width: 100%;
+  }
+  .shadow-card{
+     /* background-color: azure;
+    opacity: 0.5; */
+    background: rgba(255, 255, 255, 0.4);
+    border-radius: 4px;
+    /* color: #4e4376; */
+    color: #eeeeee;
+    height: 400px;
+    overflow: hidden;
+    width: 100%;
+    box-shadow: 8px 8px 14px 0 rgba(253, 253, 253, 0.726)
   }
 
   .title {

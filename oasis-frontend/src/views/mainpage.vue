@@ -26,7 +26,7 @@
               element-loading-spinner="el-icon-loading"
               element-loading-background="rgba(0, 0, 0, 0.1)">
                 <el-col :span="24">
-                  <top-ranking-card class="table-left" 
+                  <top-ranking-card class="table-left" style="border-shadow: 0"
                   :topRankingContent="topRanking"></top-ranking-card>
                 </el-col>
            </el-row>
@@ -410,5 +410,9 @@ export default {
   right: 0;
   bottom:0;
 }
+
+  .shadow-card{
+    box-shadow:none !important;
+  }
 
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="card">
+  <div :class="cardClass" @mouseenter="shadow" @mouseleave="normal">
     <div class="item" v-for="(item, index) in statistics">
       <span :class= "item.icon" class="item-icon"></span>
       <span class="item-title">{{item.type}}</span>
@@ -16,7 +16,19 @@
         statistics: Array,
       },
 
+      data() {
+        return{
+          cardClass:"normal-card"
+        }
+      },
+
       methods: {
+        shadow(){
+          this.cardClass="shadow-card"
+        },
+        normal(){
+          this.cardClass="normal-card"
+        }
       },
     }
 </script>
@@ -35,7 +47,7 @@
     background: #b4bccc;
   }
 
-  .card {
+  .normal-card{
     background-color: azure;
     opacity: 0.7;
     border-radius: 4px;
@@ -43,6 +55,17 @@
     height: 350px;
     overflow: scroll;
   }
+  .shadow-card{
+    background-color: azure;
+    opacity: 0.7;
+    border-radius: 4px;
+    color: #4e4376;
+    height: 350px;
+    overflow: scroll;
+    box-shadow: 8px 8px 14px 0 rgba(253, 253, 253, 0.726)
+    /* overflow: auto; */
+  }
+
 
   .item {
     /*border: solid pink;*/

@@ -1,5 +1,5 @@
 <template>
-  <div class="card">
+  <div :class="cardClass" @mouseenter="shadow" @mouseleave="normal">
     <div class="title">
       <span class="el-icon-data-analysis type-icon"></span>
       <span>Main Fields</span>
@@ -22,19 +22,46 @@
       data() {
           return{
             loading: false,
+            cardClass:"normal-card"
           }
+      },
+      methods: {
+        shadow(){
+          this.cardClass="shadow-card"
+        },
+        normal(){
+          this.cardClass="normal-card"
+        }
       }
     }
 </script>
 
 <style scoped>
-  .card{
+  /* .card{
     background-color: azure;
     opacity: 0.7;
     border-radius: 4px;
     color: #4e4376;
     height: 350px;
     overflow: hidden;
+  } */
+  .normal-card{
+    background-color: azure;
+    opacity: 0.7;
+    border-radius: 4px;
+    color: #4e4376;
+    height: 350px;
+    overflow: hidden;
+  }
+  .shadow-card{
+    background-color: azure;
+    opacity: 0.7;
+    border-radius: 4px;
+    color: #4e4376;
+    height: 350px;
+    overflow: hidden;
+    box-shadow: 8px 8px 14px 0 rgba(253, 253, 253, 0.726)
+    /* overflow: auto; */
   }
 
   .title{
