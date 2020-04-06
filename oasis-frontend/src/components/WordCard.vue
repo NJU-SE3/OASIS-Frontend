@@ -107,7 +107,7 @@
     color: #4e4376;
     height: 350px;
     overflow: scroll;
-    box-shadow: 6px 6px 12px 0 rgba(253, 253, 253, 0.726)
+    box-shadow: 8px 8px 14px 0 rgba(253, 253, 253, 0.726)
     /* overflow: auto; */
   }
 

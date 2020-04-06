@@ -228,6 +228,8 @@
   .grid-content {
     border-radius: 4px;
     min-height: 36px;
+    margin: 1%;
+    
   }
   .row-bg {
     padding: 10px 0;

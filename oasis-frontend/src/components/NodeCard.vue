@@ -180,7 +180,9 @@ require('echarts/lib/component/title');
     border-radius: 4px;
     color: #4e4376;
     height: 350px;
-    overflow: scroll;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    /* overflow: scroll; */
   }
   .shadow-card{
     background-color: azure;
@@ -188,9 +190,10 @@ require('echarts/lib/component/title');
     border-radius: 4px;
     color: #4e4376;
     height: 350px;
-    overflow: scroll;
-    box-shadow: 6px 6px 12px 0 rgba(253, 253, 253, 0.726)
-    /* overflow: auto; */
+    /* overflow: scroll; */
+    box-shadow: 8px 8px 14px 0 rgba(253, 253, 253, 0.726);
+    overflow-x: hidden;
+    overflow-y: hidden;
   }
 
   .title{

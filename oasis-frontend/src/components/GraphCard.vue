@@ -24,7 +24,7 @@
       data () {
         return {
           // loading: true,
-          colors: [ "#93b7e3",],
+          colors: [ "#ffe422",],
           extendSettings:{
             series: {
               barMaxWidth: 40,
@@ -77,7 +77,7 @@
     height: 350px;
     overflow-y: hidden;
     overflow-x: hidden;
-    box-shadow: 6px 6px 12px 0 rgba(253, 253, 253, 0.726)
+    box-shadow: 8px 8px 14px 0 rgba(253, 253, 253, 0.726)
     /* overflow: auto; */
   }
 
