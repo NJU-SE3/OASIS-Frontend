@@ -9,14 +9,14 @@
         <div class="item" v-for="(item, index) in topRankingContent.items" :key="index">
           <el-tooltip class="tool-tip" effect="light" :content="item.name" placement="top-start">
             <div class="item-name" v-if="!pdfLink" @click="jumpToProfile(item.id)">
-              <span class="item-index">{{topRankingContent.startIndex + index}}</span>
+              <span class="item-index">{{topRankingContent.startIndex + index}}. </span>
               <span class="">{{item.name}}</span>
             </div>
           </el-tooltip>
           <el-tooltip class="tool-tip" effect="light" :content="item.name" placement="top-start">
           <a v-bind:href="item.link" v-if="pdfLink">
             <div class="item-name">
-              <span class="item-index">{{topRankingContent.startIndex + index}}</span>
+              <span class="item-index">{{topRankingContent.startIndex + index}}. </span>
               <span class="">{{item.name}}</span>
             </div>
           </a>
@@ -126,14 +126,25 @@
     /* width: 25%; */
     padding-right: 30px;
     display: inline-block;
-    color: #1f78bb;
+    /* color: #1f78bb; */
+    color:#eeeeee;
     font-style: italic;
     font-weight: bold;
   }
 
   .value-type {
-    color: #4e4376;
+    color:  #ebe83d;
     /* color: #eeeeee; */
     font-weight: normal;
+  }
+
+  /* .tool-tip{
+    font: 2em sans-serif;
+  } */
+
+  .item-index{
+    font-style: italic;
+    font-weight:bold;
+    color: #fff;
   }
 </style>

@@ -19,7 +19,7 @@
     <el-row>
         <el-col :span="14" :offset="2" class="table-tab">
           <div class="link-table">
-           <div class="table-title">Top 10 {{entity}}s</div>
+           <div class="table-title">Top 10 {{entity}}s<el-link  id="top-more" :href="viewMore" >view more</el-link></div>
             <el-row  
               v-loading="loading"
               element-loading-text="拼命加载中"
@@ -126,26 +126,10 @@ export default {
         startIndex: 1,
         items:[]
       },
+      viewMore:"",
       loading:true
     }
   },
-  // computed: {
-  //   topLeft() {
-  //     console.log("this",this.topRanking)
-  //       return {
-  //         type: "",
-  //         startIndex: 1,
-  //         items:this.topRanking.slice(1,10)
-  //       }
-  //     },
-  //   topRight() {
-  //       return {
-  //         type: "",
-  //         startIndex: 11,
-  //         items: this.topRanking.slice(11)
-  //       }
-  //     },
-  // },
   created(){
     this. enterTable(0)
   },
@@ -188,6 +172,7 @@ export default {
       if (this.table_current==-1 || index!=this.table_current){
         this.table_current=index;
         this.entity=this.tab_list[index];
+        this.viewMore="/sort?type="+this.tab_list[index].toLowerCase()
         //loading
         this.loading=true;
         this.topRanking.items=[]
@@ -204,14 +189,6 @@ export default {
               name:(index==2 ? "["+item.year+"] " :"" )+ Object.getOwnPropertyDescriptor(item,curName).value,
               id:item.id,
               values:[
-                    // {
-                    //   type: "Citation",
-                    //   value: item.citationCount,
-                    // },
-                    // {
-                    //   type: "Papers",
-                    //   value: item.paperCount,
-                    // },
                     {
                       type: "Activeness",
                       value: item.activeness,
@@ -221,7 +198,6 @@ export default {
           }
           this.topRanking.items=curTop.slice(1,11)
           this.topRanking.router_type=this.tab_list[index].toLowerCase()
-          // console.log("curTop",this.topRanking)
           this.loading=false
         })
       }
@@ -422,6 +398,17 @@ export default {
   object-fit: fill;
   height: 100%;
   width: 100%;
+}
+
+.table-title{
+  position: relative;
+}
+#top-more{
+  font-size:20px;
+  color:aliceblue;
+  position: absolute;
+  right: 0;
+  bottom:0;
 }
 
 </style>

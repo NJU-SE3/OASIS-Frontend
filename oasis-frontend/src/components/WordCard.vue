@@ -1,5 +1,5 @@
 <template>
-  <div class="card">
+  <div :class="cardClass" @mouseenter="shadow" @mouseleave="normal">
     <div class="title">
       <span class="el-icon-data-analysis type-icon"></span>
       <span>Relations</span>
@@ -37,8 +37,8 @@
               "#cda819",
               "#32a487",
             ],
-            sizeMin: 1,
-            sizeMax: 40
+            sizeMin: 15,
+            sizeMax: 55
           },
           wordExtend:{
             series: {
@@ -47,6 +47,7 @@
               gridSize: 10,
             }
           },
+          cardClass:"normal-card"
         }
       },
       computed:{
@@ -55,7 +56,7 @@
           for (const item of this.data){
             d.push({
               term: item.fieldName,
-              count: item.activeness
+              count: Math.ceil(item.activeness)
             })
           }
           return {
@@ -67,6 +68,12 @@
       mounted(){
       },
       methods:{
+        shadow(){
+          this.cardClass="shadow-card"
+        },
+        normal(){
+          this.cardClass="normal-card"
+        }
       }
     }
 </script>
@@ -85,13 +92,23 @@
     background: #b4bccc;
   }
 
-  .card{
+  .normal-card{
     background-color: azure;
     opacity: 0.7;
     border-radius: 4px;
     color: #4e4376;
     height: 350px;
     overflow: scroll;
+  }
+  .shadow-card{
+    background-color: azure;
+    opacity: 0.7;
+    border-radius: 4px;
+    color: #4e4376;
+    height: 350px;
+    overflow: scroll;
+    box-shadow: 8px 8px 14px 0 rgba(253, 253, 253, 0.726)
+    /* overflow: auto; */
   }
 
   .title{
@@ -115,6 +132,7 @@
     height:100%;
   } */
   .word-cloud{
-    padding:2%;
+    padding:2%  0 0 3%;
+    width: 100%;
   }
 </style>

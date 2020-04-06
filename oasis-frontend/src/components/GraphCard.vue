@@ -1,5 +1,5 @@
 <template>
-  <div class="card">
+  <div :class="cardClass" @mouseenter="shadow" @mouseleave="normal">
     <div class="title">
       <span class="el-icon-data-analysis type-icon"></span>
       <span>{{graphInfo.type}}</span>
@@ -24,12 +24,22 @@
       data () {
         return {
           // loading: true,
-          colors: [ "#93b7e3",],
+          colors: [ "#ffe422",],
           extendSettings:{
             series: {
               barMaxWidth: 40,
             }
-          }
+          },
+          cardClass:"normal-card"
+        }
+      },
+
+      methods: {
+        shadow(){
+          this.cardClass="shadow-card"
+        },
+        normal(){
+          this.cardClass="normal-card"
         }
       }
     }
@@ -49,7 +59,7 @@
     background: #b4bccc;
   }
 
-  .card{
+  .normal-card{
     background-color: azure;
     opacity: 0.7;
     border-radius: 4px;
@@ -57,6 +67,17 @@
     height: 350px;
     overflow-y: hidden;
     overflow-x: hidden;
+    /* overflow: auto; */
+  }
+    .shadow-card{
+    background-color: azure;
+    opacity: 0.7;
+    border-radius: 4px;
+    color: #4e4376;
+    height: 350px;
+    overflow-y: hidden;
+    overflow-x: hidden;
+    box-shadow: 8px 8px 14px 0 rgba(253, 253, 253, 0.726)
     /* overflow: auto; */
   }
 

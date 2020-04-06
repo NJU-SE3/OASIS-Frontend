@@ -3,7 +3,7 @@
     <div class="item" v-for="(item, index) in statistics">
       <span :class= "item.icon" class="item-icon"></span>
       <span class="item-title">{{item.type}}</span>
-      <span class="item-number">{{item.value}}</span>
+      <span class="item-number">{{Math.round(item.value*10)/10}}</span>
     </div>
   </div>
 </template>

@@ -1,5 +1,5 @@
 <template>
-  <div class="card">
+  <div :class="cardClass" @mouseenter="shadow" @mouseleave="normal">
     <div class="title">
       <span class="el-icon-data-analysis type-icon"></span>
       <span>Relations</span>
@@ -89,7 +89,8 @@ require('echarts/lib/component/title');
           graphId:"",
           info:null,
           names:[],
-          edges:[]
+          edges:[],
+          cardClass:"normal-card"
         }
       },
       watch:{
@@ -118,13 +119,7 @@ require('echarts/lib/component/title');
           this.myChart = echarts.init(document.getElementById(this.graphId))
           this.myChart.setOption(this.settings)
         },
-        getSize(){
-
-        },
         getData(){
-          // console.log("node",this.nodes)
-          // console.log("links",this.links)
-          // console.log("type",this.type)
           let nodeList=[]
           let curN=this.type+"Name"
           console.log("curN",curN)
@@ -154,6 +149,12 @@ require('echarts/lib/component/title');
           this.edges=edgeList
           // console.log("node",this.names)
           // console.log("edge",this.edges)
+        },
+        shadow(){
+          this.cardClass="shadow-card"
+        },
+        normal(){
+          this.cardClass="normal-card"
         }
       }
     }
@@ -173,13 +174,26 @@ require('echarts/lib/component/title');
     background: #b4bccc;
   }
 
-  .card{
+  .normal-card{
     background-color: azure;
     opacity: 0.7;
     border-radius: 4px;
     color: #4e4376;
     height: 350px;
-    overflow: scroll;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    /* overflow: scroll; */
+  }
+  .shadow-card{
+    background-color: azure;
+    opacity: 0.7;
+    border-radius: 4px;
+    color: #4e4376;
+    height: 350px;
+    /* overflow: scroll; */
+    box-shadow: 8px 8px 14px 0 rgba(253, 253, 253, 0.726);
+    overflow-x: hidden;
+    overflow-y: hidden;
   }
 
   .title{
