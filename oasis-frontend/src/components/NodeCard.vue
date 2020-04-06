@@ -50,6 +50,19 @@ require('echarts/lib/component/title');
                 }
               },
             },
+            color:[
+              // "#c12e34",
+              "#ffeb00",
+              "#3bff00",
+              "#3fd4ff",
+              "#38b6b6",
+              "#8c6ac4",
+              "#2b821d",
+              "#005eaa",
+              "#339ca8",
+              "#cda819",
+              "#32a487",
+            ],
             series: [
               {
                 type: 'graph',
@@ -61,7 +74,7 @@ require('echarts/lib/component/title');
                     edgeLength : [100,600],
                     initLayout:'circular',
                     repulsion :50,
-                    edgeLength:[30,150]
+                    edgeLength:[50,150]
                 },
                 draggable:true,
                 roam:'scale',
@@ -71,20 +84,25 @@ require('echarts/lib/component/title');
                 label: {
                     show: true
                 },
-                // edgeSymbol: ['circle', 'arrow'],
-                // edgeSymbolSize: [4, 10],
-                // edgeLabel: {
-                //     fontSize: 20
-                // },
                 data:this.names,
                 links:this.edges,
                 lineStyle: {
                     opacity: 0.9,
                     width: 2,
                     curveness: 0.2
-                }
+                },
+                categories: [
+                  { name:"near" },
+                  { name:"middle" },
+                  { name:"far" }
+                ],
+                itemStyle: {
+                  borderColor: '#fff',
+                  borderWidth: 1,
+                  shadowBlur: 10,
+                  shadowColor: 'rgba(0, 0, 0, 0.3)'
               }
-            ]
+            },]
           },
           graphId:"",
           info:null,
@@ -123,7 +141,8 @@ require('echarts/lib/component/title');
           let nodeList=[]
           let curN=this.type+"Name"
           console.log("curN",curN)
-          for (const node of this.nodes){
+          
+          for (const [i,node] of this.nodes.entries()){
               let n={
                   name:node[curN],
                   value:Math.round(node.activeness* 10)/10,
@@ -131,12 +150,15 @@ require('echarts/lib/component/title');
                     show:false
                   },
                   symbolSize:Math.ceil(Math.log(node.activeness+2))*7,
+                  category: i < (this.nodes.length/3) ? 0 : (i>(this.nodes.length/3*2)? 2 :1 )
                 }
               nodeList.push(n)
           }
-          this.names=nodeList
           let edgeList=[]
           const center=this.nodes.findIndex(n => n.id==this.links[0].begin)
+          nodeList[center].itemStyle= {
+              color: 'red'
+          }
           for (const edge of this.links){
               const tar=this.nodes.findIndex(n => n.id==edge.end)
               let e={
@@ -146,6 +168,7 @@ require('echarts/lib/component/title');
               }
               edgeList.push(e)
           }
+          this.names=nodeList
           this.edges=edgeList
           // console.log("node",this.names)
           // console.log("edge",this.edges)
