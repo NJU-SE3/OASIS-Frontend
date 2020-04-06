@@ -36,6 +36,7 @@
 
       methods: {
         shadow(){
+          setTimeout
           this.cardClass="shadow-card"
         },
         normal(){
@@ -77,7 +78,7 @@
     height: 350px;
     overflow-y: hidden;
     overflow-x: hidden;
-    box-shadow: 8px 8px 14px 0 rgba(253, 253, 253, 0.726)
+    box-shadow: 8px 8px 14px 0 rgba(253, 253, 253, 0.5)
     /* overflow: auto; */
   }
 

@@ -61,7 +61,7 @@
     padding :5% 2% 0 0;
     padding-left: 30px;
     padding-right: 30px;
-    box-shadow: 8px 8px 14px 0 rgba(253, 253, 253, 0.726)
+    box-shadow: 8px 8px 14px 0 rgba(253, 253, 253, 0.5)
     /* overflow: auto; */
   }
 

@@ -214,7 +214,7 @@ require('echarts/lib/component/title');
     color: #4e4376;
     height: 350px;
     /* overflow: scroll; */
-    box-shadow: 8px 8px 14px 0 rgba(253, 253, 253, 0.726);
+    box-shadow: 8px 8px 14px 0 rgba(253, 253, 253, 0.5);
     overflow-x: hidden;
     overflow-y: hidden;
   }
