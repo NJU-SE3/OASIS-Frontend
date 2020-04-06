@@ -126,7 +126,7 @@ require('echarts/lib/component/title');
           for (const node of this.nodes){
               let n={
                   name:node[curN],
-                  value:node.activeness,
+                  value:Math.round(node.activeness* 10)/10,
                   label:{
                     show:false
                   },
