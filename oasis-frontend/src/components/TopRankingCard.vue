@@ -127,13 +127,13 @@
     padding-right: 30px;
     display: inline-block;
     /* color: #1f78bb; */
-    color: #fffd75;
+    color:#eeeeee;
     font-style: italic;
     font-weight: bold;
   }
 
   .value-type {
-    color: #4e4376;
+    color:  #ebe83d;
     /* color: #eeeeee; */
     font-weight: normal;
   }
@@ -145,6 +145,6 @@
   .item-index{
     font-style: italic;
     font-weight:bold;
-    color: #fffd75;
+    color: #fff;
   }
 </style>
