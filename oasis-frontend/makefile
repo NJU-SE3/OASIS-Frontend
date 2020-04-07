@@ -1,8 +1,8 @@
 target=root@106.14.140.93:/root/service/front
 
-all: dist resource deploy
+all: build resource deploy
 
-dist:
+build:
 	npm run build
 
 resource:
