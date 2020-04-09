@@ -179,12 +179,10 @@ export default {
         //getData
         getRequest("/api/" + this.tab_list[index].toLowerCase() + "/list")
         .then(res=>{
-          // console.log("in",res)
           let data=res.data.data
           let curName=this.tab_list[index].toLowerCase()+"Name"
           let curTop=[]
           for (const item of data){
-            // console.log("aaaaaaaaaaaaaaaaaaaaaaa",Object.getOwnPropertyDescriptor(item,curName).value)
             curTop.push({
               name:(index==2 ? "["+item.year+"] " :"" )+ Object.getOwnPropertyDescriptor(item,curName).value,
               id:item.id,
@@ -204,7 +202,6 @@ export default {
       
     },
     toSort(index){
-      console.log(index,"index",this.tab_list[index])
       this.$router.push({path:"/sort?type="+this.tab_list[index].toLowerCase()})
     },
 

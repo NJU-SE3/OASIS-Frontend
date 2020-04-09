@@ -13,7 +13,6 @@ axios.interceptors.response.use(
       return Promise.resolve(response);
     },
     err =>{
-      console.log("aaaaaa",err)
       if(response.status >=400 && response.status <500){
         return Promise.reject(response);
       }

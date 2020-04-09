@@ -207,7 +207,6 @@
       getNodeInfo(){
         getRequest("/api/graph/author/?id="+this.id)
         .then(res=>{
-          console.log("res",res)
           this.nodeInfo.links=res.data.edges
           this.nodeInfo.nodes=res.data.nodes
         })

@@ -253,7 +253,6 @@
       getWordCloud(){
         getRequest("/api/graph/field/?id="+this.id)
         .then(res=>{
-          console.log("res",res.data.nodes)
           this.wordData=res.data.nodes
         })
       }

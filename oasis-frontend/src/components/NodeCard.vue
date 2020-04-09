@@ -41,7 +41,6 @@ require('echarts/lib/component/title');
               extraCssText:'width:10em; white-space:pre-wrap',
               formatter(node){
                 if(node.dataType=="node"){
-                  // console.log("node",node)
                   return `<div style="border-bottom: 1px solid rgba(255,255,255,.3);f
                   ont-size: 22px;padding-bottom: 7px;margin-bottom: 7px"
                   >${node.data.name}</div><div 
@@ -140,7 +139,6 @@ require('echarts/lib/component/title');
         getData(){
           let nodeList=[]
           let curN=this.type+"Name"
-          console.log("curN",curN)
           
           for (const [i,node] of this.nodes.entries()){
               let n={
@@ -170,8 +168,6 @@ require('echarts/lib/component/title');
           }
           this.names=nodeList
           this.edges=edgeList
-          // console.log("node",this.names)
-          // console.log("edge",this.edges)
         },
         shadow(){
           this.cardClass="shadow-card"
