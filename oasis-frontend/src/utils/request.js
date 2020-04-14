@@ -13,13 +13,13 @@ axios.interceptors.response.use(
       return Promise.resolve(response);
     },
     err =>{
-      if(response.status >=400 && response.status <500){
-        return Promise.reject(response);
-      }
-        else{
-          Message.error({message:'出错了，请稍后重试～'})
+      // if(response.status >=400 && response.status <500){
+      //   return Promise.reject(response);
+      // }
+        // else{
+          Message.error({message:'Unavailable currently'})
           return Promise.reject(response);
-        }
+        // }
     }
 )
 
