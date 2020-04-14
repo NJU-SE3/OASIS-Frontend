@@ -264,13 +264,10 @@
     display: inline-block;
   }
 
-  .el-input__inner
+  .el-date-editor input
   {
     background-color: transparent;
     border: transparent;
-  }
-
-  .el-input__inner{
     color: azure;
   }
 
