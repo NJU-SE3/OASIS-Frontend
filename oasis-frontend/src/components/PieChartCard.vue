@@ -4,9 +4,12 @@
       <span class="el-icon-data-analysis type-icon"></span>
       <span>Main Fields</span>
     </div>
-    <div class="graph" v-loading="loading">
+    <div class="graph" v-if="chartData == null">
+      Sorry, Currently Unavailable!
+    </div>
+    <div class="graph" v-if="chartData != null" v-loading="loading">
       <ve-pie :data="chartData"
-              :legend-visible="false" 
+              :legend-visible="false"
               :settings="chartSettings"
               :extend="chartExtend"></ve-pie>
     </div>
@@ -104,5 +107,8 @@
   .graph{
     width:95%;
     height: 90%;
+  }
+  .graph-error{
+    padding-top: 100px;
   }
 </style>

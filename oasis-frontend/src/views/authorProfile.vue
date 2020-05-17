@@ -85,7 +85,7 @@
       getTrendInfo(this.graphInfos, this.id);
       this.getTopRankingInfo();
       this.getNodeInfo();
-      this.getPieChartData();
+      getPieChartData(this.pieChartData, this.id);
     },
 
     data() {
@@ -207,14 +207,16 @@
       getNodeInfo(){
         getRequest("/api/graph/author/?id="+this.id)
         .then(res=>{
-          this.nodeInfo.links=res.data.edges
-          this.nodeInfo.nodes=res.data.nodes
-        })
-      },
+          if (res.status === 200) {
+            this.nodeInfo.links = res.data.edges;
+            this.nodeInfo.nodes = res.data.nodes;
+          }
+          else {
 
-      getPieChartData() {
-          getPieChartData(this.pieChartData, this.id);
-      }
+          }
+        })
+
+      },
     },
   }
 </script>

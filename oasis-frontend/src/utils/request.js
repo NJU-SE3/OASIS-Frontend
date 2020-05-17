@@ -12,16 +12,21 @@ axios.interceptors.response.use(
     response => {
       return Promise.resolve(response);
     },
-    err =>{
-      // if(response.status >=400 && response.status <500){
-      //   return Promise.reject(response);
-      // }
-        // else{
-          Message.error({message:'Unavailable currently'})
-          return Promise.reject(response);
-        // }
+    error =>{
+          return Promise.resolve(error.response);
     }
 )
+
+function checkCode(response) {
+  if(response.status !== 200){
+    return {
+        status: response.status,
+        message: response.statusText,
+        data: response.statusText,
+      };
+  }
+  return response;
+}
 
 
 export const postRequest = (url, params) => {
@@ -90,5 +95,6 @@ export const getRequest = (url,params) => {
       // "Access-Control-Allow-Credentials": true
     },
     url: `${url}`
-  });
+  }).then(checkCode)
+    ;
 }

@@ -4,7 +4,10 @@
       <span class="el-icon-data-analysis type-icon"></span>
       <span>{{graphInfo.type}}</span>
     </div>
-    <div class="graph" v-loading="graphInfo.chartData.rows.length <= 0">
+    <div class="graph graph-error" v-if="graphInfo.chartData.rows == null">
+      Sorry, Currently Unavailable!
+    </div>
+    <div class="graph" v-if="graphInfo.chartData.rows != null" v-loading="graphInfo.chartData.rows.length <= 0">
       <ve-histogram :data="graphInfo.chartData"
                     :extend="extendSettings"
                     :legend-visible="false"
@@ -97,6 +100,10 @@
   .graph{
     height: 100%;
     width: 100%;
+  }
+
+  .graph-error{
+    padding-top: 100px;
   }
 
 </style>
