@@ -14,6 +14,8 @@ import AffiliationProfile from "@/views/affiliationProfile"
 import ConferenceProfile from "@/views/conferenceProfile"
 import FieldProfile from "@/views/fieldProfile"
 
+import Trend from "@/views/trend"
+
 
 import {getRequest} from "../utils/request"
 
@@ -81,6 +83,11 @@ const router= new Router({
       name: "FieldProfile",
       component: FieldProfile
     },
+    {
+      path: "/trend",
+      name: "Trend",
+      component: Trend
+    }
   ],
 });
 

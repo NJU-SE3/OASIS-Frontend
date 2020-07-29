@@ -5,7 +5,7 @@ services:
     image: oasis/oasis-static
     container_name: oasis-static
     ports: 
-      - "8000:80"
+      - "8004:80"
     build:
       context: .
     environment:
