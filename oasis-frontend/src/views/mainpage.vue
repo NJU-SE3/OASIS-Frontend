@@ -194,7 +194,7 @@ export default {
               ]
             })
           }
-          this.topRanking.items=curTop.slice(1,11)
+          this.topRanking.items=curTop.slice(0,10)
           this.topRanking.router_type=this.tab_list[index].toLowerCase()
           this.loading=false
         })
