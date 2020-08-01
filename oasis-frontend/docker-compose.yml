@@ -1,0 +1,23 @@
+version: '2'
+
+services:
+  oasis-static:
+    image: oasis/oasis-static
+    container_name: oasis-static
+    ports: 
+      - "8004:80"
+    build:
+      context: .
+    environment:
+      - VIRTUAL_HOST=oasi.top
+      - VIRTUAL_PORT=80
+      - LETSENCRYPT_HOST=oasi.top
+      - LETSENCRYPT_EMAIL=1071956678@qq.com
+    networks:
+      - proxy
+      - oasis
+networks:
+ proxy:
+   external: true
+ oasis:
+   external: true

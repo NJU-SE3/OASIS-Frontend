@@ -1,11 +1,13 @@
 <template>
     <div class="search-bar">
-        <el-input class="input-with-select" placeholder="" v-model="searchCon">
+        <el-input class="input-with-select" placeholder="" v-model="searchCon" @keyup.enter.native="submit">
             <el-select class="search-pre" v-model="searchType" slot="prepend" placeholder="请选择">
-            <el-option label="All" value="1"></el-option>
-            <el-option label="Essay" value="2"></el-option>
-            <el-option label="Author" value="3"></el-option>
-            <el-option label="Organizarion" value="4"></el-option>
+                <el-option label="All" value="all"></el-option>
+                <el-option label="Title" value="title"></el-option>
+                <el-option label="Author" value="authors"></el-option>
+                <el-option label="Conference" value="conferences"></el-option>
+                <el-option label="Terms" value="terms"></el-option>
+                <el-option label="Affiliation" value="affiliations"></el-option>
             </el-select>
         <el-button slot="append" icon="el-icon-search" @click="submit"></el-button>
         </el-input>
@@ -15,29 +17,55 @@
 <script>
 export default{
     name: "search-bar",
+    props: ["searchContent"],
     data(){
         return{
-            searchType:"1",
-            searchCon:""
+            searchType:"All",
+            searchCon: this.searchContent
+        }
+    },
+    watch: {
+        "searchContent": function(val) {
+            this.searchCon = val;
         }
     },
     methods:{
         submit(){
-            console.log(this.searchType,"  ",this.searchCon);
+            if (this.searchCon.trim() === "") {
+                this.$message({
+                    message: "Please enter some key words!",
+                    type: "warning"
+                });
+            }
+            else
+                this.$emit("paperSearch", {type: this.searchType, con: this.searchCon});
         }
     }
 }
 </script>
 
 <style>
+.search-bar {
+    font-size: 25px;
+    display: flex;
+}
+
+.el-input-group__prepend div.el-select .el-input__inner {
+    text-align: center;
+}
+
+.search-bar .input-with-select .el-input__inner {
+    padding: 6% 1% 6% 2%;
+}
+
   .el-select .el-input {
     width: 9em;
   }
   .input-with-select  {
     background-color: transparent;
   }
-  .input-with-select .el-input-group__prepend , 
-    .input-with-select .el-input__inner, 
+  .input-with-select .el-input-group__prepend ,
+    .input-with-select .el-input__inner,
     .input-with-select .el-input-group__append{
     background-color: rgba(255,255,255,0.5);
     border-color: transparent;
@@ -64,19 +92,19 @@ export default{
   .el-input-group__append, .el-input-group__prepend{
       padding: 0, 4%;
   }
-    .input-with-select .el-input__inner::-webkit-input-placeholder, textarea::-webkit-input-placeholder { 
-        color: black; 
+    .input-with-select .el-input__inner::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
+        color: black;
         font-size: 65%;
-    } 
-    .input-with-select .el-input__inner:-moz-placeholder, textarea:-moz-placeholder { 
-        color: black; 
+    }
+    .input-with-select .el-input__inner:-moz-placeholder, textarea:-moz-placeholder {
+        color: black;
         font-size: 65%;
-    } 
-    .input-with-select .el-input__inner::-moz-placeholder, textarea::-moz-placeholder { 
-        color: black; 
+    }
+    .input-with-select .el-input__inner::-moz-placeholder, textarea::-moz-placeholder {
+        color: black;
         font-size: 65%;
-    } 
-    .input-with-select .el-input__inner:-ms-input-placeholder, textarea:-ms-input-placeholder { 
+    }
+    .input-with-select .el-input__inner:-ms-input-placeholder, textarea:-ms-input-placeholder {
         color: black;
         font-size: 65%;
     }

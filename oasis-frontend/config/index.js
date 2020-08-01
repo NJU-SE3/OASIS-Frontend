@@ -10,7 +10,19 @@ module.exports = {
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    proxyTable: {},
+
+    proxyTable: {
+      '/query/**': {
+        target: 'https://api.oasi.top',  // 接口域名
+        changeOrigin: true,  //是否跨域
+        secure: false,
+      },
+      '/api/**': {
+        target: 'https://api.oasi.top',  // 接口域名
+        changeOrigin: true,  //是否跨域
+        secure: false,
+      },
+    },
 
     // Various Dev Server settings
     host: 'localhost', // can be overwritten by process.env.HOST
@@ -20,7 +32,7 @@ module.exports = {
     notifyOnErrors: true,
     poll: false, // https://webpack.js.org/configuration/dev-server/#devserver-watchoptions-
 
-    
+
     /**
      * Source Maps
      */
@@ -43,7 +55,7 @@ module.exports = {
     // Paths
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'static',
-    assetsPublicPath: '/',
+    assetsPublicPath: './',
 
     /**
      * Source Maps
@@ -53,6 +65,16 @@ module.exports = {
     // https://webpack.js.org/configuration/devtool/#production
     devtool: '#source-map',
 
+    proxyTable: {
+      '/query/**': {
+        target: 'http://localhost',  // 接口域名
+        changeOrigin: true,  //是否跨域
+      },
+      '/api/**': {
+        target: 'http://localhost',  // 接口域名
+        changeOrigin: true,  //是否跨域
+      },
+    },
     // Gzip off by default as many popular static hosts such as
     // Surge or Netlify already gzip all static assets for you.
     // Before setting to `true`, make sure to:
