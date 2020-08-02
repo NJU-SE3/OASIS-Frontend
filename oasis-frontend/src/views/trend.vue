@@ -2,13 +2,11 @@
   <div class="trend">
     <search> </search>
     <div class="test-group">
-      <button @click="addTrend(1)">1</button>
-      <button @click="addTrend(2)">2</button>
-      <button @click="addTrend(3)">3</button>
-      <button @click="addTrend(4)">4</button>
-      <button @click="addTrend(5)">5</button>
+      <button @click="addTrend(1, 'a')">1</button>
+      <button @click="addTrend(2, 'b')">2</button>
+      <button @click="addTrend(3, 'c')">3</button>
     </div>
-    <TrendCard />
+    <TrendCard :trendsList="trendsList" />
   </div>
 </template>
 
@@ -34,17 +32,43 @@ export default {
         '5e83326f982a43f4fd44735b',
         '5e83327f982a43f4fd447392'
       ],
+      trendsTestList: [
+        [
+          { year: '2013', count: 19 },
+          { year: '2014', count: 12 },
+          { year: '2016', count: 14 },
+          { year: '2019', count: 10 }
+        ],
+        [
+          { year: '1957', count: 30 },
+          { year: '1973', count: 100 },
+          { year: '1986', count: 16 },
+          { year: '2016', count: 2 }
+        ],
+        [
+          { year: '1954', count: 50 },
+          { year: '1967', count: 80 },
+          { year: '2002', count: 27 }
+        ]
+      ],
       trendsList: []
     }
   },
 
   methods: {
-    addTrend (id) {
-      getRequest('/api/report/paper/trend/year?id=' + this.testIdList[id - 1]).then(
-        res => {
-          console.log(res)
-        }
-      )
+    addTrend (id, name) {
+      // getRequest(
+      //   '/api/report/paper/trend/year?id=' + this.testIdList[id - 1]
+      // ).then(res => {
+      //   console.log(res)
+      // })
+      const curList = [...this.trendsList]
+      curList.push({
+        id: id,
+        name: name,
+        list: this.trendsTestList[id-1]
+      })
+      this.trendsList=curList
     }
   }
 }

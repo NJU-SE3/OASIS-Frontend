@@ -5,11 +5,11 @@
     @mouseleave="normal"
     class="card"
   >
-    <div class="trend-error " v-if="trendInfo == null">
+    <!-- <div class="trend-error " v-if="trendInfo == null">
       Sorry, Currently Unavailable!
-    </div>
-    <div class="trend" v-if="trendInfo != null">
-      <div :id="lineId"></div>
+    </div> -->
+    <div class="trend">
+      <div :id="lineId" class="node-graph"></div>
     </div>
   </div>
 </template>
@@ -18,67 +18,82 @@
 var echarts = require('echarts/lib/echarts')
 require('echarts/lib/chart/line')
 require('echarts/lib/component/tooltip')
-// require('echarts/lib/component/title');
 
 export default {
   name: 'trend-card',
+  props: {
+    trendsList: Array
+  },
   data () {
+    const testData = [
+      [
+        { year: '2013', count: 19 },
+        { year: '2014', count: 12 },
+        { year: '2016', count: 14 },
+        { year: '2019', count: 10 }
+      ],
+      [
+        { year: '1957', count: 30 },
+        { year: '1973', count: 100 },
+        { year: '1986', count: 16 },
+        { year: '2016', count: 2 }
+      ],
+      [
+        { year: '1954', count: 50 },
+        { year: '1967', count: 80 },
+        { year: '2002', count: 27 }
+      ]
+    ]
     return {
-      // loading: true,
-
-      extendSettings: {
-        series: {
-          barMaxWidth: 40
-        }
-      },
+      trendInfo: null,
       cardClass: 'normal-card',
-      trendInfo: {
-        columns: ['日期', '', '下单用户', '下单率'],
-        rows: [
-          { 日期: '1/1', 访问用户: 1393, 下单用户: 1093, 下单率: 0.32 },
-          { 日期: '1/2', 访问用户: 3530, 下单用户: 3230, 下单率: 0.26 },
-          { 日期: '1/3', 访问用户: 2923, 下单用户: 2623, 下单率: 0.76 },
-          { 日期: '1/4', 访问用户: 1723, 下单用户: 1423, 下单率: 0.49 },
-          { 日期: '1/5', 访问用户: 3792, 下单用户: 3492, 下单率: 0.323 },
-          { 日期: '1/6', 访问用户: 4593, 下单用户: 4293, 下单率: 0.78 }
-        ]
-      },
+      dataset: [],
+      series: [],
       lineId: '',
       settings: {
-        colors: [
+        dataset: this.dataset,
+        tooltip: {
+          trigger: 'axis'
+        },
+        xAxis: {
+          type: 'value',
+          min: 'dataMin',
+          splitLine: {
+            show: false
+          },
+          minInterval: 1,
+          maxInterval: 5,
+          axisLabel: {
+            fontSize: 18,
+            formatter: (value, index) => {
+              return value.toString()
+            }
+          }
+        },
+        yAxis: {},
+        series: this.series,
+        color: [
           '#516b91',
           '#59c4e6',
           '#edafda',
           '#93b7e3',
           '#a5e7f0',
           '#cbb0e3'
-        ],
-        tooltip: {
-          trigger: 'axis'
-        },
-        legend: {
-          data: ['邮件营销', '联盟广告', '视频广告', '直接访问', '搜索引擎']
-        },
-        grid: {
-          left: '3%',
-          right: '4%',
-          bottom: '3%',
-          containLabel: true
-        },
-        toolbox: {
-          feature: {
-            saveAsImage: {}
-          }
-        },
-        xAxis: {
-          type: 'category',
-          boundaryGap: false,
-          data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
-        },
-        yAxis: {
-          type: 'value'
-        }
+        ]
       }
+    }
+  },
+  watch: {
+    trendsList: function (newT, oldT) {
+      this.getData()
+      console.log('in watch')
+
+      console.log(this.dataset, this.series)
+      this.myChart.setOption({
+        dataset: this.dataset,
+        series: this.series
+      })
+    //   this.trendInfo = 'a'
     }
   },
   created () {
@@ -87,13 +102,27 @@ export default {
   mounted () {
     this.init()
   },
-
   methods: {
     init () {
-      this.myChart = echarts.init(document.getElementById(this.graphId))
+      this.myChart = echarts.init(document.getElementById(this.lineId))
       this.myChart.setOption(this.settings)
     },
-
+    getData () {
+      let dataset = []
+      let series = []
+      this.trendsList.forEach((trend, i)=> {
+        dataset.push({
+          source: trend.list
+        })
+        series.push({
+          type: 'line',
+          name: trend.name,
+          datasetIndex: i
+        })
+      })
+      this.series = series
+      this.dataset = dataset
+    },
     shadow () {
       this.cardClass = 'shadow-card'
     },
@@ -161,5 +190,11 @@ export default {
 
 .trend-error {
   padding-top: 100px;
+}
+.node-graph {
+  /* width:500px;
+    height:400px; */
+  width: 100%;
+  height: 100%;
 }
 </style>
