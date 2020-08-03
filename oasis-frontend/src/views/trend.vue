@@ -2,9 +2,27 @@
   <div class="trend">
     <search> </search>
     <div class="test-group">
-      <button @click="addTrend(1, 'a')">1</button><el-button type="danger" icon="el-icon-delete" circle @click="deleteTrend(1, 'a')"></el-button>
-      <button @click="addTrend(2, 'b')">2</button><el-button type="danger" icon="el-icon-delete" circle @click="deleteTrend(2, 'b')"></el-button>
-      <button @click="addTrend(3, 'c')">3</button><el-button type="danger" icon="el-icon-delete" circle @click="deleteTrend(3, 'c')"></el-button>
+      <button @click="addTrend(1, 'a')">1</button
+      ><el-button
+        type="danger"
+        icon="el-icon-delete"
+        circle
+        @click="deleteTrend(1, 'a')"
+      ></el-button>
+      <button @click="addTrend(2, 'b')">2</button
+      ><el-button
+        type="danger"
+        icon="el-icon-delete"
+        circle
+        @click="deleteTrend(2, 'b')"
+      ></el-button>
+      <button @click="addTrend(3, 'c')">3</button
+      ><el-button
+        type="danger"
+        icon="el-icon-delete"
+        circle
+        @click="deleteTrend(3, 'c')"
+      ></el-button>
     </div>
     <TrendCard :trendsList="trendsList" />
   </div>
@@ -57,18 +75,27 @@ export default {
 
   methods: {
     addTrend (id, name) {
-      // getRequest(
-      //   '/api/report/paper/trend/year?id=' + this.testIdList[id - 1]
-      // ).then(res => {
-      //   console.log(res)
-      // })
-      const curList = [...this.trendsList]
-      curList.push({
-        id: id,
-        name: name,
-        list: this.trendsTestList[id - 1]
+      getRequest(
+        `/api/report/paper/trend/year?baseline=activeness&refinement=${
+          this.testIdList[id - 1]
+        }`
+      ).then(res => {
+        console.log(res)
+        const curList = [...this.trendsList]
+        curList.push({
+          id: id,
+          name: name,
+          list: res.data
+        })
+        this.trendsList = curList
       })
-      this.trendsList = curList
+      // const curList = [...this.trendsList]
+      // curList.push({
+      //   id: id,
+      //   name: name,
+      //   list: this.trendsTestList[id - 1]
+      // })
+      // this.trendsList = curList
     },
     deleteTrend (id, name) {
       const curList = this.trendsList.filter(trend => trend.id !== id)
