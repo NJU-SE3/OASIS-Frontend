@@ -85,15 +85,17 @@ export default {
   },
   watch: {
     trendsList: function (newT, oldT) {
+      if (newT.length < oldT.length) {
+        this.myChart.clear()
+        this.myChart.setOption(this.settings)
+      }
       this.getData()
-      console.log('in watch')
-
-      console.log(this.dataset, this.series)
       this.myChart.setOption({
         dataset: this.dataset,
         series: this.series
       })
-    //   this.trendInfo = 'a'
+
+      console.log(this.myChart.getOption())
     }
   },
   created () {
@@ -110,7 +112,8 @@ export default {
     getData () {
       let dataset = []
       let series = []
-      this.trendsList.forEach((trend, i)=> {
+      // console.log("before get", this.trendsList)
+      this.trendsList.forEach((trend, i) => {
         dataset.push({
           source: trend.list
         })
@@ -120,6 +123,7 @@ export default {
           datasetIndex: i
         })
       })
+      console.log('in get', series, dataset)
       this.series = series
       this.dataset = dataset
     },

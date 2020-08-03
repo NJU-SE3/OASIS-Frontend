@@ -2,9 +2,9 @@
   <div class="trend">
     <search> </search>
     <div class="test-group">
-      <button @click="addTrend(1, 'a')">1</button>
-      <button @click="addTrend(2, 'b')">2</button>
-      <button @click="addTrend(3, 'c')">3</button>
+      <button @click="addTrend(1, 'a')">1</button><el-button type="danger" icon="el-icon-delete" circle @click="deleteTrend(1, 'a')"></el-button>
+      <button @click="addTrend(2, 'b')">2</button><el-button type="danger" icon="el-icon-delete" circle @click="deleteTrend(2, 'b')"></el-button>
+      <button @click="addTrend(3, 'c')">3</button><el-button type="danger" icon="el-icon-delete" circle @click="deleteTrend(3, 'c')"></el-button>
     </div>
     <TrendCard :trendsList="trendsList" />
   </div>
@@ -71,7 +71,7 @@ export default {
       this.trendsList = curList
     },
     deleteTrend (id, name) {
-      const curList = this.trendsList.filter(trend => trend.id === id)
+      const curList = this.trendsList.filter(trend => trend.id !== id)
       this.trendsList = curList
     }
   }
