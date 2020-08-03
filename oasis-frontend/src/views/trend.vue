@@ -66,9 +66,13 @@ export default {
       curList.push({
         id: id,
         name: name,
-        list: this.trendsTestList[id-1]
+        list: this.trendsTestList[id - 1]
       })
-      this.trendsList=curList
+      this.trendsList = curList
+    },
+    deleteTrend (id, name) {
+      const curList = this.trendsList.filter(trend => trend.id === id)
+      this.trendsList = curList
     }
   }
 }
