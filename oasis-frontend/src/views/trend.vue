@@ -1,6 +1,20 @@
 <template>
   <div class="trend">
-    <search> </search>
+    <search-with-dropdown @confirmField="chooseField"></search-with-dropdown>
+
+    <div class="field-tags">
+      <span class="tip">Fields you have chosen (no more than 5):</span>
+      <div class="fields">
+        <el-tag
+          v-for="tag in field_select"
+          :key="tag"
+          closable
+          @close="deleteTag(tag)">
+          {{ tag }}
+        </el-tag>
+      </div>
+    </div>
+
     <div class="test-group">
       <button @click="addTrend(1, 'a')">1</button
       ><el-button
@@ -29,7 +43,7 @@
 </template>
 
 <script>
-import Search from '../components/Search'
+import SearchWithDropdown from "../components/SearchWithDropdown"
 import TrendCard from '../components/FieldsTrendCard'
 import { getRequest } from '../utils/request'
 
@@ -37,12 +51,14 @@ export default {
   name: 'Trend',
 
   components: {
-    Search,
+    "search-with-dropdown": SearchWithDropdown,
     TrendCard
   },
 
   data () {
     return {
+      field_select: [],
+
       testIdList: [
         '5e8331c0982a43f4fd446ca8',
         '5e8331df982a43f4fd446fba',
@@ -74,6 +90,29 @@ export default {
   },
 
   methods: {
+    chooseField(field) {
+      console.log("field: ", field);
+
+      if (this.field_select.length === 5) {
+        this.$message({
+          message: 'no more than 5 fields',
+          type: 'warning'
+        });
+      }
+      else if (this.field_select.indexOf(field) !== -1) {
+        this.$message({
+          message: 'field already exists',
+          type: 'warning'
+        });
+      }
+      else
+        this.field_select.push(field);
+    },
+
+    deleteTag(tag) {
+      this.field_select.splice(this.field_select.indexOf(tag), 1);
+    },
+
     addTrend (id, name) {
       getRequest(
         `/api/report/paper/trend/year?baseline=activeness&refinement=${
