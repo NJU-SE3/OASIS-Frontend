@@ -2,7 +2,7 @@
   <div class="searchbar" @click="hideMenu">
     <div class="input">
       <el-input class="inputbar" placeholder="" v-model="field_search" @keyup.enter.native="submit">
-        <el-button slot="append" icon="el-icon-search" @click="submit"></el-button>
+        <el-button slot="append" icon="el-icon-search" @click="submit" class="submit-btn"></el-button>
       </el-input>
     </div>
     <div class="dropdown" v-show="show_menu" ref="drop">
@@ -28,7 +28,14 @@ export default {
 
   methods: {
     submit() {
-      this.field_match_list.push(this.field_search);
+      if (this.field_search === "") {
+        this.$message({
+          message: 'please input a field',
+          type: 'warning'
+        });
+      }
+
+      this.field_match_list = ["mock1", "mock2", "mock3", "mock4", "mock5", "mock6", "mock7", "mock8", "mock9", "mock10"];
       this.show_menu = true;
       this.field_search = "";
     },
@@ -41,9 +48,10 @@ export default {
 
     hideMenu(e) {
       let input = document.querySelector(".inputbar"),
-          menu = document.querySelector(".dropdown-menu");
+          menu = document.querySelector(".dropdown-menu"),
+          submiticon = document.querySelector(".submit-btn");
 
-      if (e.target !== input && e.target !== menu) {
+      if (e.target !== input && e.target !== menu && e.target !== submiticon) {
         this.show_menu = false;
       }
       else {
