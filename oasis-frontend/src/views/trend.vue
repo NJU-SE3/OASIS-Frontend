@@ -89,13 +89,6 @@ export default {
         })
         this.trendsList = curList
       })
-      // const curList = [...this.trendsList]
-      // curList.push({
-      //   id: id,
-      //   name: name,
-      //   list: this.trendsTestList[id - 1]
-      // })
-      // this.trendsList = curList
     },
     deleteTrend (id, name) {
       const curList = this.trendsList.filter(trend => trend.id !== id)
