@@ -163,8 +163,9 @@ export default {
         console.log("jump to rank");
         this.$router.push({path: "/ranking"});
       }
-      else {
-        console.log("to do");
+      else if (index===1) {
+        console.log("jump to trend");
+        this.$router.push({path: "/trend"});
       }
     },
 

@@ -111,6 +111,7 @@ export default {
 
     getList() {
       // /api/field/list
+      console.log("curNum", this.current_page)
       var url = "/api/" + this.sort_type + "/list?pageNum=" + this.current_page;
       var _this = this;
       getRequest(url)

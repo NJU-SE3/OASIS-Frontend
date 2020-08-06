@@ -6,7 +6,7 @@
       </el-header>
       <el-main style="padding:0 5%">
         <el-row class="line-ranking ranking">
-          <h1><strong>Papers </strong>   in Last 6    <strong> Years</strong></h1>
+          <h1><strong>Papers </strong>   in Last {{years}}    <strong> Years</strong></h1>
           <div class="chart">
             <ve-line
             :data="yearData"
@@ -224,7 +224,6 @@ export default {
             "#fd94d1"
         ],
       }
-
       this.termExtend={
         series: {
           width: '100%',
@@ -232,9 +231,9 @@ export default {
           gridSize: 10,
         }
       }
-
-
+    //return
       return {
+        years: "????",
         yearData:{
           columns: ['year', 'count'],
           rows: []
@@ -297,6 +296,7 @@ export default {
         let l=getRequest("/api/report/paper/trend/year");
         l.then(r=>{
           this.yearData.rows=r.data;
+          this.years=(Number(r.data[r.data.length-1].year) - Number(r.data[0].year)).toString()
           this.load1=false;
         })
       },
