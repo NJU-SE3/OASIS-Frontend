@@ -103,9 +103,9 @@ export default {
 </script>
 
 <style>
-  /* .searchbar {
+  .searchbar {
     position: relative;
-  } */
+  }
 
   .searchbar .input {
     display: flex;
@@ -124,12 +124,13 @@ export default {
 
 
   .searchbar .dropdown {
-    /* position: absolute;
+    position: absolute;
     left: 50%;
-    transform: translate(-50%); */
+    transform: translate(-50%);
     display: flex;
     justify-content: center;
     align-items: center;
+    z-index: 10;
   }
 
   .searchbar .dropdown .dropdown-menu {

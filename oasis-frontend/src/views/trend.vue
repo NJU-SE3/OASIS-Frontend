@@ -19,7 +19,7 @@
       </div>
     </div>
 
-    <div class="test-group">
+    <!-- <div class="test-group">
       <button @click="addTrend(1, 'a')">1</button
       ><el-button
         type="danger"
@@ -41,8 +41,8 @@
         circle
         @click="deleteTrend(3, 'c')"
       ></el-button>
-    </div>
-    <TrendCard :trendsList="trendsList" />
+    </div> -->
+    <TrendCard class="trend-card" :trendsList="trendsList" />
   </div>
 </template>
 
@@ -82,8 +82,8 @@ export default {
           type: 'warning'
         })
       } else {
-        this.field_select.push(field)
-        this.addTrend(field.id, field.name)
+        this.field_select.push(field);
+        this.addTrend(field.id);
       }
     },
 
@@ -93,16 +93,17 @@ export default {
       console.log(e.target)
 
       if (e.target !== searchbar) {
-        console.log('hide menu')
-        this.show_menu = false
+        console.log('hide menu');
+        this.show_menu = false;
       }
     },
 
     deleteTag (tag) {
-      this.field_select.splice(this.field_select.indexOf(tag), 1)
+      this.field_select.splice(this.field_select.indexOf(tag), 1);
+      this.deleteTrend(tag.id);
     },
 
-    addTrend (id, name) {
+    addTrend (id) {
       getRequest(
         `/api/report/paper/trend/year?baseline=activeness&refinement=${id}`
       ).then(res => {
@@ -130,5 +131,9 @@ export default {
 
 .trend .field-tags {
   margin: 10px auto;
+}
+
+.trend .trend-card {
+  margin: 80px 0;
 }
 </style>
