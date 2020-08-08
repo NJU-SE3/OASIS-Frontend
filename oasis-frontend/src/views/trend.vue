@@ -1,16 +1,15 @@
 <template>
-  <div class="trend">
-    <search-with-dropdown @confirmField="chooseField"></search-with-dropdown>
+  <div class="trend" @click="hideMenu">
+    <search-with-dropdown class="search" @confirmField="chooseField" :show_dropdown="show_menu"></search-with-dropdown>
 
     <div class="field-tags">
-      <span class="tip">Fields you have chosen (no more than 5):</span>
       <div class="fields">
         <el-tag
           v-for="tag in field_select"
-          :key="tag"
+          :key="tag.id"
           closable
           @close="deleteTag(tag)">
-          {{ tag }}
+          {{ tag.name }}
         </el-tag>
       </div>
     </div>
@@ -58,6 +57,7 @@ export default {
   data () {
     return {
       field_select: [],
+      show_menu: false,
 
       testIdList: [
         '5e8331c0982a43f4fd446ca8',
@@ -105,8 +105,23 @@ export default {
           type: 'warning'
         });
       }
-      else
+      else {
         this.field_select.push(field);
+        this.addTrend(field.id, field.name);
+      }
+
+      
+    },
+
+    hideMenu(e) {
+      let searchbar = document.querySelector(".search");
+
+      console.log(e.target);
+
+      if (e.target !== searchbar) {
+        console.log("hide menu");
+        this.show_menu = false;
+      }
     },
 
     deleteTag(tag) {
@@ -140,5 +155,9 @@ export default {
 <style scoped>
 .trend {
   padding: 10px 4%;
+}
+
+.trend .field-tags {
+  margin: 10px auto;
 }
 </style>
