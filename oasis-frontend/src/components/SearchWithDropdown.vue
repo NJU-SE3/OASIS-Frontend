@@ -7,8 +7,9 @@
     </div>
     <div class="dropdown" v-show="show_menu" ref="drop">
       <div class="dropdown-menu">
-        <ul class="field-match-list" @click="chooseField">
-          <li class="field-item" v-for="(item, index) in field_match_list" :key="index" :id="item.id">{{ item.name }}</li>
+        <ul class="field-match-list" @click="chooseField" v-loading="is_loading">
+          <li class="no-content-tip" v-if="no_content">no search result</li>
+          <li class="field-item" v-for="(item, index) in field_match_list" :key="index" :id="item.id">{{ item.fieldName }}</li>
         </ul>
       </div>
     </div>
@@ -16,6 +17,7 @@
 </template>
 
 <script>
+import {getRequest} from "../utils/request.js"
 export default {
   name: "SearchWithDropdown",
   props: ["show_dropdown"],
@@ -23,7 +25,9 @@ export default {
     return {
       show_menu: this.show_dropdown,
       field_search: "",
-      field_match_list: []
+      field_match_list: [],
+      is_loading: true,
+      no_content: false
     }
   },
 
@@ -36,6 +40,9 @@ export default {
 
   methods: {
     submit() {
+      this.is_loading = true;
+      this.no_content = false;
+
       if (this.field_search === "") {
         this.$message({
           message: 'please input a field',
@@ -43,42 +50,38 @@ export default {
         });
       }
 
-      this.field_match_list = [
-        {
-          id: "5e8331c0982a43f4fd446ca8",
-          name: "name1"
-        },
-        {
-          id: "id2",
-          name: "name2"
-        },
-        {
-          id: "id2",
-          name: "name2"
-        },
-        {
-          id: "id2",
-          name: "name2"
-        },
-        {
-          id: "id2",
-          name: "name2"
-        },
-        {
-          id: "id2",
-          name: "name2"
-        },
-        {
-          id: "id2",
-          name: "name2"
-        }
-      ];
+      let _this = this;
+
+      getRequest(`/api/field/search?query=${_this.field_search}`)
+        .then(data => {
+          // console.log("data", data);
+          if (data.data.length === 0) {
+            _this.no_content = true;
+          }
+          else {
+            _this.field_match_list = data.data;
+            _this.no_content = false;
+          }
+          _this.is_loading = false;
+        })
+        .catch(err => {
+          _this.is_loading = false;
+          _this.no_content = true;
+        })
+
+      
       this.show_menu = true;
       this.field_search = "";
     },
 
     chooseField(e) {
+      let no_content = document.querySelector(".no-content-tip");
       this.show_menu = false;
+
+      if (e.target === no_content) {
+        return;
+      }
+      
       this.$emit("confirmField",{id: e.target.id, name: e.target.innerText});
       this.field_match_list = [];
     },
