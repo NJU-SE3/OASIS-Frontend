@@ -145,6 +145,7 @@ export default {
   .searchbar .dropdown .dropdown-menu .field-match-list {
     padding: 0;
     position: relative;
+    min-height: 1em;
   }
 
   .searchbar .dropdown .dropdown-menu li {
