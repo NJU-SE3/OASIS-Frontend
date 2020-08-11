@@ -44,12 +44,18 @@
       ></el-button>
     </div> -->
     <TrendCard class="trend-card" :trendsList="trendsList" />
+    <el-row>
+      <el-col span="10">
+        <top-ranking-card :topRankingContent="topRankingContent[1]"/>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
 <script>
 import SearchWithDropdown from '../components/SearchWithDropdown'
 import TrendCard from '../components/FieldsTrendCard'
+import TopRankingCard from "../components/TopRankingCard.vue";
 import { getRequest } from '../utils/request'
 
 export default {
@@ -57,6 +63,7 @@ export default {
 
   components: {
     'search-with-dropdown': SearchWithDropdown,
+    'top-ranking-card': TopRankingCard,
     TrendCard
   },
 
@@ -64,7 +71,26 @@ export default {
     return {
       field_select: [],
       show_menu: false,
-      trendsList: []
+      trendsList: [],
+      topRankingContent: [
+        {
+          type: "Authors",
+          router_type: "author",
+          startIndex: 1,
+          items: [],
+        },
+        {
+          type: "Affiliations",
+          router_type: "affiliation",
+          startIndex: 1,
+          items: [],
+        },
+        {
+          type: "Papers",
+          startIndex: 1,
+          items: [],
+        },
+      ],
     }
   },
 
@@ -120,7 +146,9 @@ export default {
     deleteTrend (id) {
       const curList = this.trendsList.filter(trend => trend.id !== id)
       this.trendsList = curList
-    }
+    },
+
+
   }
 }
 </script>
