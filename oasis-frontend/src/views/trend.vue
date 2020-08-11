@@ -13,6 +13,7 @@
           :key="tag.id"
           closable
           @close="deleteTag(tag)"
+          class="tag-item"
         >
           {{ tag.name }}
         </el-tag>
@@ -131,6 +132,11 @@ export default {
 
 .trend .field-tags {
   margin: 10px auto;
+  height: 35px;
+}
+
+.trend .field-tags .tag-item {
+  margin-right: 5px;
 }
 
 .trend .trend-card {
