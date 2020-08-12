@@ -92,7 +92,7 @@ export default {
         })
       } else {
         this.field_select.push(field);
-        this.addTrend(field.id);
+        this.addTrend(field.id, field.name);
         this.getRelatedField(field.id);
       }
     },
@@ -110,7 +110,7 @@ export default {
       this.deleteTrend(tag.id);
     },
 
-    addTrend (id) {
+    addTrend (id, name) {
       getRequest(
         `/api/report/paper/trend/year?baseline=activeness&refinement=${id}`
       ).then(res => {

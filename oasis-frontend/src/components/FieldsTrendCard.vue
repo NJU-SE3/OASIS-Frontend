@@ -5,12 +5,15 @@
     @mouseleave="normal"
     class="card"
   >
-    <!-- <div class="trend-error " v-if="trendInfo == null">
-      Sorry, Currently Unavailable!
+    <div
+      class="trend"
+      :id="lineId"
+    ></div>
+    <!-- <div :style="{ display: !empty ? 'none' : 'block', width: '100%', height: '100%' }">
+      <h2>FIELD TREND</h2>
+      <div>wanna see the trends of the fields you are interested in?</div>
+      <div>JUST Enter the name!</div>
     </div> -->
-    <div class="trend">
-      <div :id="lineId" class="node-graph"></div>
-    </div>
   </div>
 </template>
 
@@ -25,44 +28,34 @@ export default {
     trendsList: Array
   },
   data () {
-    const testData = [
-      [
-        { year: '2013', count: 19 },
-        { year: '2014', count: 12 },
-        { year: '2016', count: 14 },
-        { year: '2019', count: 10 }
-      ],
-      [
-        { year: '1957', count: 30 },
-        { year: '1973', count: 100 },
-        { year: '1986', count: 16 },
-        { year: '2016', count: 2 }
-      ],
-      [
-        { year: '1954', count: 50 },
-        { year: '1967', count: 80 },
-        { year: '2002', count: 27 }
-      ]
-    ]
     return {
       trendInfo: null,
+      empty: true,
       cardClass: 'normal-card',
       dataset: [],
       series: [],
       lineId: '',
+      color: ['#516b91', '#59c4e6', '#edafda', '#93b7e3', '#a5e7f0', '#cbb0e3'],
       settings: {
         dataset: this.dataset,
         tooltip: {
-          trigger: 'axis'
+          trigger: 'axis',
+          formatter: (value, index) => {
+            console.log(value)
+            let res = `${value[0].axisValue}<br />`
+            value.forEach((v, i) => {
+              res += `${v.seriesName}: ${Number(v.data.count).toFixed(2)}<br />`
+            })
+            return res
+          }
         },
+
         xAxis: {
           type: 'value',
           min: 'dataMin',
           splitLine: {
             show: false
           },
-          minInterval: 1,
-          maxInterval: 5,
           axisLabel: {
             fontSize: 18,
             formatter: (value, index) => {
@@ -71,15 +64,7 @@ export default {
           }
         },
         yAxis: {},
-        series: this.series,
-        color: [
-          '#516b91',
-          '#59c4e6',
-          '#edafda',
-          '#93b7e3',
-          '#a5e7f0',
-          '#cbb0e3'
-        ]
+        series: this.series
       }
     }
   },
@@ -90,12 +75,22 @@ export default {
         this.myChart.setOption(this.settings)
       }
       this.getData()
-      this.myChart.setOption({
-        dataset: this.dataset,
-        series: this.series
-      })
-
-      console.log(this.myChart.getOption())
+      if (this.series.length === 0) {
+        this.empty = true
+        // this.myChart = echarts.init(document.getElementById(this.lineId))
+      } else if (this.series.length === 1) {
+        this.empty = false
+        this.myChart.setOption(this.settings)
+        this.myChart.setOption({
+          dataset: this.dataset,
+          series: this.series
+        })
+      } else {
+        this.myChart.setOption({
+          dataset: this.dataset,
+          series: this.series
+        })
+      }
     }
   },
   created () {
@@ -107,12 +102,11 @@ export default {
   methods: {
     init () {
       this.myChart = echarts.init(document.getElementById(this.lineId))
-      this.myChart.setOption(this.settings)
+      // this.myChart.setOption(this.settings)
     },
     getData () {
       let dataset = []
       let series = []
-      // console.log("before get", this.trendsList)
       this.trendsList.forEach((trend, i) => {
         dataset.push({
           source: trend.list
@@ -120,10 +114,11 @@ export default {
         series.push({
           type: 'line',
           name: trend.name,
-          datasetIndex: i
+          datasetIndex: i,
+          itemStyle: { normal: { color: this.color[i] } }
         })
       })
-      console.log('in get', series, dataset)
+      // console.log('in get', series, dataset)
       this.series = series
       this.dataset = dataset
     },
@@ -194,11 +189,5 @@ export default {
 
 .trend-error {
   padding-top: 100px;
-}
-.node-graph {
-  /* width:500px;
-    height:400px; */
-  width: 100%;
-  height: 100%;
 }
 </style>
