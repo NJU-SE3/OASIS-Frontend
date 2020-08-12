@@ -29,14 +29,14 @@
           <div v-for="(author, index) in authorSummary" :key="index">
             <el-checkbox class="check-box"
                          v-model="authorSummaryCheck[index]">
-              {{author.first}}({{author.second}})
+              {{handleLength(author.first)}}({{author.second}})
             </el-checkbox>
           </div>
         </el-collapse-item>
         <el-collapse-item title="Conference" name="2">
           <div v-for="(conference, index) in conferenceSummary" :key="index">
             <el-checkbox class="check-box" v-model="conferenceSummaryCheck[index]">
-              {{conference.first}}({{conference.second}})
+              {{handleLength(conference.first)}}({{conference.second}})
             </el-checkbox>
           </div>
         </el-collapse-item>
@@ -46,7 +46,7 @@
             <el-tooltip placement="bottom">
               <div slot="content">{{affiliation.first}}({{affiliation.second}})</div>
               <el-checkbox class="check-box" v-model="affiliationSummaryCheck[index]">
-                {{affiliation.first}}({{affiliation.second}})
+                {{handleLength(affiliation.first)}}({{affiliation.second}})
               </el-checkbox>
             </el-tooltip>
           </div>
@@ -54,7 +54,7 @@
         <el-collapse-item title="Term" name="4">
           <div v-for="(term, index) in termSummary" :key="index">
             <el-checkbox class="check-box" v-model="termSummaryCheck[index]">
-              {{term.first}}({{term.second}})
+              {{handleLength(term.first)}}({{term.second}})
             </el-checkbox>
           </div>
         </el-collapse-item>
@@ -137,6 +137,15 @@
       },
 
       methods: {
+        handleLength(value){
+          if(value.length <= 30){
+            return value;
+          }
+          else {
+            return value.substring(0, 30) + "...";
+          }
+        },
+
         checkYear(value) {
           this.yearChecked = true;
         },
@@ -276,7 +285,7 @@
   }
 
   .el-picker-panel {
-    background-color: rgba(255,255,255,0.5);
+    background-color: rgba(255,255,255,0.8);
   }
 
   .el-date-picker__header-label:hover,.el-picker-panel__icon-btn:hover {

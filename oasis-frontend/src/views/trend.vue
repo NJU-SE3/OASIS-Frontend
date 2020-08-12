@@ -13,6 +13,7 @@
           :key="tag.id"
           closable
           @close="deleteTag(tag)"
+          class="tag-item"
         >
           {{ tag.name }}
         </el-tag>
@@ -76,7 +77,9 @@ export default {
           message: 'no more than 5 fields',
           type: 'warning'
         })
-      } else if (this.field_select.indexOf(field) !== -1) {
+      } else if (this.field_select.some((val, idx, arr) => {
+        return val.id === field.id;
+      })) {
         this.$message({
           message: 'field already exists',
           type: 'warning'
@@ -130,10 +133,15 @@ export default {
 }
 
 .trend .field-tags {
-  margin: 10px auto;
+  margin: 20px auto;
+  height: 35px;
+}
+
+.trend .field-tags .tag-item {
+  margin-right: 5px;
 }
 
 .trend .trend-card {
-  margin: 80px 0;
+  margin: 30px 0;
 }
 </style>
