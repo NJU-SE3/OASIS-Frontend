@@ -281,7 +281,7 @@
   .basic-info, .grid-content {
     margin:1% 1%;
   }
-  
+
   .grid-content {
     border-radius: 4px;
     min-height: 36px;

@@ -18,37 +18,18 @@
           {{ tag.name }}
         </el-tag>
       </div>
+      <div class="related-fields">
+        <el-tag
+          v-for="tag in related_field"
+          :key="tag.id"
+          class="related-tag-item"
+          @click="chooseField(tag)"
+        >
+          {{ tag.name }}
+        </el-tag>
+      </div>
     </div>
-
-    <!-- <div class="test-group">
-      <button @click="addTrend(1, 'a')">1</button
-      ><el-button
-        type="danger"
-        icon="el-icon-delete"
-        circle
-        @click="deleteTrend(1, 'a')"
-      ></el-button>
-      <button @click="addTrend(2, 'b')">2</button
-      ><el-button
-        type="danger"
-        icon="el-icon-delete"
-        circle
-        @click="deleteTrend(2, 'b')"
-      ></el-button>
-      <button @click="addTrend(3, 'c')">3</button
-      ><el-button
-        type="danger"
-        icon="el-icon-delete"
-        circle
-        @click="deleteTrend(3, 'c')"
-      ></el-button>
-    </div> -->
     <TrendCard class="trend-card" :trendsList="trendsList" />
-    <el-row>
-      <el-col span="10">
-        <top-ranking-card :topRankingContent="topRankingContent[1]"/>
-      </el-col>
-    </el-row>
   </div>
 </template>
 
@@ -70,6 +51,7 @@ export default {
   data () {
     return {
       field_select: [],
+      related_field: [],
       show_menu: false,
       trendsList: [],
       topRankingContent: [
@@ -96,8 +78,6 @@ export default {
 
   methods: {
     chooseField (field) {
-      console.log('field: ', field)
-
       if (this.field_select.length === 5) {
         this.$message({
           message: 'no more than 5 fields',
@@ -113,16 +93,14 @@ export default {
       } else {
         this.field_select.push(field);
         this.addTrend(field.id);
+        this.getRelatedField(field.id);
       }
     },
 
     hideMenu (e) {
       let searchbar = document.querySelector('.search')
 
-      console.log(e.target)
-
       if (e.target !== searchbar) {
-        console.log('hide menu');
         this.show_menu = false;
       }
     },
@@ -148,9 +126,39 @@ export default {
     deleteTrend (id) {
       const curList = this.trendsList.filter(trend => trend.id !== id)
       this.trendsList = curList
+      this.deleteRelatedFields(id);
     },
 
+    getRelatedField(id){
+      getRequest("/api/graph/field/?id=" + id)
+        .then(res=>{
+          var data = res.data.nodes;
 
+          this.related_field.push({
+            id: data[1].id,
+            name: data[1].fieldName,
+            related_id: id,
+
+          },
+            {
+            id: data[2].id,
+              name: data[2].fieldName,
+              related_id: id,
+
+          },
+            {
+              id: data[3].id,
+              name: data[3].fieldName,
+              related_id: id,
+            },
+          );
+        })
+    },
+
+    deleteRelatedFields(id) {
+      const curList = this.related_field.filter(trend => trend.related_id !== id)
+      this.related_field = curList
+    },
   }
 }
 </script>
@@ -162,11 +170,22 @@ export default {
 
 .trend .field-tags {
   margin: 20px auto;
-  height: 35px;
+  height: 100px;
 }
 
 .trend .field-tags .tag-item {
   margin-right: 5px;
+  margin-bottom: 8px;
+}
+
+.trend .field-tags .related-tag-item {
+  margin-right: 5px;
+  margin-bottom: 8px;
+  color: darkorange;
+}
+
+.related-tag-item:hover {
+  cursor: pointer;
 }
 
 .trend .trend-card {
