@@ -1,5 +1,9 @@
 <template>
   <div :class="cardClass" @mouseenter="shadow" @mouseleave="normal">
+    <div class="title">
+      <span class="el-icon-data-analysis type-icon"></span>
+      <span>Author Interests</span>
+    </div>
     <el-row :style="{ height: '100%' }">
       <el-col
         :span="6"
@@ -24,7 +28,7 @@
           </el-tooltip>
         </ul>
       </el-col>
-      <el-col :span="18" class="trend-line" :style="{ height: '100%' }">
+      <el-col :span="18" class="trend-line" :style="{ height: '95%' }">
         <div
           :id="authorTrendId"
           class="author-trend-lines"
@@ -66,7 +70,22 @@ export default {
             return res
           }
         },
-        legend: {},
+        legend: {
+          tooltip: {
+            show: true,
+            formatter: value => {
+              console.log(value)
+              let tip = ''
+              if (value.name === "Overall") {
+                tip = 'Show the overall <br />trend of the field select.'
+              } else {
+                tip =
+                  "Show the trend of <br /> selected field in this <br />auther's academic career."
+              }
+              return `${value.name}<br />${tip}`
+            }
+          }
+        },
         xAxis: {
           type: 'value',
           min: 'dataMin',
@@ -165,7 +184,7 @@ export default {
           dataset.push({ source: data0 }, { source: r[1].data })
           series.push(
             {
-              name: 'total',
+              name: 'Overall',
               type: 'line',
               datasetIndex: 0,
               encode: {
@@ -175,7 +194,7 @@ export default {
               yAxisIndex: 0
             },
             {
-              name: "author's",
+              name: 'Author',
               type: 'line',
               datasetIndex: 1,
               encode: {
@@ -217,6 +236,19 @@ export default {
   background: #b4bccc;
 }
 
+.title {
+  font-size: large;
+  font-weight: bold;
+  padding-top: 5px;
+  padding-left: 20px;
+  text-align: left;
+}
+
+.type-icon {
+  font-size: large;
+  font-weight: bold;
+}
+
 .normal-card {
   background-color: azure;
   box-sizing: border-box;
@@ -244,8 +276,8 @@ export default {
 }
 .trend-list {
   overflow: auto;
-  height: 93%;
-  padding: 0;
+  height: 83%;
+  padding: 0 2% 2%;
   border-right: 1px solid #cccccc;
 }
 .trend-line {

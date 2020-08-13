@@ -55,7 +55,7 @@
         ></el-col>
         <el-col :span="16"
           ><div class="grid-content">
-            <author-trend-card></author-trend-card></div
+            <author-trend-card /></div
         ></el-col>
       </el-row>
       <el-row :gutter="15">
