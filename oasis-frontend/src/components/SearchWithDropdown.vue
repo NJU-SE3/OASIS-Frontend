@@ -7,7 +7,7 @@
     </div>
     <div class="dropdown" v-show="show_menu" ref="drop">
       <div class="dropdown-menu">
-        <ul class="field-match-list" @click="chooseField" v-loading="is_loading">
+        <ul class="field-match-list" @click="chooseField" v-loading="is_loading" element-loading-background="rgba(0, 0, 0, 0)">
           <li class="no-content-tip" v-if="no_content">no search result</li>
           <li class="field-item" v-for="(item, index) in field_match_list" :key="index" :id="item.id">{{ item.fieldName }}</li>
         </ul>
@@ -48,6 +48,7 @@ export default {
           message: 'please input a field',
           type: 'warning'
         });
+        return;
       }
 
       let _this = this;

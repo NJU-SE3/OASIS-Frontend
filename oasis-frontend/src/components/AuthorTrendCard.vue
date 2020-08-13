@@ -88,7 +88,7 @@ export default {
       getRequest(`/api/attention/batchQuery?authorId=${this.authorId}`)
         .then(res => {
           console.log(res.data)
-          this.this.myChart = echarts.init(
+          this.myChart = echarts.init(
             document.getElementById(this.authorTrendId)
           )
           this.myChart.setOption(this.settings)
