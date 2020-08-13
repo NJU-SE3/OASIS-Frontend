@@ -1,7 +1,7 @@
 <template>
   <div :class="cardClass" @mouseenter="shadow" @mouseleave="normal">
-    <el-row :style="{ height: '100%' }">
-      <el-col :span="6" :style="{ height: '100%' }">
+    <el-row :style="{height: '100%'}">
+      <el-col :span="6" :style="{height: '100%'}" class="trend-list-container">
         <ul class="trend-list" @click="changeYear">
           <el-tooltip
             v-for="item in yearFieldList"
@@ -124,7 +124,6 @@ export default {
       )
       let res = Promise.all([all, author])
       res.then(r => {
-        //   console.log(r)
           let series = []
           let dataset = []
           dataset.push({ source: r[0].data }, { source: r[1].data })
@@ -219,5 +218,11 @@ export default {
   text-overflow: ellipsis;
   white-space: nowrap;
   padding: 3px 0;
+  cursor: pointer;
+}
+
+.trend-list-container li:hover {
+  background-color: rgba(255, 255, 255, 0.7);
+  /* background-color: #4e4376; */
 }
 </style>
