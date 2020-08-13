@@ -3,7 +3,7 @@
     <el-row :style="{height: '100%'}">
       <el-col :span="6" :style="{height: '100%'}" class="trend-list-container">
         <ul class="trend-list" @click="changeYear">
-          <el-tooltip v-for="item in yearFieldList" :key="item.year" effect="dark" :content="item.fieldName" placement="top">
+          <el-tooltip v-for="item in yearFieldList" :key="item.year" effect="dark" :content="item.fieldName" placement="right">
              <li class="trend-list-item" :itemid="item.fieldId" :itemname="item.fieldName">{{ item.year }}: {{item.fieldName}}</li>
           </el-tooltip>
         </ul>
@@ -141,6 +141,8 @@ export default {
 .trend-list {
   overflow: auto;
   height: 93%;
+  padding: 0;
+  border-right: 1px solid #cccccc;
 }
 .trend-line {
   overflow: hidden;
@@ -150,12 +152,12 @@ export default {
   overflow: hidden;
   text-overflow:ellipsis;
   white-space: nowrap;
-  padding: 3px 0;
+  padding: 0.5em 1em;
   cursor: pointer;
 }
 
 .trend-list-container li:hover {
-  background-color: rgba(255, 255, 255, 0.7);
-  /* background-color: #4e4376; */
+  /* color: blue; */
+  background: rgba(180, 188, 204, 0.5);
 }
 </style>
