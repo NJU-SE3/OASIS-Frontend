@@ -1,15 +1,32 @@
 <template>
   <div :class="cardClass" @mouseenter="shadow" @mouseleave="normal">
     <el-row :style="{ height: '100%' }">
-      <el-col :span="4" :style="{ height: '100%' }">
+      <el-col :span="6" :style="{ height: '100%' }">
         <ul class="trend-list" @click="changeYear">
-          <li v-for="item in yearFieldList" :key="item.year">
-            {{ item.year }}: {{ item.fieldName }}
-          </li>
+          <el-tooltip
+            v-for="item in yearFieldList"
+            :key="item.year"
+            effect="dark"
+            :content="item.fieldName"
+            placement="top"
+          >
+            <li
+              class="trend-list-item"
+              :itemid="item.fieldId"
+              :itemname="item.fieldName"
+            >
+              {{ item.year }}: {{ item.fieldName }}
+            </li>
+          </el-tooltip>
         </ul>
       </el-col>
-      <el-col :span="20" class="trend-line" :style="{ height: '100%' }" v-loading="lineLoading" element-loading-background="rgba(0, 0, 0, 0)">
-        <div :id="authorTrendId" class="author-trend-lines" />
+      <el-col :span="18" class="trend-line" :style="{ height: '100%' }">
+        <div
+          :id="authorTrendId"
+          class="author-trend-lines"
+          v-loading="lineLoading"
+          element-loading-background="rgba(0, 0, 0, 0)"
+        />
       </el-col>
     </el-row>
   </div>
@@ -39,7 +56,7 @@ export default {
             // console.log(value)
             let res = `${value[0].axisValue}<br />`
             value.forEach((v, i) => {
-              res += `${v.seriesName}: ${Number(v.data.count).toFixed(2)}<br />`
+              res += `${v.seriesName}: ${Number(v.data.count || v.data.score).toFixed(2)}<br />`
             })
             return res
           }
@@ -81,7 +98,7 @@ export default {
     init () {
       getRequest(`/api/attention/batchQuery?authorId=${this.authorId}`)
         .then(res => {
-          console.log(res.data)
+        //   console.log(res.data)
           this.yearFieldList = res.data
           this.myChart = echarts.init(
             document.getElementById(this.authorTrendId)
@@ -98,9 +115,6 @@ export default {
           console.log(err)
         })
     },
-    changeYear (e) {
-      // console.log(e)
-    },
     setLine (id, name) {
       let all = getRequest(
         `/api/report/paper/trend/year?baseline=activeness&refinement=${id}`
@@ -109,37 +123,63 @@ export default {
         `/api/attention/trend?authorId=${this.authorId}&fieldName=${name}`
       )
       let res = Promise.all([all, author])
-      res
-        .then(r => {
-          console.log(r)
+      res.then(r => {
+        //   console.log(r)
           let series = []
           let dataset = []
-
-          dataset.push({ source: r[0].data }, { source: r[1].data } )
-          series.push({
-            name: 'total',
-            type: 'line',
-            datasetIndex: 0
-          },
-          {
-            name: "author's",
-            type: 'line',
-            datasetIndex: 1
-          })
+          dataset.push({ source: r[0].data }, { source: r[1].data })
+          series.push(
+            {
+              name: 'total',
+              type: 'line',
+              datasetIndex: 0,
+              encode: {
+                x: 'year',
+                y: 'count'
+              }
+            },
+            {
+              name: "author's",
+              type: 'line',
+              datasetIndex: 1,
+              encode: {
+                x: 'year',
+                y: 'score'
+              }
+            }
+          )
           this.myChart.setOption({
             series: series,
             dataset: dataset
           })
-          this.lineLoading=false
+          this.lineLoading = false
         })
         .catch(err => {
           console.log(err)
         })
+    },
+    changeYear (e) {
+      let id = e.target.getAttribute('itemId'),
+        name = e.target.getAttribute('itemname')
+      this.setLine(id, name)
     }
   }
 }
 </script>
 <style scoped>
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background: #b4bccc;
+}
+
 .normal-card {
   background-color: azure;
   box-sizing: border-box;
@@ -168,9 +208,16 @@ export default {
 }
 .trend-list {
   overflow: auto;
-  overflow-y: scroll;
+  height: 93%;
 }
 .trend-line {
   overflow: hidden;
+}
+
+.trend-list .trend-list-item {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding: 3px 0;
 }
 </style>
