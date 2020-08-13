@@ -1,12 +1,14 @@
 <template>
   <div :class="cardClass" @mouseenter="shadow" @mouseleave="normal">
     <el-row :style="{height: '100%'}">
-      <el-col :span="4" :style="{height: '100%'}" >
+      <el-col :span="6" :style="{height: '100%'}" >
         <ul class="trend-list" @click="changeYear">
-             <li v-for="item in yearFieldList" :key="item.year" >{{ item.year }}: {{item.fieldName}}</li>
+          <el-tooltip v-for="item in yearFieldList" :key="item.year" effect="dark" :content="item.fieldName" placement="top">
+             <li class="trend-list-item" :itemid="item.fieldId" :itemname="item.fieldName">{{ item.year }}: {{item.fieldName}}</li>
+          </el-tooltip>
         </ul>
       </el-col>
-      <el-col :span="20" class="trend-line">
+      <el-col :span="18" class="trend-line">
         <div :id="authorTrendId" class="author-trend-lines" />
       </el-col>
     </el-row>
@@ -90,12 +92,26 @@ export default {
     },
 
     changeYear(e){
-        // console.log(e)
-    }
+      let id = e.target.targetgetAttribute("itemId"),
+          name = e.target.getAttribute("itemname");
+    },
   }
 }
 </script>
 <style scoped>
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background: #b4bccc;
+}
+
 .normal-card {
   background-color: azure;
   box-sizing: border-box;
@@ -122,11 +138,18 @@ export default {
   width: 100%;
   height: 100%;
 }
-.trend-lista {
+.trend-list {
   overflow: auto;
-  overflow-y: scroll;
+  height: 93%;
 }
 .trend-line {
   overflow: hidden;
+}
+
+.trend-list .trend-list-item {
+  overflow: hidden;
+  text-overflow:ellipsis;
+  white-space: nowrap;
+  padding: 3px 0;
 }
 </style>
