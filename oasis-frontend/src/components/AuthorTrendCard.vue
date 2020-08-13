@@ -10,7 +10,7 @@
         :style="{ height: '100%' }"
         class="trend-list-container"
       >
-        <ul class="trend-list" @click="changeYear">
+        <ul class="trend-list" @click="changeYear" :select="selectYear">
           <el-tooltip
             v-for="item in yearFieldList"
             :key="item.year"
@@ -20,8 +20,10 @@
           >
             <li
               class="trend-list-item"
+              :class="selectYear == item.year ? 'selected-item' : ''"
               :itemid="item.fieldId"
               :itemname="item.fieldName"
+              :itemyear="item.year"
             >
               {{ item.year }}: {{ item.fieldName }}
             </li>
@@ -52,6 +54,7 @@ export default {
   data () {
     return {
       cardClass: 'normal-card',
+      selectYear: 0,
       authorTrendId: '',
       lineLoading: true,
       series: [],
@@ -76,7 +79,7 @@ export default {
             formatter: value => {
               console.log(value)
               let tip = ''
-              if (value.name === "Overall") {
+              if (value.name === 'Overall') {
                 tip = 'Show the overall <br />trend of the field select.'
               } else {
                 tip =
@@ -87,13 +90,22 @@ export default {
           }
         },
         xAxis: {
+          name: 'year',
+          //   nameGap: 30,
+          //   nameLocation: 'start',
+          nameLocation: 'center',
+          nameTextStyle: {
+            fontStyle: 'italic',
+            fontWeight: 'bold',
+            fontSize: 18
+          },
           type: 'value',
           min: 'dataMin',
           splitLine: {
             show: false
           },
           axisLabel: {
-            fontSize: 18,
+            // fontSize: 18,
             formatter: (value, index) => {
               return value.toString()
             }
@@ -101,6 +113,12 @@ export default {
         },
         yAxis: [
           {
+            name: 'activiness',
+            nameTextStyle: {
+              fontStyle: 'italic',
+              fontWeight: 'bold',
+              fontSize: 18
+            },
             splitLine: {
               lineStyle: {
                 type: 'dashed',
@@ -109,6 +127,12 @@ export default {
             }
           },
           {
+            name: 'score',
+            nameTextStyle: {
+              fontStyle: 'italic',
+              fontWeight: 'bold',
+              fontSize: 18
+            },
             splitLine: {
               lineStyle: {
                 type: 'dotted',
@@ -157,7 +181,8 @@ export default {
           if (this.yearFieldList.length !== 0) {
             this.setLine(
               this.yearFieldList[0].fieldId,
-              this.yearFieldList[0].fieldName
+              this.yearFieldList[0].fieldName,
+              this.yearFieldList[0].year
             )
           }
         })
@@ -165,7 +190,8 @@ export default {
           console.log(err)
         })
     },
-    setLine (id, name) {
+    setLine (id, name, year) {
+      this.selectYear = year
       let all = getRequest(
         `/api/report/paper/trend/year?baseline=activeness&refinement=${id}`
       )
@@ -216,8 +242,9 @@ export default {
     },
     changeYear (e) {
       let id = e.target.getAttribute('itemId'),
-        name = e.target.getAttribute('itemname')
-      this.setLine(id, name)
+        name = e.target.getAttribute('itemname'),
+        year = e.target.getAttribute('itemyear')
+      this.setLine(id, name, year)
     }
   }
 }
@@ -294,5 +321,8 @@ export default {
 
 .trend-list-container li:hover {
   background: rgba(180, 188, 204, 0.5);
+}
+.selected-item{
+    background: rgba(104, 154, 255, 0.329);
 }
 </style>
