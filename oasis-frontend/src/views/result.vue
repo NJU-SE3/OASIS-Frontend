@@ -76,6 +76,7 @@ export default {
     bus.$on("fuzzySearch", data => {
       _this.search_type = data.type;
       _this.search_query = data.con;
+      _this.search_query_display = data.con;
       _this.search_query = _this.convertSpecialChar(_this.search_query);
     })
   },
