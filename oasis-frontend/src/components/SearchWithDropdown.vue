@@ -72,7 +72,7 @@ export default {
 
       
       this.show_menu = true;
-      this.field_search = "";
+      // this.field_search = "";
     },
 
     chooseField(e) {
@@ -85,6 +85,7 @@ export default {
       
       this.$emit("confirmField",{id: e.target.id, name: e.target.innerText});
       this.field_match_list = [];
+      this.field_search = "";
     },
 
     hideMenu(e) {
