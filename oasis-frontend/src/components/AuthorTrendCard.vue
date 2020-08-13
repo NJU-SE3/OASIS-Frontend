@@ -1,21 +1,12 @@
 <template>
   <div :class="cardClass" @mouseenter="shadow" @mouseleave="normal">
-    <el-row>
-      <el-col :span="4">
-        <ul>
-          <li>2020: aaaaaaaaaaaaaaaaaa</li>
-          <li>2020: aaaaaaaaaaaaaaaaaa</li>
-          <li>2020: aaaaaaaaaaaaaaaaaa</li>
-          <li>2020: aaaaaaaaaaaaaaaaaa</li>
-          <li>2020: aaaaaaaaaaaaaaaaaa</li>
-          <li>2020: aaaaaaaaaaaaaaaaaa</li>
-          <li>2020: aaaaaaaaaaaaaaaaaa</li>
-          <li>2020: aaaaaaaaaaaaaaaaaa</li>
-          <li>2020: aaaaaaaaaaaaaaaaaa</li>
-          <li>2020: aaaaaaaaaaaaaaaaaa</li>
+    <el-row :style="{height: '100%'}">
+      <el-col :span="4" :style="{height: '100%'}" >
+        <ul class="trend-list" @click="changeYear">
+             <li v-for="item in yearFieldList" :key="item.year" >{{ item.year }}: {{item.fieldName}}</li>
         </ul>
       </el-col>
-      <el-col :span="20">
+      <el-col :span="20" class="trend-line">
         <div :id="authorTrendId" class="author-trend-lines" />
       </el-col>
     </el-row>
@@ -66,7 +57,6 @@ export default {
         series: this.series
       },
       yearFieldList: [],
-
       authorTrendList: []
     }
   },
@@ -88,7 +78,8 @@ export default {
       getRequest(`/api/attention/batchQuery?authorId=${this.authorId}`)
         .then(res => {
           console.log(res.data)
-          this.this.myChart = echarts.init(
+          this.yearFieldList=res.data
+          this.myChart = echarts.init(
             document.getElementById(this.authorTrendId)
           )
           this.myChart.setOption(this.settings)
@@ -96,6 +87,10 @@ export default {
         .catch(err => {
           console.log(err)
         })
+    },
+
+    changeYear(e){
+        // console.log(e)
     }
   }
 }
@@ -108,8 +103,7 @@ export default {
   border-radius: 4px;
   color: #4e4376;
   height: 350px;
-  overflow: scroll;
-  padding: 5% 2% 0 0;
+  /* padding: 2% 2% ; */
   text-align: left;
 }
 .shadow-card {
@@ -119,15 +113,20 @@ export default {
   border-radius: 4px;
   color: #4e4376;
   height: 350px;
-  overflow: scroll;
   box-shadow: 8px 8px 14px 0 rgba(253, 253, 253, 0.5);
-  padding: 5% 2% 0 0;
+  /* padding: 2% 2% ; */
   text-align: left;
-  /* overflow: auto; */
 }
 
 .author-trend-lines {
   width: 100%;
   height: 100%;
+}
+.trend-lista {
+  overflow: auto;
+  overflow-y: scroll;
+}
+.trend-line {
+  overflow: hidden;
 }
 </style>
