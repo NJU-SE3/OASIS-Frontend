@@ -1,14 +1,18 @@
 <template>
   <div :class="cardClass" @mouseenter="shadow" @mouseleave="normal">
-    <el-row :style="{height: '100%'}">
-      <el-col :span="6" :style="{height: '100%'}" class="trend-list-container">
+    <el-row :style="{ height: '100%' }">
+      <el-col
+        :span="6"
+        :style="{ height: '100%' }"
+        class="trend-list-container"
+      >
         <ul class="trend-list" @click="changeYear">
           <el-tooltip
             v-for="item in yearFieldList"
             :key="item.year"
             effect="dark"
             :content="item.fieldName"
-            placement="top"
+            placement="right"
           >
             <li
               class="trend-list-item"
@@ -36,6 +40,7 @@
 var echarts = require('echarts/lib/echarts')
 require('echarts/lib/chart/line')
 require('echarts/lib/component/tooltip')
+require('echarts/lib/component/legend')
 import { getRequest } from '../utils/request'
 
 export default {
@@ -45,7 +50,6 @@ export default {
       cardClass: 'normal-card',
       authorTrendId: '',
       lineLoading: true,
-      color: ['#516b91', '#59c4e6', '#edafda', '#93b7e3', '#a5e7f0', '#cbb0e3'],
       series: [],
       dataset: [],
       settings: {
@@ -53,14 +57,16 @@ export default {
         tooltip: {
           trigger: 'axis',
           formatter: (value, index) => {
-            // console.log(value)
             let res = `${value[0].axisValue}<br />`
             value.forEach((v, i) => {
-              res += `${v.seriesName}: ${Number(v.data.count || v.data.score).toFixed(2)}<br />`
+              res += `${v.seriesName}: ${Number(
+                v.data.count || v.data.score
+              ).toFixed(2)}<br />`
             })
             return res
           }
         },
+        legend: {},
         xAxis: {
           type: 'value',
           min: 'dataMin',
@@ -74,7 +80,33 @@ export default {
             }
           }
         },
-        yAxis: {},
+        yAxis: [
+          {
+            splitLine: {
+              lineStyle: {
+                type: 'dashed',
+                color: '#93b7e3'
+              }
+            }
+          },
+          {
+            splitLine: {
+              lineStyle: {
+                type: 'dotted',
+                color: '#cbb0e3'
+              }
+            }
+          }
+        ],
+        color: [
+          //   '#516b91',
+          '#59c4e6',
+          '#edafda',
+          '#93b7e3',
+          '#a5e7f0',
+          '#cbb0e3'
+        ],
+
         series: this.series
       },
       yearFieldList: [],
@@ -98,8 +130,7 @@ export default {
     init () {
       getRequest(`/api/attention/batchQuery?authorId=${this.authorId}`)
         .then(res => {
-        //   console.log(res.data)
-          this.yearFieldList = res.data
+          this.yearFieldList = res.data.reverse()
           this.myChart = echarts.init(
             document.getElementById(this.authorTrendId)
           )
@@ -123,10 +154,15 @@ export default {
         `/api/attention/trend?authorId=${this.authorId}&fieldName=${name}`
       )
       let res = Promise.all([all, author])
-      res.then(r => {
+      res
+        .then(r => {
+          this.lineLoading = true
           let series = []
           let dataset = []
-          dataset.push({ source: r[0].data }, { source: r[1].data })
+          const data0 = [...new Set(r[0].data.map(v => JSON.stringify(v)))].map(
+            v => JSON.parse(v)
+          )
+          dataset.push({ source: data0 }, { source: r[1].data })
           series.push(
             {
               name: 'total',
@@ -135,7 +171,8 @@ export default {
               encode: {
                 x: 'year',
                 y: 'count'
-              }
+              },
+              yAxisIndex: 0
             },
             {
               name: "author's",
@@ -144,7 +181,8 @@ export default {
               encode: {
                 x: 'year',
                 y: 'score'
-              }
+              },
+              yAxisIndex: 1
             }
           )
           this.myChart.setOption({
@@ -186,7 +224,6 @@ export default {
   border-radius: 4px;
   color: #4e4376;
   height: 350px;
-  /* padding: 2% 2% ; */
   text-align: left;
 }
 .shadow-card {
@@ -208,6 +245,8 @@ export default {
 .trend-list {
   overflow: auto;
   height: 93%;
+  padding: 0;
+  border-right: 1px solid #cccccc;
 }
 .trend-line {
   overflow: hidden;
@@ -217,12 +256,11 @@ export default {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  padding: 3px 0;
+  padding: 0.5em 1em;
   cursor: pointer;
 }
 
 .trend-list-container li:hover {
-  background-color: rgba(255, 255, 255, 0.7);
-  /* background-color: #4e4376; */
+  background: rgba(180, 188, 204, 0.5);
 }
 </style>
