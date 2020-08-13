@@ -58,6 +58,7 @@
                 :key="index"
                 :class="{active : (index == current)}"
                 @mouseenter="enter(index)"
+                @mouseleave="leave"
                 @click="detail(index)">
               <el-link :underline="false">{{ item }}</el-link>
             </li>
@@ -66,29 +67,37 @@
       </el-col>
       <el-col :span="14" :offset="1">
         <div class="link-content">
-          <div id="content-item-one" :class="{imgActive : pic_one}">
-            <el-image src="/static/mainpage/charts.jpg"
+          <div id="content-item-one">
+            <el-image src="/static/mainpage/ranking.jpg"
                       alt="ooops"
                       class="img-item"
                       lazy
                       @click="detail(0)"
-                      @mouseenter="enter(0)"></el-image>
+                      ></el-image>
+
+            <div class="mask"
+                @mouseenter="enter(0)"
+                @mouseleave="leave"
+                @click="detail(0)">
+              <div class="intro-title">Ranking</div>
+              <div class="intro">this is ranking introduction</div>
+            </div>
           </div>
-          <div id="content-item-two" :class="{imgActive : pic_two}">
-            <el-image src="/static/mainpage/TODO1.jpg"
+          <div id="content-item-two">
+            <el-image src="/static/mainpage/trend.jpg"
                       alt="ooops"
                       class="img-item"
                       lazy
                       @click="detail(1)"
-                      @mouseenter="enter(1)"></el-image>
-          </div>
-          <div id="content-item-three" :class="{imgActive : pic_three}">
-            <el-image src="/static/mainpage/TODO2.jpg"
-                      alt="ooops"
-                      class="img-item"
-                      lazy
-                      @click="detail(2)"
-                      @mouseenter="enter(2)"></el-image>
+                      ></el-image>
+
+            <div class="mask"
+                  @mouseenter="enter(1)"
+                  @mouseleave="leave"
+                  @click="detail(1)">
+              <div class="intro-title">Trend</div>
+              <div class="intro">this is trend intro</div>
+            </div>
           </div>
         </div>
       </el-col>
@@ -111,11 +120,11 @@ export default {
   },
   data () {
     return {
-      nav_list: ["Ranking", "TODO1", "TODO2"],
+      nav_list: ["Ranking", "Trend"],
       current: 0,
       pic_one: true,
       pic_two: false,
-      pic_three: false,
+      // pic_three: false,
       search_val: "",
       tab_list: ["Author","Affiliation","Conference","Field"],
       entity:"Author",
@@ -141,21 +150,23 @@ export default {
   methods: {
     enter(index) {
       this.current = index;
+      let ele = document.querySelector(`#content-item-${index === 0? "one" : "two"} .mask`);
+      ele.style["opacity"] = 1;
+      ele.style["transition"] = "all 0.7s ease";
       if (index == 0) {
         this.pic_one = true;
         this.pic_two = false;
-        this.pic_three = false;
       }
       else if (index == 1) {
         this.pic_two = true;
-        this.pic_three = false;
         this.pic_one = false;
       }
-      else {
-        this.pic_three = true;
-        this.pic_one = false;
-        this.pic_two = false;
-      }
+    },
+
+    leave() {
+      let ele = document.querySelector(`#content-item-${this.pic_one === true? "one" : "two"} .mask`);
+      ele.style["opacity"] = 0;
+      ele.style["transition"] = "all 0.7s ease";
     },
 
     detail(index) {
@@ -280,34 +291,47 @@ export default {
   }
 
   .link-content > * {
-    opacity: 0.3;
+    /* opacity: 0.3; */
     transition: all 0.6s;
   }
 
   .link-content #content-item-one {
     display: inline-block;
-    width: 50%;
+    width: 100%;
     height: 50%;
-    /* background: pink; */
+    position: relative;
   }
 
   .link-content #content-item-two {
     display: inline-block;
-    width: 50%;
-    height: 50%;
-    /* background: yellow; */
-  }
-
-  .link-content #content-item-three {
     width: 100%;
     height: 50%;
-    /* background: white; */
+    position: relative;
   }
 
-  .imgActive {
-    transition: all 1s;
+  .link-content #content-item-one .mask,
+  .link-content #content-item-two .mask {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    color: #ffffff;
+    opacity: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+    /* 转换速度 */
+    transition: all 1s ease;
+  }
+
+  .link-content #content-item-one:hover .mask,
+  .link-content #content-item-two:hover .mask {
     opacity: 1;
-    cursor: pointer;
+    transition: all 1s ease;
   }
 
   /* .img-item {
@@ -321,7 +345,15 @@ export default {
   }
 
 /* 图片-tab */
-  .tab-list .tab-list-item {
+
+  .show .tab-list {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .show .tab-list .tab-list-item {
     display: flex;
     justify-content: flex-start;
     padding: 20px 50px;
