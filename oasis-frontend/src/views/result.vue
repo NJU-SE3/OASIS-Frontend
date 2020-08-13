@@ -6,7 +6,7 @@
             <h1 class="title" @click="gotoMainpage">
               OASIS
             </h1>
-            <search @paperSearch="commonSearch" :searchContent="search_query"></search>
+            <search @paperSearch="commonSearch" :searchContent="search_query_display"></search>
           </div>
         </div>
       </el-header>
@@ -93,6 +93,7 @@ export default {
       loading: true,
 
       search_query: "",
+      search_query_display: "",
       search_type: "",
 
       search_within_query: "",
@@ -129,6 +130,7 @@ export default {
     commonSearch(val) {
       this.search_type = val.type;
       this.search_query = val.con;
+      this.search_query_display = val.con;
       this.search_query = this.convertSpecialChar(this.search_query);
       this.getFuzzySearchResult();
     },
