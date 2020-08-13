@@ -1,12 +1,14 @@
 <template>
   <div :class="cardClass" @mouseenter="shadow" @mouseleave="normal">
-    <el-row :style="{height: '100%'}">
-      <el-col :span="4" :style="{height: '100%'}" >
+    <el-row :style="{ height: '100%' }">
+      <el-col :span="4" :style="{ height: '100%' }">
         <ul class="trend-list" @click="changeYear">
-             <li v-for="item in yearFieldList" :key="item.year" >{{ item.year }}: {{item.fieldName}}</li>
+          <li v-for="item in yearFieldList" :key="item.year">
+            {{ item.year }}: {{ item.fieldName }}
+          </li>
         </ul>
       </el-col>
-      <el-col :span="20" class="trend-line">
+      <el-col :span="20" class="trend-line" :style="{ height: '100%' }" v-loading="lineLoading" element-loading-background="rgba(0, 0, 0, 0)">
         <div :id="authorTrendId" class="author-trend-lines" />
       </el-col>
     </el-row>
@@ -25,13 +27,16 @@ export default {
     return {
       cardClass: 'normal-card',
       authorTrendId: '',
+      lineLoading: true,
       color: ['#516b91', '#59c4e6', '#edafda', '#93b7e3', '#a5e7f0', '#cbb0e3'],
+      series: [],
+      dataset: [],
       settings: {
         dataset: this.dataset,
         tooltip: {
           trigger: 'axis',
           formatter: (value, index) => {
-            console.log(value)
+            // console.log(value)
             let res = `${value[0].axisValue}<br />`
             value.forEach((v, i) => {
               res += `${v.seriesName}: ${Number(v.data.count).toFixed(2)}<br />`
@@ -39,7 +44,6 @@ export default {
             return res
           }
         },
-
         xAxis: {
           type: 'value',
           min: 'dataMin',
@@ -78,19 +82,59 @@ export default {
       getRequest(`/api/attention/batchQuery?authorId=${this.authorId}`)
         .then(res => {
           console.log(res.data)
-          this.yearFieldList=res.data
+          this.yearFieldList = res.data
           this.myChart = echarts.init(
             document.getElementById(this.authorTrendId)
           )
           this.myChart.setOption(this.settings)
+          if (this.yearFieldList.length !== 0) {
+            this.setLine(
+              this.yearFieldList[0].fieldId,
+              this.yearFieldList[0].fieldName
+            )
+          }
         })
         .catch(err => {
           console.log(err)
         })
     },
+    changeYear (e) {
+      // console.log(e)
+    },
+    setLine (id, name) {
+      let all = getRequest(
+        `/api/report/paper/trend/year?baseline=activeness&refinement=${id}`
+      )
+      let author = getRequest(
+        `/api/attention/trend?authorId=${this.authorId}&fieldName=${name}`
+      )
+      let res = Promise.all([all, author])
+      res
+        .then(r => {
+          console.log(r)
+          let series = []
+          let dataset = []
 
-    changeYear(e){
-        // console.log(e)
+          dataset.push({ source: r[0].data }, { source: r[1].data } )
+          series.push({
+            name: 'total',
+            type: 'line',
+            datasetIndex: 0
+          },
+          {
+            name: "author's",
+            type: 'line',
+            datasetIndex: 1
+          })
+          this.myChart.setOption({
+            series: series,
+            dataset: dataset
+          })
+          this.lineLoading=false
+        })
+        .catch(err => {
+          console.log(err)
+        })
     }
   }
 }
@@ -122,7 +166,7 @@ export default {
   width: 100%;
   height: 100%;
 }
-.trend-lista {
+.trend-list {
   overflow: auto;
   overflow-y: scroll;
 }

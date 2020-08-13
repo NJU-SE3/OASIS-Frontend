@@ -231,7 +231,6 @@ export default {
           gridSize: 10,
         }
       }
-    //return
       return {
         years: "????",
         yearData:{
