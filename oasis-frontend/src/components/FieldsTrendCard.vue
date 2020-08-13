@@ -6,10 +6,20 @@
     class="card"
   >
     <div
-      class="trend"
+      class="trendCard"
       :id="lineId"
+      v-loading="loading"
+      element-loading-background="rgba(0, 0, 0, 0)"
+      :style="{
+        display: empty ? 'none' : 'block'
+      }"
     ></div>
-    <!-- <div :style="{ display: !empty ? 'none' : 'block', width: '100%', height: '100%' }">
+    <!-- <div
+      class="trendCard"
+      :style="{
+        display: empty ? 'block' : 'none'
+      }"
+    >
       <h2>FIELD TREND</h2>
       <div>wanna see the trends of the fields you are interested in?</div>
       <div>JUST Enter the name!</div>
@@ -30,6 +40,7 @@ export default {
   data () {
     return {
       trendInfo: null,
+      loading: false,
       empty: true,
       cardClass: 'normal-card',
       dataset: [],
@@ -41,7 +52,6 @@ export default {
         tooltip: {
           trigger: 'axis',
           formatter: (value, index) => {
-            console.log(value)
             let res = `${value[0].axisValue}<br />`
             value.forEach((v, i) => {
               res += `${v.seriesName}: ${Number(v.data.count).toFixed(2)}<br />`
@@ -70,6 +80,7 @@ export default {
   },
   watch: {
     trendsList: function (newT, oldT) {
+      this.loading = true
       if (newT.length < oldT.length) {
         this.myChart.clear()
         this.myChart.setOption(this.settings)
@@ -91,6 +102,7 @@ export default {
           series: this.series
         })
       }
+      this.loading = false
     }
   },
   created () {
@@ -102,7 +114,6 @@ export default {
   methods: {
     init () {
       this.myChart = echarts.init(document.getElementById(this.lineId))
-      // this.myChart.setOption(this.settings)
     },
     getData () {
       let dataset = []
@@ -155,7 +166,6 @@ export default {
   border-radius: 4px;
   color: #4e4376;
   height: 500px;
-  /* height: 350px; */
   overflow: hidden;
 }
 .shadow-card {
@@ -167,27 +177,9 @@ export default {
   overflow-y: hidden;
   overflow-x: hidden;
   box-shadow: 8px 8px 14px 0 rgba(253, 253, 253, 0.4);
-  /* overflow: auto; */
 }
-
-.title {
-  font-size: large;
-  font-weight: bold;
-  padding-top: 5px;
-  padding-left: 20px;
-  text-align: left;
-}
-
-.type-icon {
-  font-size: large;
-  font-weight: bold;
-}
-.trend {
+.trendCard {
   height: 100%;
   width: 100%;
-}
-
-.trend-error {
-  padding-top: 100px;
 }
 </style>
