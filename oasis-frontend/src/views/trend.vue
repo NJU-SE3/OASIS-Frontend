@@ -79,7 +79,6 @@ export default {
       } else {
         this.field_select.push(field);
         this.addTrend(field.id, field.name);
-        this.getRelatedField(field.id);
       }
     },
 
