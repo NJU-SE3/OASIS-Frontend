@@ -79,8 +79,8 @@
                 @mouseenter="enter(0)"
                 @mouseleave="leave"
                 @click="detail(0)">
-              <div class="intro-title">Ranking</div>
-              <div class="intro">this is ranking introduction</div>
+              <!-- <div class="intro-title">Ranking</div> -->
+              <em class="intro">You may be interested in these top rankings</em>
             </div>
           </div>
           <div id="content-item-two">
@@ -95,8 +95,8 @@
                   @mouseenter="enter(1)"
                   @mouseleave="leave"
                   @click="detail(1)">
-              <div class="intro-title">Trend</div>
-              <div class="intro">this is trend intro</div>
+              <!-- <div class="intro-title">Trend</div> -->
+              <em class="intro">Stay updated with the latest academic trends</em>
             </div>
           </div>
         </div>
@@ -444,5 +444,6 @@ export default {
   .shadow-card{
     box-shadow:none !important;
   }
+
 
 </style>
