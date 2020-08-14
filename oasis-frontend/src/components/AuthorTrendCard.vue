@@ -3,6 +3,19 @@
     <div class="title">
       <span class="el-icon-data-analysis type-icon"></span>
       <span>Author Interests</span>
+      <el-tooltip class="item" effect="light" placement="top">
+        <div slot="content">
+          Show the most concerned area every year for this author.<br />The line
+          graph compare the trend of a particular field<br />(using
+          <em>activiness: sum(PaperCount/(Ceiling((CurrentYear-SomeYear)/3)) </em
+          >), <br />and the trend in author's academic career<br />(using
+          <em
+            >score: How many papers this author published containing this field
+            in a particular year?</em
+          >).
+        </div>
+        <span class="el-icon-question" />
+      </el-tooltip>
     </div>
     <el-row :style="{ height: '100%' }">
       <el-col
@@ -46,6 +59,7 @@
 var echarts = require('echarts/lib/echarts')
 require('echarts/lib/chart/line')
 require('echarts/lib/component/tooltip')
+require('echarts/lib/component/title')
 require('echarts/lib/component/legend')
 import { getRequest } from '../utils/request'
 
@@ -59,6 +73,7 @@ export default {
       lineLoading: true,
       series: [],
       dataset: [],
+
       settings: {
         dataset: this.dataset,
         tooltip: {
@@ -91,8 +106,6 @@ export default {
         },
         xAxis: {
           name: 'year',
-          //   nameGap: 30,
-          //   nameLocation: 'start',
           nameLocation: 'center',
           nameTextStyle: {
             fontStyle: 'italic',
@@ -105,7 +118,6 @@ export default {
             show: false
           },
           axisLabel: {
-            // fontSize: 18,
             formatter: (value, index) => {
               return value.toString()
             }
@@ -141,14 +153,7 @@ export default {
             }
           }
         ],
-        color: [
-          //   '#516b91',
-          '#59c4e6',
-          '#edafda',
-          '#93b7e3',
-          '#a5e7f0',
-          '#cbb0e3'
-        ],
+        color: ['#59c4e6', '#edafda'],
 
         series: this.series
       },
@@ -322,7 +327,7 @@ export default {
 .trend-list-container li:hover {
   background: rgba(180, 188, 204, 0.5);
 }
-.selected-item{
-    background: rgba(104, 154, 255, 0.329);
+.selected-item {
+  background: rgba(104, 154, 255, 0.329);
 }
 </style>
