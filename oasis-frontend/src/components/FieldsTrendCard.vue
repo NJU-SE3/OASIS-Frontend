@@ -4,26 +4,21 @@
     @mouseenter="shadow"
     @mouseleave="normal"
     class="card"
+    v-loading="loading"
+    element-loading-background="rgba(255, 255, 255, 0.4)"
   >
-    <div
-      class="trendCard"
-      :id="lineId"
-      v-loading="loading"
-      element-loading-background="rgba(0, 0, 0, 0)"
-      :style="{
-        display: empty ? 'none' : 'block'
-      }"
-    ></div>
-    <!-- <div
-      class="trendCard"
-      :style="{
-        display: empty ? 'block' : 'none'
-      }"
-    >
-      <h2>FIELD TREND</h2>
-      <div>wanna see the trends of the fields you are interested in?</div>
-      <div>JUST Enter the name!</div>
-    </div> -->
+    <div class="trendCard" :id="lineId" v-show="!empty"></div>
+    <div class="trendCard trendCardTips" v-show="empty">
+      <div>
+        <h1>FIELD TREND</h1>
+        <div>
+          Wanna see the <strong>Trends</strong> of the
+          <strong>Fields</strong> you are interested in?
+        </div>
+        <div><strong>JUST</strong> enter the name!</div>
+        <div>And <strong>compare</strong> freely.</div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -31,6 +26,7 @@
 var echarts = require('echarts/lib/echarts')
 require('echarts/lib/chart/line')
 require('echarts/lib/component/tooltip')
+require('echarts/lib/component/legend')
 
 export default {
   name: 'trend-card',
@@ -59,8 +55,21 @@ export default {
             return res
           }
         },
-
+        legend: {
+          icon: 'pin',
+          textStyle:{
+             fontSize :15
+          }
+        },
         xAxis: {
+          name: 'Year',
+          nameGap: 30,
+          nameTextStyle: {
+            fontStyle: 'italic',
+            fontWeight: 'bold',
+            fontSize: 30
+          },
+
           type: 'value',
           min: 'dataMin',
           splitLine: {
@@ -73,7 +82,14 @@ export default {
             }
           }
         },
-        yAxis: {},
+        yAxis: {
+          name: 'Activiness',
+          nameTextStyle: {
+            fontStyle: 'italic',
+            fontWeight: 'bold',
+            fontSize: 30
+          }
+        },
         series: this.series
       }
     }
@@ -91,6 +107,10 @@ export default {
         // this.myChart = echarts.init(document.getElementById(this.lineId))
       } else if (this.series.length === 1) {
         this.empty = false
+        this.$nextTick(_ => {
+          this.myChart.resize()
+        })
+
         this.myChart.setOption(this.settings)
         this.myChart.setOption({
           dataset: this.dataset,
@@ -181,5 +201,18 @@ export default {
 .trendCard {
   height: 100%;
   width: 100%;
+}
+.trendCardTips {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: translateY(-15%);
+}
+
+.trendCardTips h1 {
+  font-size: 250%;
+}
+.trendCardTips > div {
+  font-size: 130%;
 }
 </style>
